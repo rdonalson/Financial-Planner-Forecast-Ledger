@@ -1,0 +1,61 @@
+<!-- Header Bar -->
+<nav class="navbar navbar-light bg-light header">
+  <!-- App Title -->
+  <div class="title-bar-sections">
+    <a class="navbar-brand header-text" href="#">
+      <img
+        src="assets/images/Rick Donalson.jpg"
+        alt=""
+        width="45"
+        height="35"
+        class="d-inline-block align-top"
+      />
+      <label class="title">
+        {{title}}
+      </label>
+    </a>
+  </div>
+  <!-- Right side link to GitHub -->
+  <div class="title-bar-sections right">
+    <span class="navbar-text">
+      <a  href="https://github.com/rdonalson/Financial-Planner-Forecast-Ledger">
+        Find the code for this on GitHub
+        <i class="pi pi-github"></i>
+      </a>
+    </span>
+
+  </div>
+</nav>
+<!-- Navigation Menues -->
+<p-menubar *ngIf="!loggedIn">
+  <!-- Login Button-->
+  <button
+    pButton
+    pRipple
+    label="Login"
+    *ngIf="!loggedIn"
+    icon="pi pi-sign-in"
+    type="button"
+    class="p-button-success p-button-outlined p-button-rounded"
+    iconPos="right"
+    (click)="login()"
+  ></button>
+</p-menubar>
+
+<p-menubar *ngIf="loggedIn" [model]="menuItems">
+  <!-- Logout Button & User Name -->
+  <button
+    pButton
+    pRipple
+    label="{{ claims?.name }}"
+    *ngIf="loggedIn"
+    icon="pi pi-sign-out"
+    type="button"
+    class="p-button-success p-button-outlined p-button-rounded"
+    iconPos="right"
+    (click)="logout()"
+    pTooltip="Logout"
+    tooltipPosition="left"
+  ></button>
+</p-menubar>
+

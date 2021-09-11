@@ -1,0 +1,70 @@
+<div class="card">
+  <div class="card-header">
+    <div class="p-fluid p-d-flex p-ai-center">
+      <div class="title-div left">
+        <span>
+          {{ pageTitle }}
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="content-section implementation">
+      <div class="card right-card">
+        <p-galleria
+          [value]="images"
+          [responsiveOptions]="responsiveOptions"
+          [containerStyle]="{ 'max-width': '640px' }"
+          [numVisible]="5"
+          [circular]="true"
+          [autoPlay]="true"
+          [transitionInterval]="5000"
+        >
+          <ng-template pTemplate="item" let-item>
+            <img
+              [src]="item.previewImageSrc"
+              style="width: 100%; display: block"
+            />
+          </ng-template>
+          <ng-template pTemplate="thumbnail" let-item>
+            <div class="p-grid p-nogutter p-justify-center">
+              <img [src]="item.thumbnailImageSrc" style="display: block" />
+            </div>
+          </ng-template>
+        </p-galleria>
+      </div>
+      <div class="card left-card">
+        <ul style="list-style-type: circle">
+          <li>
+            This Application enables You to keep your checking or saving account
+            solvent out to any future point in time.
+          </li>
+          <li>
+            You enter expenses and gratuities with a starting
+            amount, then by entering a time frame, you can easily see a total by
+            end of that time frame.
+          </li>
+          <li>
+            These calculated items can be displayed in either a graphic or
+            ledger format.
+          </li>
+        </ul>
+        <p class="button-container">
+          <p-button
+            label="Instructions"
+            icon="pi pi-info-circle"
+            iconPos="left"
+            (click)="showDialog()"
+          ></p-button>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<p-dialog
+  header="{{headerText}}"
+  [(visible)]="display"
+  [style]="{ width: '50vw' }"
+>
+  <app-help-dialog></app-help-dialog>
+</p-dialog>
