@@ -1,0 +1,115 @@
+<div class="card">
+  <div class="card-header">
+    <div class="card-container flex align-items-center justify-content-start">
+      <div class="title-div left">
+        <span>
+          {{ pageTitle }}
+        </span>
+      </div>
+      <div class="display-div left">
+        <span>
+          {{ dateRangeDisplay }}
+        </span>
+      </div>
+      <div class="spinner-box right">
+        <p-progressSpinner
+          *ngIf="progressSpinner"
+          strokeWidth="6"
+          [style]="{ width: '2rem', height: '2rem' }"
+          fill="#efefef"
+          animationDuration="3s"
+          styleClass="custom-spinner"
+        ></p-progressSpinner>
+      </div>
+      <div class="right">
+        <button
+          pButton
+          pRipple
+          label="Calculate"
+          icon="pi pi-clock"
+          class="p-button-success p-mr-2"
+          (click)="calculate()"
+        ></button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="card-container">
+      <p-tabView styleClass="tabview-custom" [(activeIndex)]="activeIndex">
+        <p-tabPanel>
+          <ng-template pTemplate="header">
+            <i class="pi pi-calendar"></i>
+            <span>&nbsp;Date Range</span>
+          </ng-template>
+          <!-- Start Date -->
+          <div class="field grid">
+            <label for="beginDateId" class="col-12 mb-2 md:col-2 md:mb-0"
+              >Start Date</label
+            >
+            <div class="col-12 md:col-10">
+              <p-calendar
+                [(ngModel)]="ledgerParams.timeFrameBegin"
+                id="beginDateId"
+                placeholder="Select a start date"
+                [showIcon]="true"
+                pTooltip="{{ messages['timeFrameBegin'].informational }}"
+                tooltipPosition="left"
+                (onSelect)="setInvalidDays()"
+              >
+              </p-calendar>
+            </div>
+          </div>
+          <!-- End Date -->
+          <div class="field grid">
+            <label for="endDateId" class="col-12 mb-2 md:col-2 md:mb-0"
+              >End Date</label
+            >
+            <div class="col-12 md:col-10">
+              <p-calendar
+                [(ngModel)]="ledgerParams.timeFrameEnd"
+                id="endDateId"
+                placeholder="Select an end date"
+                [showIcon]="true"
+                pTooltip="{{ messages['timeFrameEnd'].informational }}"
+                tooltipPosition="left"
+                [minDate]="invalidDate"
+                (onSelect)="setInvalidDays()"
+              >
+              </p-calendar>
+            </div>
+          </div>
+          <div class="field grid">
+            <label
+              for="groupingTransformId"
+              class="col-12 mb-2 md:col-2 md:mb-0"
+              >Grouping?</label
+            >
+            <div class="col-12 md:col-10 field-checkbox">
+              <p-checkbox
+                [(ngModel)]="ledgerParams.groupingTransform"
+                [binary]="true"
+                pTooltip="{{ messages['groupingTransform'].informational }}"
+                tooltipPosition="left"
+              >
+              </p-checkbox>
+            </div>
+          </div>
+        </p-tabPanel>
+        <p-tabPanel>
+          <ng-template pTemplate="header">
+            <i class="pi pi-chart-line"></i>
+            <span>&nbsp;Chart</span>
+          </ng-template>
+          <app-chart [data]="data"></app-chart>
+        </p-tabPanel>
+        <p-tabPanel>
+          <ng-template pTemplate="header">
+            <i class="pi pi-list"></i>
+            <span>&nbsp;Ledger</span>
+          </ng-template>
+          <app-ledger [ledgerList]="ledgerList"></app-ledger>
+        </p-tabPanel>
+      </p-tabView>
+    </div>
+  </div>
+</div>

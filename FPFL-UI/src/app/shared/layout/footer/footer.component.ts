@@ -12,7 +12,7 @@ export class FooterComponent implements OnInit {
   constructor() {}
   ngOnInit(): void {
     const dte = new Date();
-    this.value = `Financial Planner Ng ${dte.getFullYear()}`;
+    this.value = `Financial Planner: Forecast Ledger ${dte.getFullYear()}`;
   }
 
 }

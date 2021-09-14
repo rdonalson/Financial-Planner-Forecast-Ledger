@@ -18,7 +18,7 @@ import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-er
 export class HeaderComponent implements OnInit, OnDestroy {
   menuItems: MenuItem[] = [];
   claims: any;
-  title = 'Financial Planner Ng';
+  title = 'Financial Planner: Forecast Ledger';
   isIframe: boolean = false;
   loggedIn: boolean = false;
   private readonly destroying$ = new Subject<void>();
