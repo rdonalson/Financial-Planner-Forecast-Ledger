@@ -47,7 +47,7 @@ namespace FPFL.API.Web.Controllers.ItemDetail
         /// <summary>
         ///     Add new Initial Amount
         ///     POST: api/InitialAmounts
-        ///     New Debit Model in the payload
+        ///     New Initial Amount Model in the payload
         /// </summary>
         /// <param name="initialAmount">Item: The input Initial Amount Model</param>
         /// <returns>Task<ActionResult<Item>>: Return the new Debit & Action State</returns>
@@ -62,7 +62,7 @@ namespace FPFL.API.Web.Controllers.ItemDetail
         /// <summary>
         ///     Update Existing initial Amount
         ///     PUT: api/Credits/{userId}
-        ///     initial Amount Model in the payload
+        ///     Initial Amount Model in the payload
         /// </summary>
         /// <param name="userId">Guid: Authorized User OID</param>
         /// <param name="initialAmount">Item: The Edited Initial Amount Model</param>

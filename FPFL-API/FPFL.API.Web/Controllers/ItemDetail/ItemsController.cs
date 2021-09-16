@@ -49,7 +49,7 @@ namespace FPFL.API.Web.Controllers.ItemDetail
         /// <param name="id">int: Id of the record item</param>
         /// <returns>Task<ActionResult<VwItem>>: Asynchronous return of the requested Item</returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<VwItem>> GetCredit(int id)
+        public async Task<ActionResult<VwItem>> GetItem(int id)
         {
             // HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
             VwItem item = await _repoItems.GetItem(id);
@@ -89,7 +89,7 @@ namespace FPFL.API.Web.Controllers.ItemDetail
         /// <param name="item">Item: The input Item Model</param>
         /// <returns>Task<ActionResult<Item>>: Return the new Item & Action State</returns>
         [HttpPost]
-        public async Task<ActionResult<Item>> PostCredit(Item item)
+        public async Task<ActionResult<Item>> PostItem(Item item)
         {
             // HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
             bool result = await _repoItems.PostItem(item);
