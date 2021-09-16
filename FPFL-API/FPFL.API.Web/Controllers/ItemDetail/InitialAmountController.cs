@@ -3,6 +3,7 @@ using FPFL.API.Data.Domain;
 using FPFL.API.Infrastructure.ItemDetail.Interface;
 using FPFL.API.Infrastructure.ItemDetail.Repository;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
 using System;
@@ -13,7 +14,7 @@ namespace FPFL.API.Web.Controllers.ItemDetail
     /// <summary>
     ///     The Initial Amount Controller
     /// </summary>
-    // [Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class InitialAmountController : ControllerBase
@@ -39,7 +40,7 @@ namespace FPFL.API.Web.Controllers.ItemDetail
         [HttpGet("{userId}")]
         public async Task<ActionResult<Item>> GetInitialAmount(Guid userId)
         {
-            // HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
+            HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
             return await _repoInitialAmount.GetInitialAmount(userId);
         }
 
@@ -53,7 +54,7 @@ namespace FPFL.API.Web.Controllers.ItemDetail
         [HttpPost]
         public async Task<ActionResult<Item>> PostInitialAmount(Item initialAmount)
         {
-            // HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
+            HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
             bool result = await _repoInitialAmount.PostInitialAmount(initialAmount);
             return result ? Created("Created", initialAmount) : (ActionResult<Item>)BadRequest();
         }
@@ -69,7 +70,7 @@ namespace FPFL.API.Web.Controllers.ItemDetail
         [HttpPut("{userId}")]
         public async Task<IActionResult> PutInitialAmount(Guid userId, Item initialAmount)
         {
-            // HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
+            HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
             if (userId != initialAmount.UserId)
             {
                 return BadRequest();

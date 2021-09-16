@@ -8,7 +8,9 @@ namespace FPFL.API.Data.Context
 {
     public partial class FPFLContext : DbContext
     {
-        private readonly string Conn = "";  // When creating structure add a connection string
+        // private readonly string Conn = "";  // When creating structure add a connection string
+        private readonly string Conn = "Data Source = DESKTOP-VPBJU0V\\APPLICATION;Initial Catalog=FPFL;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;";
+
         public FPFLContext() { }
         public FPFLContext(DbContextOptions<FPFLContext> options) : base(options) { }
 

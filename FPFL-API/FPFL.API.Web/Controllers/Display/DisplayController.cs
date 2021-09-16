@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace FPFL.API.Web.Controllers.Display
 {
-    // [Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class DisplayController : ControllerBase
@@ -47,7 +47,7 @@ namespace FPFL.API.Web.Controllers.Display
         [HttpPost]
         public async Task<ActionResult<List<LedgerVM>>> createLedger(LedgerParams input)
         {
-            // HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
+            HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
             return await _repoDisplay.CreateLedger(input.TimeFrameBegin, input.TimeFrameEnd, input.UserId, input.GroupingTransform);
         }
     }

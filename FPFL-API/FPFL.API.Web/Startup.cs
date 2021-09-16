@@ -55,13 +55,10 @@ namespace FPFL.API.Web
 
             loggerFactory.AddLog4Net();
             app.UseCors("default");
-
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
