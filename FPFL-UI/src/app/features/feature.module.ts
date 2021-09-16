@@ -4,8 +4,8 @@ import { FormsModule } from '@angular/forms';
 
 import { FeatureRoutingModule } from './feature-routing.module';
 import { SharedModule } from '../shared/shared.module';
-// import { ItemDetailModule } from './item-detail/item-detail.module';
 import { DisplayModule } from './display/display.module';
+import { ItemDetailModule } from './item-detail/item-detail.module';
 
 @NgModule({
 
@@ -13,7 +13,7 @@ import { DisplayModule } from './display/display.module';
     SharedModule,
     CommonModule,
     FormsModule,
-    //ItemDetailModule,
+    ItemDetailModule,
     DisplayModule,
     FeatureRoutingModule
   ],

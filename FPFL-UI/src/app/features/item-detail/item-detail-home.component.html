@@ -1,0 +1,67 @@
+<div class="card">
+  <div class="card-header">
+    <div class="card-container flex align-items-center justify-content-start">
+      <div class="title-div left">
+        <span>
+          {{ pageTitle }}
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <button
+          pButton
+          (click)="initialAmount()"
+          type="button"
+          label="Initial Amount"
+          icon="pi pi-link"
+          class="
+            p-button-text
+            p-button-success
+            p-button-raised
+            p-button-rounded
+            p-button-sm
+            p-button-link
+          "
+        ></button>
+      </li>
+      <li class="nav-item">
+        <button
+          pButton
+          (click)="credits()"
+          type="button"
+          label="Credits"
+          icon="pi pi-link"
+          class="
+            p-button-text
+            p-button-success
+            p-button-raised
+            p-button-rounded
+            p-button-sm
+            p-button-link
+          "
+        ></button>
+      </li>
+      <li class="nav-item">
+        <button
+          pButton
+          (click)="debits()"
+          type="button"
+          label="Debits"
+          icon="pi pi-link"
+          class="
+            p-button-text
+            p-button-success
+            p-button-raised
+            p-button-rounded
+            p-button-sm
+            p-button-link
+          "
+        ></button>
+      </li>
+    </ul>
+  </div>
+</div>
+

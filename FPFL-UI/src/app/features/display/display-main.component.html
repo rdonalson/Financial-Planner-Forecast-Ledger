@@ -1,4 +1,5 @@
 <div class="card">
+  <!-- Card Header -->
   <div class="card-header">
     <div class="card-container flex align-items-center justify-content-start">
       <div class="title-div left">
@@ -11,6 +12,7 @@
           {{ dateRangeDisplay }}
         </span>
       </div>
+      <!-- Progress Spinner -->
       <div class="spinner-box right">
         <p-progressSpinner
           *ngIf="progressSpinner"
@@ -21,6 +23,7 @@
           styleClass="custom-spinner"
         ></p-progressSpinner>
       </div>
+      <!-- Calculate Button -->
       <div class="right">
         <button
           pButton
@@ -33,9 +36,11 @@
       </div>
     </div>
   </div>
+  <!-- Card Body -->
   <div class="card-body">
     <div class="card-container">
       <p-tabView styleClass="tabview-custom" [(activeIndex)]="activeIndex">
+        <!-- Date Range Tab -->
         <p-tabPanel>
           <ng-template pTemplate="header">
             <i class="pi pi-calendar"></i>
@@ -95,18 +100,22 @@
             </div>
           </div>
         </p-tabPanel>
+        <!-- Chart Tab -->
         <p-tabPanel>
           <ng-template pTemplate="header">
             <i class="pi pi-chart-line"></i>
             <span>&nbsp;Chart</span>
           </ng-template>
+          <!-- Chart Component -->
           <app-chart [data]="data"></app-chart>
         </p-tabPanel>
+        <!-- Ledger Tab -->
         <p-tabPanel>
           <ng-template pTemplate="header">
             <i class="pi pi-list"></i>
             <span>&nbsp;Ledger</span>
           </ng-template>
+          <!-- Ledger Component -->
           <app-ledger [ledgerList]="ledgerList"></app-ledger>
         </p-tabPanel>
       </p-tabView>
