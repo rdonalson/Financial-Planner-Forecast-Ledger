@@ -3,15 +3,17 @@ using FPFL.API.Data.Domain;
 using FPFL.API.Infrastructure.ItemDetail.Interface;
 using FPFL.API.Infrastructure.ItemDetail.Repository;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+
 namespace FPFL.API.Web.Controllers.ItemDetail
 {
-    // [Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ItemsController : ControllerBase
@@ -38,7 +40,7 @@ namespace FPFL.API.Web.Controllers.ItemDetail
         [HttpGet("{userId}/list/{itemType}")]
         public async Task<ActionResult<List<VwItem>>> GetItems(Guid userId, int itemType)
         {
-            // HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
+            HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
             return await _repoItems.GetItems(userId, itemType);
         }
 
@@ -51,7 +53,7 @@ namespace FPFL.API.Web.Controllers.ItemDetail
         [HttpGet("{id}")]
         public async Task<ActionResult<VwItem>> GetItem(int id)
         {
-            // HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
+            HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
             VwItem item = await _repoItems.GetItem(id);
             if (item == null)
             {
@@ -71,7 +73,7 @@ namespace FPFL.API.Web.Controllers.ItemDetail
         [HttpPut("{id}")]
         public async Task<IActionResult> PutItem(int id, Item item)
         {
-            // HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
+            HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
             if (id != item.Id)
             {
                 return BadRequest();
@@ -91,7 +93,7 @@ namespace FPFL.API.Web.Controllers.ItemDetail
         [HttpPost]
         public async Task<ActionResult<Item>> PostItem(Item item)
         {
-            // HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
+            HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
             bool result = await _repoItems.PostItem(item);
             return result ? Created("Created", item) : (ActionResult<Item>)BadRequest();
         }
@@ -105,7 +107,7 @@ namespace FPFL.API.Web.Controllers.ItemDetail
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteItem(int id)
         {
-            // HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
+            HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
             bool result = await _repoItems.DeleteItem(id);
             return result ? (IActionResult)Accepted() : NotFound();
         }

@@ -1,0 +1,13 @@
+C:\Users\rickd\source\repos\Financial-Planner-Forecast-Ledger\FPFL-API\FPFL.API.Infrastructure\bin\Debug\netcoreapp3.1\FPFL.API.Infrastructure.deps.json
+C:\Users\rickd\source\repos\Financial-Planner-Forecast-Ledger\FPFL-API\FPFL.API.Infrastructure\bin\Debug\netcoreapp3.1\FPFL.API.Infrastructure.dll
+C:\Users\rickd\source\repos\Financial-Planner-Forecast-Ledger\FPFL-API\FPFL.API.Infrastructure\bin\Debug\netcoreapp3.1\FPFL.API.Infrastructure.pdb
+C:\Users\rickd\source\repos\Financial-Planner-Forecast-Ledger\FPFL-API\FPFL.API.Infrastructure\bin\Debug\netcoreapp3.1\FPFL.API.Data.dll
+C:\Users\rickd\source\repos\Financial-Planner-Forecast-Ledger\FPFL-API\FPFL.API.Infrastructure\bin\Debug\netcoreapp3.1\FPFL.API.Data.pdb
+C:\Users\rickd\source\repos\Financial-Planner-Forecast-Ledger\FPFL-API\FPFL.API.Infrastructure\obj\Debug\netcoreapp3.1\FPFL.API.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\rickd\source\repos\Financial-Planner-Forecast-Ledger\FPFL-API\FPFL.API.Infrastructure\obj\Debug\netcoreapp3.1\FPFL.API.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\rickd\source\repos\Financial-Planner-Forecast-Ledger\FPFL-API\FPFL.API.Infrastructure\obj\Debug\netcoreapp3.1\FPFL.API.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\rickd\source\repos\Financial-Planner-Forecast-Ledger\FPFL-API\FPFL.API.Infrastructure\obj\Debug\netcoreapp3.1\FPFL.API.Infrastructure.AssemblyInfo.cs
+C:\Users\rickd\source\repos\Financial-Planner-Forecast-Ledger\FPFL-API\FPFL.API.Infrastructure\obj\Debug\netcoreapp3.1\FPFL.API.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\rickd\source\repos\Financial-Planner-Forecast-Ledger\FPFL-API\FPFL.API.Infrastructure\obj\Debug\netcoreapp3.1\FPFL.API.Infrastructure.csproj.CopyComplete
+C:\Users\rickd\source\repos\Financial-Planner-Forecast-Ledger\FPFL-API\FPFL.API.Infrastructure\obj\Debug\netcoreapp3.1\FPFL.API.Infrastructure.dll
+C:\Users\rickd\source\repos\Financial-Planner-Forecast-Ledger\FPFL-API\FPFL.API.Infrastructure\obj\Debug\netcoreapp3.1\FPFL.API.Infrastructure.pdb
