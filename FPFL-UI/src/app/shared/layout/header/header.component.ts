@@ -18,7 +18,7 @@ import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-er
 export class HeaderComponent implements OnInit, OnDestroy {
   menuItems: MenuItem[] = [];
   claims: any;
-  title = 'Financial Planner: Forecast Ledger';
+  title = 'Financial Planner';
   isIframe: boolean = false;
   loggedIn: boolean = false;
   private readonly destroying$ = new Subject<void>();
@@ -80,11 +80,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
         {
           label: 'Credits',
           icon: 'pi pi-link',
-          routerLink: '/feature/item-detail/credit'
+          routerLink: '/feature/item-detail/item/credit'
         }, {
           label: 'Debits',
           icon: 'pi pi-link',
-          routerLink: '/feature/item-detail/debit'
+          routerLink: '/feature/item-detail/item/debit'
         }
         ]
       },

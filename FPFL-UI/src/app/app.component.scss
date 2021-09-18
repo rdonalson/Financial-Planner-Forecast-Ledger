@@ -1,7 +1,27 @@
-app-header {
-  border-width: 1px;
-  border-style: solid;
-  border-color: rgb(0 0 0 / 25%);
+
+
+:host ::ng-deep {
+  app-header {
+    border-width: .15rem;
+    border-style: solid;
+    border-color: rgb(0 0 0 / 25%);
+  }
+
+  .card-header {
+    border-width: thin;
+    border-style: solid;
+    border-color: rgb(0 0 0 / 15%);
+
+  }
+
+  .card-body {
+    border-width: thin;
+    border-style: solid;
+    border-color: rgb(0 0 0 / 15%);
+
+  }
+
+
 }
 
 

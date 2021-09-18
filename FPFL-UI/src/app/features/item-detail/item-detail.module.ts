@@ -25,12 +25,16 @@ import { InitialAmountService } from './shared/services/initial-amount/initial-a
 import { ArrayUtilService } from './shared/services/common/array-util.service';
 import { ItemDetailCommonService } from './shared/services/common/item-detail-common.service';
 import { ItemDetailHomeComponent } from './item-detail-home.component';
-
+import { ItemListComponent } from './item/item-list/item-list.component';
+import { ItemEditComponent } from './item/item-edit/item-edit.component';
+import { ItemService } from './shared/services/item/item.service';
 
 @NgModule({
   declarations: [
     ItemDetailHomeComponent,
-    InitialAmountComponent
+    InitialAmountComponent,
+    ItemListComponent,
+    ItemEditComponent,
   ],
   imports: [
     CommonModule,
@@ -58,6 +62,7 @@ import { ItemDetailHomeComponent } from './item-detail-home.component';
     MessageUtilService,
     PeriodService,
     InitialAmountService,
+    ItemService,
     ArrayUtilService,
     ItemDetailCommonService
   ]

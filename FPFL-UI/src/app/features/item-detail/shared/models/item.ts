@@ -1,12 +1,13 @@
-import { IPeriod } from './period';
-
-export interface ICredit {
-  pkCredit: number;
+export interface IItem {
+  id: number;
   userId: string;
   name: string;
   amount: number;
-  fkPeriod: number;
-  dateRangeReq?: boolean;
+  fkItemType: number;
+  itemType?: string;
+  fkPeriod?: number;
+  period?: string;
+  dateRangeReq: boolean;
   beginDate?: Date;
   endDate?: Date;
   weeklyDow?: number;
@@ -28,5 +29,4 @@ export interface ICredit {
   semiAnnual2Day?: number;
   annualMoy?: number;
   annualDom?: number;
-  period?: IPeriod;
 }

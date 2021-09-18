@@ -1,0 +1,139 @@
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { ConfirmationService } from 'primeng/api';
+
+import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
+import { IItem } from '../../shared/models/item';
+import { MessageUtilService } from '../../shared/services/common/message-util.service';
+import { ItemService } from '../../shared/services/item/item.service';
+import { GeneralUtilService } from 'src/app/core/services/common/general-util.service';
+
+@Component({
+  templateUrl: './item-list.component.html',
+  styleUrls: ['./item-list.component.scss']
+})
+export class ItemListComponent implements OnInit {
+  itemTypeName!: string;
+  itemTypeValue!: number;
+  pageTitle!: string;
+  progressSpinner: boolean = false;
+  private sub!: Subscription;
+  itemList: IItem[] = [];
+  selectedCredits: IItem[] = [];
+  userId: string = '';
+
+  /**
+   * Base Constructor
+   * @param {GeneralUtilService} generalUtilService
+   * @param {MessageUtilService} messageUtilService
+   * @param {GlobalErrorHandlerService} err
+   * @param {ConfirmationService} confirmationService
+   * @param {ItemService} itemService
+   */
+  constructor(
+    private generalUtilService: GeneralUtilService,
+    private messageUtilService: MessageUtilService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private err: GlobalErrorHandlerService,
+    private confirmationService: ConfirmationService,
+    private itemService: ItemService
+  ) { }
+
+  ngOnInit(): void {
+    this.userId = this.generalUtilService.getUserOid();
+    this.getRouteParams();
+  }
+  /**
+   * Removes the "sub" observable for Prameter retrieval
+   */
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
+  }
+  /**
+   * Get Primary Key from Route Paramters
+   */
+  private getRouteParams(): void {
+    this.sub = this.route.params
+      .subscribe((params: any) => {
+        this.getItemTypeValue(params.itemType);
+        this.pageTitle = `Manage ${this.itemTypeName}`
+        this.getItems(this.userId, this.itemTypeValue);;
+      });
+  }
+
+  private getItemTypeValue(type: string): void {
+    switch (type) {
+      case 'credit':
+        this.itemTypeName = 'Credits';
+        this.itemTypeValue = 1;
+        break;
+      case 'debit':
+        this.itemTypeName = 'Debits';
+        this.itemTypeValue = 2;
+        break;
+      default:
+        break;
+    }
+  }
+
+  //#region Data Functions
+  //#region Reads
+  /**
+   * Get the User's List of Credits
+   * @param {string} userId User's OID
+   * @returns {any}
+   */
+  getItems(userId: string, itemType: number): any {
+    this.progressSpinner = true;
+    return this.itemService.getItems(userId, itemType)
+      .subscribe({
+        next: (data: IItem[]): void => {
+          this.itemList = data;
+          // console.log(JSON.stringify(this.creditList));
+        },
+        error: catchError((err: any) => this.err.handleError(err)),
+        complete: () => {
+          this.progressSpinner = false;
+        }
+      });
+  }
+  //#endregion Reads
+  //#region Writes
+  /**
+   * Delete a specific Credit
+   * Prompt User before committing
+   * @param {number} id The id of the Credit
+   */
+  deleteCredit(id: number): void {
+    if (id === 0) {
+      // Don't delete, it was never saved.
+      this.messageUtilService.onComplete('Credit not Found');
+    } else {
+      this.confirmationService.confirm({
+        message: 'Do you want to delete this record?',
+        header: 'Delete Confirmation',
+        icon: 'pi pi-info-circle',
+        accept: () => {
+          this.progressSpinner = true;
+          this.itemService.deleteItem(id)
+            .subscribe({
+              next: () => this.messageUtilService.onComplete(`Credit Deleted`),
+              error: catchError((err: any) => {
+                this.messageUtilService.onError(`Credit Delete Failed`);
+                return this.err.handleError(err);
+              }),
+              complete: () => {
+                this.progressSpinner = false;
+                location.reload();
+              }
+            });
+        }
+      });
+    }
+  }
+  //#endregion Writes
+  //#endregion Data Functions
+}

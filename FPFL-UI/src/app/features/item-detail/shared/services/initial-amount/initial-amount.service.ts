@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -6,7 +5,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 
 import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
 import * as auth from '../../../../../shared/auth-config.json';
-import { IInitialAmount } from '../../models/initial-amount';
+import { IItem } from '../../models/item';
 
 /**
  * Initial Amount Service
@@ -16,7 +15,8 @@ export class InitialAmountService {
   private url = auth.resources.api.resourceUri + '/initialamount';
 
   /**
-   * Base Constructor   *
+   * Base Constructor
+   *
    * @param {HttpClient} http Used for calling the Apis
    * @param {GlobalErrorHandlerService} err Error Handler
    */
@@ -32,11 +32,11 @@ export class InitialAmountService {
    * @param {string} userId User's OID from Login
    * @returns {Observable<IInitialAmount>} return the record
    */
-  getInitialAmount(userId: string): Observable<IInitialAmount> {
+  getInitialAmount(userId: string): Observable<IItem> {
     const url = `${this.url}/${userId}`;
-    return this.http.get<IInitialAmount>(url)
+    return this.http.get<IItem>(url)
       .pipe(
-        tap(data => console.log('getInitialAmount: ' + JSON.stringify(data))),
+        // tap(data => console.log('getInitialAmount: ' + JSON.stringify(data))),
         catchError((err: any) => this.err.handleError(err))
       );
   }
@@ -46,12 +46,12 @@ export class InitialAmountService {
   /**
    * Creates the new Initial Amount for the User
    *
-   * @param {IInitialAmount} initialAmount The new record to be added
-   * @returns {Observable<IInitialAmount>} return the record
+   * @param {IItem} initialAmount The new record to be added
+   * @returns {Observable<IItem>} return the record
    */
-  createInitialAmount(initialAmount: IInitialAmount): Observable<IInitialAmount> {
+  createInitialAmount(initialAmount: IItem): Observable<IItem> {
     const headers = new HttpHeaders({ 'content-type': 'application/json' });
-    return this.http.post<IInitialAmount>(this.url, initialAmount, { headers })
+    return this.http.post<IItem>(this.url, initialAmount, { headers })
       .pipe(
         // tap(data => console.log('createInitialAmount: ' + JSON.stringify(data))),
         catchError((err: any) => this.err.handleError(err))
@@ -61,15 +61,15 @@ export class InitialAmountService {
   /**
    * Updates the Initial Amount
    *
-   * @param {IInitialAmount} initialAmount The record to be updated
+   * @param {IItem} initialAmount The record to be updated
    * @returns {Observable<IInitialAmount>} return the record
    */
-  updateInitialAmount(initialAmount: IInitialAmount): Observable<IInitialAmount> {
+  updateInitialAmount(initialAmount: IItem): Observable<IItem> {
     const headers = new HttpHeaders({ 'content-type': 'application/json' });
     const url = `${this.url}/${initialAmount.userId}`;
-    return this.http.put<IInitialAmount>(url, initialAmount, { headers })
+    return this.http.put<IItem>(url, initialAmount, { headers })
       .pipe(
-        // tap(() => console.log('updateInitialAmount: ' + initialAmount.pkInitialAmount)),
+        // tap(() => console.log('updateInitialAmount: ' + initialAmount.id)),
         // Return the product on an update
         map(() => initialAmount),
         catchError((err: any) => this.err.handleError(err))

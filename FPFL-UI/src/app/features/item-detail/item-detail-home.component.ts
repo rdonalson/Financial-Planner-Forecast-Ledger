@@ -15,9 +15,9 @@ export class ItemDetailHomeComponent implements OnInit {
     this.router.navigate(['feature/item-detail/initial-amount']);
   }
   credits(): void {
-    this.router.navigate(['feature/item-detail/credit']);
+    this.router.navigate(['feature/item-detail/item/credit']);
   }
   debits(): void {
-    this.router.navigate(['feature/item-detail/debit']);
+    this.router.navigate(['feature/item-detail/item/debit']);
   }
 }

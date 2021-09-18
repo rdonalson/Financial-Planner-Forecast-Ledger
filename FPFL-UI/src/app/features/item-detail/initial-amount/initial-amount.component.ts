@@ -1,13 +1,11 @@
-/* eslint-disable @typescript-eslint/no-inferrable-types */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, OnInit } from '@angular/core';
 import { catchError } from 'rxjs/operators';
 
-import { IInitialAmount } from '../shared/models/initial-amount';
 import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
 import { InitialAmountService } from '../shared/services/initial-amount/initial-amount.service';
 import { MessageUtilService } from '../shared/services/common/message-util.service';
 import { GeneralUtilService } from 'src/app/core/services/common/general-util.service';
+import { IItem } from '../shared/models/item';
 
 /**
  * Class and Page that manage the initial starting amount that the User has in their
@@ -24,7 +22,7 @@ export class InitialAmountComponent implements OnInit {
   pageTitle: string = 'Initial Amount';
   progressSpinner: boolean = false;
   userId: string = '';
-  initialAmount!: IInitialAmount;
+  initialAmount!: IItem;
 
   /**
    * Base Constructor
@@ -63,12 +61,12 @@ export class InitialAmountComponent implements OnInit {
     this.progressSpinner = true;
     return this.intialAmountService.getInitialAmount(userId)
       .subscribe({
-        next: (data: IInitialAmount): void => {
+        next: (data: IItem): void => {
           if (!data) {
             this.saveInitialAmount();
           } else {
             this.initialAmount = data;
-            // console.log(`Record Retrieved: ${JSON.stringify(this.initialAmount)}`);
+            console.log(`Record Retrieved: ${JSON.stringify(this.initialAmount)}`);
           }
         },
         error: catchError((err: any) => this.err.handleError(err)),
@@ -85,11 +83,11 @@ export class InitialAmountComponent implements OnInit {
    */
   saveInitialAmount(): void {
     this.progressSpinner = true;
-    if (this.initialAmount.pkInitialAmount === 0) {
+    if (this.initialAmount.id === 0) {
       // Create a new record
       this.intialAmountService.createInitialAmount(this.initialAmount)
         .subscribe({
-          next: (data: IInitialAmount): void => {
+          next: (data: IItem): void => {
             this.initialAmount = data;
             // console.log(`Record Created: ${JSON.stringify(this.initialAmount)}`);
           },
@@ -106,7 +104,7 @@ export class InitialAmountComponent implements OnInit {
       // Update the existing record
       this.intialAmountService.updateInitialAmount(this.initialAmount)
         .subscribe({
-          next: (data: IInitialAmount) => {
+          next: (data: IItem) => {
             this.initialAmount = data;
             // console.log(`Record Updated: ${JSON.stringify(this.initialAmount)}`);
           },
@@ -131,10 +129,36 @@ export class InitialAmountComponent implements OnInit {
   private initialize(): void {
     this.userId = this.generalUtilService.getUserOid();
     this.initialAmount = {
-      pkInitialAmount: 0,
+      id: 0,
       userId: this.userId,
+      name: '',
       amount: 0,
-      beginDate: new Date()
+      fkItemType: 3,
+      itemType: '',
+      fkPeriod: undefined,
+      period: '',
+      dateRangeReq: false,
+      beginDate: undefined,
+      endDate: undefined,
+      weeklyDow: undefined,
+      everOtherWeekDow: undefined,
+      biMonthlyDay1: undefined,
+      biMonthlyDay2: undefined,
+      monthlyDom: undefined,
+      quarterly1Month: undefined,
+      quarterly1Day: undefined,
+      quarterly2Month: undefined,
+      quarterly2Day: undefined,
+      quarterly3Month: undefined,
+      quarterly3Day: undefined,
+      quarterly4Month: undefined,
+      quarterly4Day: undefined,
+      semiAnnual1Month: undefined,
+      semiAnnual1Day: undefined,
+      semiAnnual2Month: undefined,
+      semiAnnual2Day: undefined,
+      annualMoy: undefined,
+      annualDom: undefined
     };
   }
   //#endregion Utils
