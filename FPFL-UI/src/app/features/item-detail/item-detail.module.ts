@@ -16,7 +16,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { CalendarModule } from 'primeng/calendar';
 import { TooltipModule } from 'primeng/tooltip';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import {ToolbarModule} from 'primeng/toolbar';
+import { ToolbarModule } from 'primeng/toolbar';
 
 import { ItemDetailRoutingModule } from './item-detail-routing.module';
 import { InitialAmountComponent } from './initial-amount/initial-amount.component';
