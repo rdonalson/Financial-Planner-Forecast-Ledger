@@ -8,9 +8,9 @@ describe('InitialAmountComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ InitialAmountComponent ]
+      declarations: [InitialAmountComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

@@ -2,15 +2,10 @@
 @import url(../../shared/styles/item-detail-common.scss);
 
 :host ::ng-deep {
-  .card-header {
-    background-color: #efefef;
-    font-size: 16px;
-    font-weight: 500;
-    padding: 16px;
-  }
-
-  button {
-    margin-right: .5rem;
+  .edit-spinner-box {
+    padding-top: 4px;
+    padding-bottom: 0px;
+    margin-right: 1.5rem;
   }
 
   .top-spacer {
@@ -25,20 +20,25 @@
   .p-dropdown {
     width: auto;
     max-width: 14rem;
+    min-width: 12rem;
   }
 
   .p-field-radiobutton {
-    padding-top: .5rem;
-    padding-right: .5rem;
+    padding-top: 0.5rem;
+    padding-right: 0.5rem;
 
     label {
-      padding-left: .5rem;
+      padding-left: 0.5rem;
     }
   }
 
   .p-calendar {
     height: 2.38rem;
     max-width: 14.5rem;
+    min-width: 12rem;
+  }
+
+  .vertical-button-spacer {
+    margin: 0 0.5rem 0.5rem 0;
   }
 }
-

@@ -1,5 +1,4 @@
 
-
 :host ::ng-deep {
   app-header {
     border-width: .15rem;
@@ -11,17 +10,23 @@
     border-width: thin;
     border-style: solid;
     border-color: rgb(0 0 0 / 15%);
-
+    background-color: #efefef;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 16px;
   }
 
   .card-body {
     border-width: thin;
     border-style: solid;
     border-color: rgb(0 0 0 / 15%);
-
   }
 
-
+  .p-paginator {
+    .p-paginator-current {
+      margin-left: auto;
+    }
+  }
 }
 
 

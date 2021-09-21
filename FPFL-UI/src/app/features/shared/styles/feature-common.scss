@@ -1,7 +1,4 @@
-.spinner-box {
-  padding: 0 2rem 0 0;
-  height: 2rem;
-}
+
 
 .return {
   cursor: pointer;
@@ -12,6 +9,41 @@
     color: rgba(0, 0, 0, 0.644);
   }
 }
+
+.vertical-separator {
+  height: 45px;
+}
+
+.navbar {
+  border-width: 0.15rem;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.25);
+}
+
+.container-fluid {
+  padding: .5rem 1rem .5rem 1rem;
+}
+
+.navbar-brand {
+  font-weight: 500;
+  font-family:Roboto, "Helvetica Neue", sans-serif;
+  font-size: 16px;
+  color: rgb(56, 56, 56) !important;
+}
+
+.new-button {
+  height: 42px;
+  min-width: 5rem;
+}
+
+.item-detail-home {
+  color: rgba(105, 105, 105, 0.667) !important;
+  font-weight: 500;
+  font-style: italic;
+  font-size: 12px;
+  :hover{color:rgba(0, 0, 0, 0.59) !important};
+}
+
 
 :host ::ng-deep .custom-spinner .p-progress-spinner-circle {
   animation:
@@ -50,3 +82,4 @@
       stroke-dashoffset: -124px;
   }
 }
+

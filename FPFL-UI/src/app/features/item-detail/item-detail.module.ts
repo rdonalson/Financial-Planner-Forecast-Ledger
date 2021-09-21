@@ -16,6 +16,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { CalendarModule } from 'primeng/calendar';
 import { TooltipModule } from 'primeng/tooltip';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import {ToolbarModule} from 'primeng/toolbar';
 
 import { ItemDetailRoutingModule } from './item-detail-routing.module';
 import { InitialAmountComponent } from './initial-amount/initial-amount.component';
@@ -28,6 +29,7 @@ import { ItemDetailHomeComponent } from './item-detail-home.component';
 import { ItemListComponent } from './item/item-list/item-list.component';
 import { ItemEditComponent } from './item/item-edit/item-edit.component';
 import { ItemService } from './shared/services/item/item.service';
+import { StyleTestComponent } from './style-test/style-test.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +37,7 @@ import { ItemService } from './shared/services/item/item.service';
     InitialAmountComponent,
     ItemListComponent,
     ItemEditComponent,
+    StyleTestComponent,
   ],
   imports: [
     CommonModule,
@@ -53,6 +56,7 @@ import { ItemService } from './shared/services/item/item.service';
     CalendarModule,
     TableModule,
     TooltipModule,
+    ToolbarModule,
     ItemDetailRoutingModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
