@@ -17,11 +17,16 @@ const routes: Routes = [
 ];
 const isIframe = window !== window.parent && !window.opener;
 
+/**
+ * Preloading Strategies:
+ *  Default:       PreloadAllModules
+ *  Lazy Loading:  SelectiveStrategyService
+ * The "Iframe" is for the Azure Login Boilerplate Code
+ */
 @NgModule({
   imports: [
-    // PreloadAllModules  SelectiveStrategy
     RouterModule.forRoot(routes, {
-      preloadingStrategy: PreloadAllModules,
+      preloadingStrategy: SelectiveStrategyService,
       // Don't perform initial navigation in iframes
       initialNavigation: !isIframe ? 'enabled' : 'disabled'
     })

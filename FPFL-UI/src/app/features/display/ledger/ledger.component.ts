@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-inferrable-types */
-/* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
+
 import { ILedgerVM } from '../shared/view-models/ledger-vm';
 
 @Component({
@@ -9,12 +7,6 @@ import { ILedgerVM } from '../shared/view-models/ledger-vm';
   templateUrl: './ledger.component.html',
   styleUrls: ['./ledger.component.scss']
 })
-export class LedgerComponent implements OnInit {
-
+export class LedgerComponent {
   @Input() ledgerList: ILedgerVM[] = [];
-
-  constructor() {}
-
-  ngOnInit(): void {}
-
 }

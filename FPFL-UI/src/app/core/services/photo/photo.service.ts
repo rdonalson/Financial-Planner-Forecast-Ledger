@@ -1,7 +1,10 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import { Injectable } from '@angular/core';
+
 import { IImage } from '../../model/image';
 
+/**
+ * Image Cycling Service for the Galleria on the Home page
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -9,14 +12,23 @@ export class PhotoService {
 
   private images!: IImage[];
 
+  /**
+   * Constructor
+   */
   constructor() {
     this.initializeImages();
   }
 
+  /**
+   * Returns the Image List
+   */
   public get Images(): IImage[] {
     return this.images;
   }
 
+  /**
+   * Image Initializer
+   */
   private initializeImages(): void {
     this.images = [
       {

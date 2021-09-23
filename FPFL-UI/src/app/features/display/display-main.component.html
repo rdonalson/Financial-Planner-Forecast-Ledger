@@ -1,123 +1,103 @@
-<div class="card">
-  <!-- Card Header -->
-  <div class="card-header">
-    <div class="card-container flex align-items-center justify-content-start">
-      <div class="title-div left">
-        <span>
-          {{ pageTitle }}
-        </span>
-      </div>
-      <div class="display-div left">
-        <span>
-          {{ dateRangeDisplay }}
-        </span>
-      </div>
-      <!-- Progress Spinner -->
-      <div class="spinner-box right">
-        <p-progressSpinner
-          *ngIf="progressSpinner"
-          strokeWidth="6"
-          [style]="{ width: '2rem', height: '2rem' }"
-          fill="#efefef"
-          animationDuration="3s"
-          styleClass="custom-spinner"
-        ></p-progressSpinner>
-      </div>
-      <!-- Calculate Button -->
-      <div class="right">
-        <button
-          pButton
-          pRipple
-          label="Calculate"
-          icon="pi pi-clock"
-          class="p-button-success p-mr-2"
-          (click)="calculate()"
-        ></button>
-      </div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <!-- Page Title -->
+    <a class="navbar-brand">{{ pageTitle }}</a>
+    <div class="vertical-separator"></div>
+    <!-- Progress Spinner -->
+    <div class="navbar-brand list-spinner-box">
+      <p-progressSpinner *ngIf="progressSpinner" strokeWidth="6" [style]="{ width: '2rem', height: '2rem' }"
+        fill="#efefef" animationDuration="3s" styleClass="custom-spinner "></p-progressSpinner>
+    </div>
+    <!-- Responsive Toggle Button -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-0 mb-lg-0">
+        <!-- Navigate to Home Link -->
+        <li class="nav-item">
+          <a class="nav-link nav-link-helper" aria-current="page" routerLink="/home">
+            <i>Home</i>
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
+</nav>
+<div class="card">
   <!-- Card Body -->
   <div class="card-body">
-    <!-- <div class="card-container"> -->
-      <p-tabView styleClass="tabview-custom" [(activeIndex)]="activeIndex">
-        <!-- Date Range Tab -->
-        <p-tabPanel>
-          <ng-template pTemplate="header">
-            <i class="pi pi-calendar"></i>
-            <span>&nbsp;Date Range</span>
-          </ng-template>
+    <p-tabView styleClass="tabview-custom" [(activeIndex)]="activeIndex">
+      <!-- Date Range Tab -->
+      <p-tabPanel>
+        <ng-template pTemplate="header">
+          <i class="pi pi-calendar"></i>
+          <span>&nbsp;Date Range</span>
+        </ng-template>
+        <div class="card-container">
           <!-- Start Date -->
           <div class="field grid">
-            <label for="beginDateId" class="col-12 mb-2 md:col-2 md:mb-0"
-              >Start Date</label
-            >
-            <div class="col-12 md:col-10">
-              <p-calendar
-                [(ngModel)]="ledgerParams.timeFrameBegin"
-                id="beginDateId"
-                placeholder="Select a start date"
-                [showIcon]="true"
-                pTooltip="{{ messages['timeFrameBegin'].informational }}"
-                tooltipPosition="left"
-                (onSelect)="setInvalidDays()"
-              >
+            <label for="beginDateId" class="col-12 mb-2 md:col-2 md:mb-0">Start Date</label>
+            <div class="col-5 md:col-4 p-calendar-dropdown-format-helper">
+              <p-calendar [(ngModel)]="ledgerParams.timeFrameBegin" id="beginDateId" placeholder="Select a start date"
+                [showIcon]="true" pTooltip="{{ messages['timeFrameBegin'].informational }}" tooltipPosition="left"
+                (onSelect)="setInvalidDays()">
               </p-calendar>
             </div>
           </div>
           <!-- End Date -->
           <div class="field grid">
-            <label for="endDateId" class="col-12 mb-2 md:col-2 md:mb-0"
-              >End Date</label
-            >
-            <div class="col-12 md:col-10">
-              <p-calendar
-                [(ngModel)]="ledgerParams.timeFrameEnd"
-                id="endDateId"
-                placeholder="Select an end date"
-                [showIcon]="true"
-                pTooltip="{{ messages['timeFrameEnd'].informational }}"
-                tooltipPosition="left"
-                [minDate]="invalidDate"
-                (onSelect)="setInvalidDays()"
-              >
+            <label for="endDateId" class="col-12 mb-2 md:col-2 md:mb-0">End Date</label>
+            <div class="col-5 md:col-4 p-calendar-dropdown-format-helper">
+              <p-calendar [(ngModel)]="ledgerParams.timeFrameEnd" id="endDateId" placeholder="Select an end date"
+                [showIcon]="true" pTooltip="{{ messages['timeFrameEnd'].informational }}" tooltipPosition="left"
+                [minDate]="invalidDate" (onSelect)="setInvalidDays()">
               </p-calendar>
             </div>
           </div>
+          <!-- Grouping? -->
           <div class="field grid">
-            <label
-              for="groupingTransformId"
-              class="col-12 mb-2 md:col-2 md:mb-0"
-              >Grouping?</label
-            >
-            <div class="col-12 md:col-10 field-checkbox">
-              <p-checkbox
-                [(ngModel)]="ledgerParams.groupingTransform"
-                [binary]="true"
-                pTooltip="{{ messages['groupingTransform'].informational }}"
-                tooltipPosition="left"
-              >
+            <label for="groupingTransformId" class="col-12 mb-2 md:col-2 md:mb-0">Grouping?</label>
+            <div class="col-5 md:col-4">
+              <p-checkbox id="groupingTransformId" [(ngModel)]="ledgerParams.groupingTransform" [binary]="true"
+                pTooltip="{{ messages['groupingTransform'].informational }}" tooltipPosition="left">
               </p-checkbox>
             </div>
           </div>
-        </p-tabPanel>
-        <!-- Chart Tab -->
-        <p-tabPanel>
-          <ng-template pTemplate="header">
-            <i class="pi pi-chart-line"></i>
-            <span>&nbsp;Chart</span>
-          </ng-template>
-          <!-- Chart Component -->
-          <app-chart [data]="data"></app-chart>
-        </p-tabPanel>
-        <!-- Ledger Tab -->
-        <p-tabPanel>
-          <ng-template pTemplate="header">
-            <i class="pi pi-list"></i>
-            <span>&nbsp;Ledger</span>
-          </ng-template>
-          <!-- Ledger Component -->
-          <app-ledger [ledgerList]="ledgerList"></app-ledger>
-        </p-tabPanel>
-      </p-tabView>
-Q  </div>
+          <!-- Control Buttons -->
+          <div class="field grid">
+            <div class="col-5 md:col-4 top-spacer">
+              <button pButton pRipple label="Calculate" icon="pi pi-clock" class="p-button-success p-mr-2"
+                (click)="calculate()"></button>
+            </div>
+          </div>
+        </div>
+      </p-tabPanel>
+      <!-- Chart Tab -->
+      <p-tabPanel>
+        <ng-template pTemplate="header">
+          <i class="pi pi-chart-line"></i>
+          <span>&nbsp;Chart</span>
+        </ng-template>
+        <h3 id="chartMessage">To view Chart rotate device to Landscape View</h3>
+        <h5 id="chartDateRange">{{ dateRangeDisplay }}</h5>
+        <!-- Chart Component -->
+        <app-chart id="chart" [data]="data"></app-chart>
+      </p-tabPanel>
+      <!-- Ledger Tab -->
+      <p-tabPanel>
+        <ng-template pTemplate="header">
+          <i class="pi pi-list"></i>
+          <span>&nbsp;Ledger</span>
+        </ng-template>
+        <h3 id="ledgerMessage">
+          To view Ledger rotate device to Landscape View
+        </h3>
+        <h5 id="ledgerDateRange">{{ dateRangeDisplay }}</h5>
+        <!-- Ledger Component -->
+        <app-ledger id="ledger" [ledgerList]="ledgerList"></app-ledger>
+      </p-tabPanel>
+    </p-tabView>
+  </div>
 </div>

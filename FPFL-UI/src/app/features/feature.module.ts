@@ -8,7 +8,6 @@ import { DisplayModule } from './display/display.module';
 import { ItemDetailModule } from './item-detail/item-detail.module';
 
 @NgModule({
-
   imports: [
     SharedModule,
     CommonModule,
@@ -17,8 +16,7 @@ import { ItemDetailModule } from './item-detail/item-detail.module';
     DisplayModule,
     FeatureRoutingModule
   ],
-  exports: [
-  ],
+  exports: [],
   providers: []
 })
 export class FeatureModule { }

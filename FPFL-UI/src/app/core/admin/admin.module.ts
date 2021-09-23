@@ -11,14 +11,12 @@ import { DialogModule } from 'primeng/dialog';
 import { PageNotFoundComponent } from './system/page-not-found/page-not-found.component';
 import { AdminRoutingModule } from './admin-routing.module';
 import { ErrorComponent } from './system/error/error.component';
-import { HelpDialogComponent } from './help-dialog/help-dialog.component';
 
 @NgModule({
   declarations: [
     HomeComponent,
     PageNotFoundComponent,
-    ErrorComponent,
-    HelpDialogComponent
+    ErrorComponent
   ],
   imports: [
     CommonModule,

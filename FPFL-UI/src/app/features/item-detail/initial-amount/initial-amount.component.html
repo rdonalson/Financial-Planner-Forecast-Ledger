@@ -2,8 +2,9 @@
   <div class="container-fluid">
     <!-- Page Title -->
     <a class="navbar-brand" href="#">{{ pageTitle }}</a>
+    <div class="vertical-separator"></div>
     <!-- Progress Spinner -->
-    <div class="navbar-brand spinner-box">
+    <div class="navbar-brand list-spinner-box">
       <p-progressSpinner
         *ngIf="progressSpinner"
         strokeWidth="6"
@@ -29,8 +30,12 @@
       <ul class="navbar-nav me-auto mb-0 mb-lg-0">
         <!-- Navigate to Item Detail Home Link -->
         <li class="nav-item">
-          <a class="nav-link item-detail-home" aria-current="page">
-            <i routerLink="/feature/item-detail">Item Detail Home</i>
+          <a
+            class="nav-link nav-link-helper"
+            aria-current="page"
+            routerLink="/feature/item-detail"
+          >
+            <i>Item Detail Home</i>
           </a>
         </li>
       </ul>

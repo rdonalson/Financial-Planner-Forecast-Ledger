@@ -1,18 +1,24 @@
-.red{
-  color: red;
+:host ::ng-deep {
+  .red {
+    color: red;
+  }
+
+  .green {
+    color: rgb(14, 182, 14);
+  }
+
+  .blue {
+    color: blue;
+  }
+
+  .right {
+    text-align: right !important;
+  }
+
+  .item-header {
+    background-color: rgb(200, 200, 200) !important;
+  }
+  .item-body {
+    background-color: rgb(245, 245, 245);
+  }
 }
-
-.green {
-  color: rgb(17, 219, 17);
-}
-
-.blue {
-  color: blue;
-}
-
-.right {
-  text-align: right !important;
-}
-
-
-

@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-inferrable-types */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-empty-function */
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -47,8 +44,7 @@ export class DisplayMainComponent implements OnInit {
     private claimsUtilService: GeneralUtilService,
     private err: GlobalErrorHandlerService,
     private displayService: DisplayService,
-    private route: ActivatedRoute,
-
+    private route: ActivatedRoute
   ) {
     // Criterial field messages.
     this.messages = {
@@ -90,11 +86,9 @@ export class DisplayMainComponent implements OnInit {
    * Create the Date Range Display Value
    */
   private generateDateRangeDisplay(): void {
-    this.dateRangeDisplay = `Date Range: ${
-      this.ledgerParams.timeFrameBegin.toDateString()
-    } to ${
-      this.ledgerParams.timeFrameEnd.toDateString()
-    }`;
+    this.dateRangeDisplay = `Date Range:    ${this.ledgerParams.timeFrameBegin.toDateString()
+      } to ${this.ledgerParams.timeFrameEnd.toDateString()
+      }`;
   }
 
   /**

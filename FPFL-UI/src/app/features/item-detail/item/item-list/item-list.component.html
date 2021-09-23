@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
     <!-- Page Title -->
-    <a class="navbar-brand" href="#">{{ pageTitle }}</a>
+    <a class="navbar-brand">{{ pageTitle }}</a>
     <div class="vertical-separator"></div>
     <!-- Progress Spinner -->
     <div class="navbar-brand list-spinner-box">
@@ -31,25 +31,15 @@
         <!-- Navigate to Item Detail Home Link -->
         <li class="nav-item">
           <a
-            class="nav-link item-detail-home"
+            class="nav-link nav-link-helper"
             aria-current="page"
-            routerLink="/feature/item-detail"
+            [routerLink]="['/feature/item-detail']"
           >
             <i>Item Detail Home</i>
           </a>
         </li>
       </ul>
       <form class="d-flex">
-        <!-- Search Box -->
-        <span class="p-input-icon-left">
-          <i class="pi pi-search"></i>
-          <input
-            pInputText
-            type="search"
-            class="form-control"
-            placeholder="Search..."
-          />
-        </span>
         <!-- New Button -->
         <button
           pButton
@@ -57,7 +47,7 @@
           label="New"
           type="button"
           icon="pi pi-plus"
-          class="p-button-success left-spacer new-button"
+          class="p-button-success new-button"
           [routerLink]="['./edit', 0]"
         ></button>
       </form>
@@ -66,7 +56,10 @@
 </nav>
 <div class="card">
   <div class="card-body" #cardBody>
-    <div class="p-grid p-fluid">
+    <div *ngIf="itemList.length === 0" class="p-grid p-fluid">
+      Add some {{ itemTypeName }}
+    </div>
+    <div *ngIf="itemList.length > 0" class="p-grid p-fluid">
       <!-- Credits Display Table -->
       <p-table
         #dt
@@ -79,6 +72,18 @@
         [rowHover]="true"
         dataKey="id"
       >
+        <ng-template pTemplate="caption">
+          <!-- Search Box: Needs to be within the p-table -->
+          <span class="p-input-icon-left" style="width: 15rem">
+            <i class="pi pi-search"></i>
+            <input
+              pInputText
+              type="text"
+              (keyup)="dt.filterGlobal($any($event.target).value, 'contains')"
+              placeholder="Search..."
+            />
+          </span>
+        </ng-template>
         <!-- Body: Column Headers -->
         <ng-template pTemplate="header">
           <tr>

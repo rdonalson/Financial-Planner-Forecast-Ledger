@@ -1,9 +1,10 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorHandler, Injectable } from '@angular/core';
 import { ObservableInput, throwError } from 'rxjs';
 
+/**
+ * Error Handling Service
+ */
 @Injectable({
   providedIn: 'root'
 })

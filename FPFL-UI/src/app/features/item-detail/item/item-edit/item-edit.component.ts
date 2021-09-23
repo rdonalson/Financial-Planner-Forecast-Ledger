@@ -2,9 +2,10 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChildren } from '@angular
 import { FormBuilder, FormControlName, FormGroup } from '@angular/forms';
 import { formatDate } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { ConfirmationService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+
+import { ConfirmationService } from 'primeng/api';
 
 import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
 import { IItem } from '../../shared/models/item';
@@ -17,8 +18,10 @@ import { PeriodService } from '../../shared/services/period/period.service';
 import { GeneralUtilService } from 'src/app/core/services/common/general-util.service';
 import { ItemDetailCommonService } from '../../shared/services/common/item-detail-common.service';
 
+/**
+ * Reactive CRUD Form for individual items; credit (1) or debit (2)
+ */
 @Component({
-  selector: 'app-item-edit',
   templateUrl: './item-edit.component.html',
   styleUrls: ['./item-edit.component.scss']
 })
@@ -43,7 +46,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
   dateRangeToggle: boolean | undefined;
 
   /**
-   * Base Constructor
+   * Constructor
    * @param {GeneralUtilService} claimsUtilService
    * @param {ConfirmationService} confirmationService
    * @param {FormBuilder} fb
@@ -76,7 +79,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
   /**
    * Initialize the Item Interface, gets the Period list and initizes the FormBuilder
    */
-   ngOnInit(): void {
+  ngOnInit(): void {
     this.initializeRecord();
     this.getPeriods();
     this.itemForm = this.itemDetailCommonService.generateForm(this.fb);
@@ -125,7 +128,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    * Allows the user to select a Date Range by showing the Date Range fields
    * @param {any} e Checked: True/False show Date Range Calendar Selectors
    */
-   showHideDateRange(e: any): void {
+  showHideDateRange(e: any): void {
     this.dateRangeToggle = e.checked;
     this.itemDetailCommonService.updateDateRangeValidation(
       this.itemForm,
@@ -280,10 +283,10 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     this.item.amount = this.itemForm.value.Amount;
     this.item.fkPeriod = this.itemForm.value.Period;
     this.item.fkItemType = this.itemTypeValue,
-    this.item.itemType = undefined,
-    this.item.period = undefined,
-    // Date Range Switch
-    this.item.dateRangeReq = this.itemForm.value.DateRangeReq;
+      this.item.itemType = undefined,
+      this.item.period = undefined,
+      // Date Range Switch
+      this.item.dateRangeReq = this.itemForm.value.DateRangeReq;
     // Start Date for Date Range / Initialization Date for Periods: Single Occurrence & Every Two Weeks
     this.item.beginDate = (
       this.itemForm.value.InitializationDate !== null && (this.periodSwitch === 4 || this.periodSwitch === 1)

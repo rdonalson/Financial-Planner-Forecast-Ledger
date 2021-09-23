@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ConfirmationService } from 'primeng/api';
@@ -10,6 +10,10 @@ import { MessageUtilService } from '../../shared/services/common/message-util.se
 import { ItemService } from '../../shared/services/item/item.service';
 import { GeneralUtilService } from 'src/app/core/services/common/general-util.service';
 
+/**
+ * Form that will display the list two types of items; Credit (1) or Debit (2)
+ * Using Prime Ng table component
+ */
 @Component({
   templateUrl: './item-list.component.html',
   styleUrls: ['./item-list.component.scss']
@@ -25,7 +29,7 @@ export class ItemListComponent implements OnInit {
   userId: string = '';
 
   /**
-   * Base Constructor
+   * Constructor
    * @param {GeneralUtilService} generalUtilService
    * @param {MessageUtilService} messageUtilService
    * @param {GlobalErrorHandlerService} err
@@ -36,12 +40,12 @@ export class ItemListComponent implements OnInit {
     private generalUtilService: GeneralUtilService,
     private messageUtilService: MessageUtilService,
     private route: ActivatedRoute,
-    private router: Router,
     private err: GlobalErrorHandlerService,
     private confirmationService: ConfirmationService,
     private itemService: ItemService
   ) { }
 
+  //#region Events
   ngOnInit(): void {
     this.userId = this.generalUtilService.getUserOid();
     this.getRouteParams();
@@ -52,8 +56,13 @@ export class ItemListComponent implements OnInit {
   ngOnDestroy(): void {
     this.sub.unsubscribe();
   }
+  //#endregion Events
+
+  //#region Utilities
   /**
-   * Get Primary Key from Route Paramters
+   * Collect the Route Parameter
+   * Set variables
+   * Get the item list
    */
   private getRouteParams(): void {
     this.sub = this.route.params
@@ -64,6 +73,10 @@ export class ItemListComponent implements OnInit {
       });
   }
 
+  /**
+   * Get the type of items to presented
+   * @param {string} type The value; credit or debit
+   */
   private getItemTypeValue(type: string): void {
     switch (type) {
       case 'credit':
@@ -78,6 +91,7 @@ export class ItemListComponent implements OnInit {
         break;
     }
   }
+  //#endregion Utilities
 
   //#region Data Functions
   //#region Reads

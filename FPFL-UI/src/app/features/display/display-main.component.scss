@@ -1,36 +1,30 @@
 @import url(../shared/styles/feature-common.scss);
-@import url(../display/shared/styles/display-common.scss);
 
 :host ::ng-deep {
-  .card-header {
-    background-color: #efefef;
-    font-size: 16px;
-    font-weight: 500;
-    padding: 16px;
+  .vertical-button-spacer {
+    margin: 0 0.5rem 0.5rem 0;
   }
 
-
-  button {
-    margin-right: .5rem;
+  @media screen and (max-width: 480px) {
+    #chart {
+      display: none;
+    }
+    #ledger {
+      display: none;
+    }
+    #chartDateRange {
+      display: none;
+    }
+    #ledgerDateRange {
+      display: none;
+    }
   }
-
-  .top-spacer {
-    margin-top: 1rem;
+  @media screen and (min-width: 480px) {
+    #chartMessage {
+      display: none;
+    }
+    #ledgerMessage {
+      display: none;
+    }
   }
-
-  .p-col-max-width-15 {
-    width: auto;
-    max-width: 15rem;
-  }
-
-  .p-calendar {
-    height: 2.38rem;
-    max-width: 14.5rem;
-  }
-
-  .p-checkbox {
-    padding-top: .5rem;
-  }
-
 }
-

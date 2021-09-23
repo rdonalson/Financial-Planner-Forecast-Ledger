@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/member-delimiter-style */
 import { FormGroup } from '@angular/forms';
 
 // Generic validator for Reactive forms
@@ -6,19 +5,7 @@ import { FormGroup } from '@angular/forms';
 // NOTE: This validator does NOT support validation of controls or groups within a FormArray.
 export class GenericValidator {
 
-  // Provide the set of valid validation messages
-  // Stucture:
-  // controlName1: {
-  //     validationRuleName1: 'Validation Message.',
-  //     validationRuleName2: 'Validation Message.'
-  // },
-  // controlName2: {
-  //     validationRuleName1: 'Validation Message.',
-  //     validationRuleName2: 'Validation Message.'
-  // }
-  constructor(private validationMessages: { [key: string]: { [key: string]: string } }) {
-
-  }
+  constructor(private validationMessages: { [key: string]: { [key: string]: string } }) {}
 
   // Processes each control within a FormGroup
   // And returns a set of validation messages to display
@@ -51,17 +38,28 @@ export class GenericValidator {
     }
     return messages;
   }
-
-  // getErrorCount(container: FormGroup): number {
-  //   let errorCount = 0;
-  //   for (const controlKey in container.controls) {
-  //     if (container.controls.hasOwnProperty(controlKey)) {
-  //       if (container.controls[controlKey].errors) {
-  //         errorCount += Object.keys(container.controls[controlKey].errors).length;
-  //         console.log(errorCount);
-  //       }
-  //     }
-  //   }
-  //   return errorCount;
-  // }
 }
+
+// Archive
+// Provide the set of valid validation messages
+// Stucture:
+// controlName1: {
+//     validationRuleName1: 'Validation Message.',
+//     validationRuleName2: 'Validation Message.'
+// },
+// controlName2: {
+//     validationRuleName1: 'Validation Message.',
+//     validationRuleName2: 'Validation Message.'
+// }
+// getErrorCount(container: FormGroup): number {
+//   let errorCount = 0;
+//   for (const controlKey in container.controls) {
+//     if (container.controls.hasOwnProperty(controlKey)) {
+//       if (container.controls[controlKey].errors) {
+//         errorCount += Object.keys(container.controls[controlKey].errors).length;
+//         console.log(errorCount);
+//       }
+//     }
+//   }
+//   return errorCount;
+// }

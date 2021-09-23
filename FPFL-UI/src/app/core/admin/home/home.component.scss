@@ -1,23 +1,4 @@
 :host ::ng-deep {
-  .card-header {
-    background-color: #efefef;
-    font-size: 16px;
-    font-weight: 500;
-    padding: 16px;
-  }
-
-  button {
-    margin-right: 0.5rem;
-  }
-
-  .top-spacer {
-    margin-top: 1rem;
-  }
-
-  .p-col-max-width-15 {
-    width: auto;
-    max-width: 15rem;
-  }
 
   .left-card {
     margin-left: 1rem;
@@ -30,5 +11,9 @@
 
   .button-container {
     padding-left: 1rem;
+  }
+
+  @media screen and (max-width: 1000px) {
+    #galleria { display: none;}
   }
 }

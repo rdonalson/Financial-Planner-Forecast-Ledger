@@ -8,9 +8,9 @@ describe('LedgerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LedgerComponent ]
+      declarations: [LedgerComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

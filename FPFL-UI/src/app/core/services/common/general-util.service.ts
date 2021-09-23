@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-empty-function */
 import { Injectable } from '@angular/core';
 
 /**
@@ -9,9 +7,6 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class GeneralUtilService {
-
-  constructor() {}
-
   /**
    * Gets the User's OID Guid for use in CRUD operations
    * @returns {string} User's OID

@@ -12,7 +12,8 @@ import { IItem } from '../shared/models/item';
  * account.  This amount is used as the starting point for forcasted ledger calculations
  * If the user doesn't add a value then it is defaulted to Zero.
  * There is only one entry and no deletions
- * One entered only updating is possible.
+ * Once entered only updating is possible.
+ * This is a type of item; initial amount (3)
  */
 @Component({
   templateUrl: './initial-amount.component.html',

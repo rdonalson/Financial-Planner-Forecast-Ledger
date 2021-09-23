@@ -1,15 +1,20 @@
-/* eslint-disable @typescript-eslint/no-inferrable-types */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { MsalService, MsalBroadcastService, MSAL_GUARD_CONFIG, MsalGuardConfiguration } from '@azure/msal-angular';
 import { EventMessage, EventType, InteractionType, PopupRequest, RedirectRequest } from '@azure/msal-browser';
-import { MenuItem } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { catchError, filter, takeUntil } from 'rxjs/operators';
+
+import { MenuItem } from 'primeng/api';
+
 import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
 
+/**
+ * This component builds the Header and Navigation
+ * This is where the Azure Active Directory Boilerplate code
+ * handles the user login and authentication
+ * Once logged in the user's claims data and OID is added to the local storage
+ */
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',

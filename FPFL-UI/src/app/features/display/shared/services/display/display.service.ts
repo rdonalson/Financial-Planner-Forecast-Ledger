@@ -18,7 +18,7 @@ export class DisplayService {
   private url = auth.resources.api.resourceUri + '/display';
 
   /**
-   * Base Constructor
+   * Constructor
    * @param {HttpClient} http
    * @param {GlobalErrorHandlerService} err
    */

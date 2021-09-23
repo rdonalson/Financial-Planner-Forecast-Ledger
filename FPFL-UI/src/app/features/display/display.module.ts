@@ -15,18 +15,14 @@ import { ChartComponent } from './chart/chart.component';
 import { LedgerComponent } from './ledger/ledger.component';
 import { DisplayService } from './shared/services/display/display.service';
 import { DisplayMainComponent } from './display-main.component';
-import { CreditOrDebitPipe } from './shared/pipes/credit-or-debit.pipe';
-import { ItemTypePipe } from './shared/pipes/item-type.pipe';
-import { AppConfigService } from './shared/services/app-config/app-config.service';
+import { FeatureRoutingModule } from '../feature-routing.module';
 
 
 @NgModule({
   declarations: [
     DisplayMainComponent,
     LedgerComponent,
-    ChartComponent,
-    CreditOrDebitPipe,
-    ItemTypePipe
+    ChartComponent
   ],
   imports: [
     CommonModule,
@@ -38,12 +34,12 @@ import { AppConfigService } from './shared/services/app-config/app-config.servic
     CalendarModule,
     TooltipModule,
     TableModule,
-    ChartModule
+    ChartModule,
+    FeatureRoutingModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
-    DisplayService,
-    AppConfigService
+    DisplayService
   ]
 })
 export class DisplayModule { }
