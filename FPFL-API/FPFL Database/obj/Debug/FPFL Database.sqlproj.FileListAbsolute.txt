@@ -5,5 +5,3 @@ C:\Users\rickd\source\repos\Financial-Planner-Forecast-Ledger\FPFL-API\FPFL Data
 C:\Users\rickd\source\repos\Financial-Planner-Forecast-Ledger\FPFL-API\FPFL Database\obj\Debug\predeploy.sql
 C:\Users\rickd\source\repos\Financial-Planner-Forecast-Ledger\FPFL-API\FPFL Database\obj\Debug\FPFL_Database.dll
 C:\Users\rickd\source\repos\Financial-Planner-Forecast-Ledger\FPFL-API\FPFL Database\obj\Debug\FPFL_Database.pdb
-C:\Users\rickd\source\repos\Financial-Planner-Forecast-Ledger\FPFL-API\FPFL Database\bin\Debug\FPFL_Database.dll
-C:\Users\rickd\source\repos\Financial-Planner-Forecast-Ledger\FPFL-API\FPFL Database\bin\Debug\FPFL_Database.pdb

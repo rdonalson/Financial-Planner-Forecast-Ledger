@@ -3,6 +3,7 @@ C:\Users\rickd\source\repos\Financial-Planner-Forecast-Ledger\FPFL-API\FPFL.API.
 C:\Users\rickd\source\repos\Financial-Planner-Forecast-Ledger\FPFL-API\FPFL.API.Data\bin\Debug\netcoreapp3.1\FPFL.API.Data.runtimeconfig.dev.json
 C:\Users\rickd\source\repos\Financial-Planner-Forecast-Ledger\FPFL-API\FPFL.API.Data\bin\Debug\netcoreapp3.1\FPFL.API.Data.dll
 C:\Users\rickd\source\repos\Financial-Planner-Forecast-Ledger\FPFL-API\FPFL.API.Data\bin\Debug\netcoreapp3.1\FPFL.API.Data.pdb
+C:\Users\rickd\source\repos\Financial-Planner-Forecast-Ledger\FPFL-API\FPFL.API.Data\obj\Debug\netcoreapp3.1\FPFL.API.Data.csproj.AssemblyReference.cache
 C:\Users\rickd\source\repos\Financial-Planner-Forecast-Ledger\FPFL-API\FPFL.API.Data\obj\Debug\netcoreapp3.1\FPFL.API.Data.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\rickd\source\repos\Financial-Planner-Forecast-Ledger\FPFL-API\FPFL.API.Data\obj\Debug\netcoreapp3.1\FPFL.API.Data.AssemblyInfoInputs.cache
 C:\Users\rickd\source\repos\Financial-Planner-Forecast-Ledger\FPFL-API\FPFL.API.Data\obj\Debug\netcoreapp3.1\FPFL.API.Data.AssemblyInfo.cs
