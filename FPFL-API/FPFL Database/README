@@ -1,0 +1,22 @@
+** Note:  This is an Entity Framework Code First application.
+          Applying the Migrations in the FPFL.API.Data project will build everything listed here.
+
+** Order of Script Execution
+  Create Database
+    - FPFL.sql
+  Create Schema
+    - ItemDetail.sql
+  Create Tables
+    - ItemTypes.sql
+    - Periods.sql
+    - Items.sql
+  Create View
+    - vwItems.sql
+  Add Seed Data
+    - Insert ItemTypes.sql
+    - Insert Periods.sql
+  Create Procedure
+    - spCreateLedgerReadout.sql
+  
+** Alternatively run the Complete Script to build everything
+    - Complete Script.sql
