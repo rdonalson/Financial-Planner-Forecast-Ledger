@@ -26,3 +26,14 @@ app-header {
     margin-left: auto;
   }
 }
+
+@media screen and (min-width: 480px) {
+  .margins {
+    margin: .75rem;
+  }
+}
+@media screen and (max-width: 480px) {
+  .margins {
+    margin: 0 !important;
+  }
+}

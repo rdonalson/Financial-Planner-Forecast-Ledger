@@ -9,10 +9,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FooterComponent implements OnInit {
   value: string = '';
-  constructor() {}
   ngOnInit(): void {
     const dte = new Date();
     this.value = `Financial Planner: Forecast Ledger ${dte.getFullYear()}`;
   }
-
 }

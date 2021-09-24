@@ -26,11 +26,11 @@ import { ItemDetailCommonService } from '../../shared/services/common/item-detai
   styleUrls: ['./item-edit.component.scss']
 })
 export class ItemEditComponent implements OnInit, OnDestroy {
-  itemTypeName!: string;
-  itemTypeValue!: number;
   private item!: IItem;
   private sub!: Subscription;
   private userId: string = '';
+  itemTypeName!: string;
+  itemTypeValue!: number;
   recordId!: number;
   pageTitle!: string;
   defaultPath: string = '../../';

@@ -1,12 +1,46 @@
 /* You can add global styles to this file, and also import other style files */
 // node_modules\bootstrap\scss\_utilities.scss
-// @import './variables';
-// @import './mixins';
+
 html,
 body {
   height: 100%;
 }
 body {
   margin: 0;
+  padding: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+@media screen and (max-width: 480px) {
+  .container,
+  .container-fluid,
+  .container-lg,
+  .container-md,
+  .container-sm,
+  .container-xl,
+  .container-xxl {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .col {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .row {
+    padding: 0 !important;
+    margin: 0 !important;
+
+  }
+
+  .flex .flex-column {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .pt-3 {
+    padding: 0 !important;
+    padding: 0 !important;
+  }
 }

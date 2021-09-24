@@ -11,19 +11,6 @@ import { PhotoService } from 'src/app/core/services/photo/photo.service';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-
-  /**
-   * Constructor
-   * @param {MsalService} authService Authentication Login Services
-   * @param {GlobalErrorHandlerService} err Error Handle Service
-   */
-  constructor(
-    private authService: MsalService,
-    private err: GlobalErrorHandlerService
-  ) {
-    const photoService: PhotoService = new PhotoService();
-    this.images = photoService.Images;
-  }
   pageTitle: string = 'Home';
   images: IImage[] = [];
   display: boolean = false;
@@ -41,6 +28,19 @@ export class HomeComponent implements OnInit {
       numVisible: 1
     }
   ];
+  
+  /**
+   * Constructor
+   * @param {MsalService} authService Authentication Login Services
+   * @param {GlobalErrorHandlerService} err Error Handle Service
+   */
+  constructor(
+    private authService: MsalService,
+    private err: GlobalErrorHandlerService
+  ) {
+    const photoService: PhotoService = new PhotoService();
+    this.images = photoService.Images;
+  }
 
   /**
    * Initialize the form

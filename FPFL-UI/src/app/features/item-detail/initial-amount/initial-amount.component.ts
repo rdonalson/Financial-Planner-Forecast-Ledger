@@ -49,6 +49,47 @@ export class InitialAmountComponent implements OnInit {
   }
   //#endregion Events
 
+  //#region Utils
+  /**
+   * Prepares the form and "initialAmount" for use
+   */
+   private initialize(): void {
+    this.userId = this.generalUtilService.getUserOid();
+    this.initialAmount = {
+      id: 0,
+      userId: this.userId,
+      name: '',
+      amount: 0,
+      fkItemType: 3,
+      itemType: '',
+      fkPeriod: undefined,
+      period: '',
+      dateRangeReq: false,
+      beginDate: undefined,
+      endDate: undefined,
+      weeklyDow: undefined,
+      everOtherWeekDow: undefined,
+      biMonthlyDay1: undefined,
+      biMonthlyDay2: undefined,
+      monthlyDom: undefined,
+      quarterly1Month: undefined,
+      quarterly1Day: undefined,
+      quarterly2Month: undefined,
+      quarterly2Day: undefined,
+      quarterly3Month: undefined,
+      quarterly3Day: undefined,
+      quarterly4Month: undefined,
+      quarterly4Day: undefined,
+      semiAnnual1Month: undefined,
+      semiAnnual1Day: undefined,
+      semiAnnual2Month: undefined,
+      semiAnnual2Day: undefined,
+      annualMoy: undefined,
+      annualDom: undefined
+    };
+  }
+  //#endregion Utils
+
   //#region Data Functions
   //#region Reads
   /**
@@ -122,45 +163,4 @@ export class InitialAmountComponent implements OnInit {
   }
   //#endregion Writes
   //#endregion Data Functions
-
-  //#region Utils
-  /**
-   * Prepares the form and "initialAmount" for use
-   */
-  private initialize(): void {
-    this.userId = this.generalUtilService.getUserOid();
-    this.initialAmount = {
-      id: 0,
-      userId: this.userId,
-      name: '',
-      amount: 0,
-      fkItemType: 3,
-      itemType: '',
-      fkPeriod: undefined,
-      period: '',
-      dateRangeReq: false,
-      beginDate: undefined,
-      endDate: undefined,
-      weeklyDow: undefined,
-      everOtherWeekDow: undefined,
-      biMonthlyDay1: undefined,
-      biMonthlyDay2: undefined,
-      monthlyDom: undefined,
-      quarterly1Month: undefined,
-      quarterly1Day: undefined,
-      quarterly2Month: undefined,
-      quarterly2Day: undefined,
-      quarterly3Month: undefined,
-      quarterly3Day: undefined,
-      quarterly4Month: undefined,
-      quarterly4Day: undefined,
-      semiAnnual1Month: undefined,
-      semiAnnual1Day: undefined,
-      semiAnnual2Month: undefined,
-      semiAnnual2Day: undefined,
-      annualMoy: undefined,
-      annualDom: undefined
-    };
-  }
-  //#endregion Utils
 }

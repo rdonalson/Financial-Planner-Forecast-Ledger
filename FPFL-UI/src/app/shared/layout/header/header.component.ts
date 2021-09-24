@@ -44,6 +44,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ) { }
 
+  //#region Events
   /**
    * Initialize the Page
    */
@@ -70,6 +71,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   }
 
+  /**
+   * Unsubscribe from events when component is destroyed
+   */
+   ngOnDestroy(): void {
+    this.destroying$.next(undefined);
+    this.destroying$.complete();
+  }
+  //#endregion Events
+
+  //#region Utilities
   /**
    * Initializes the navigation menu
    */
@@ -133,7 +144,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   checkAccount(): void {
     this.loggedIn = this.authService.instance.getAllAccounts().length > 0;
   }
+  //#endregion Utilities
 
+  //#region Authentication
   /**
    * Login Routine
    */
@@ -164,12 +177,5 @@ export class HeaderComponent implements OnInit, OnDestroy {
     localStorage.removeItem('claims');
     this.authService.logout();
   }
-
-  /**
-   * Unsubscribe from events when component is destroyed
-   */
-  ngOnDestroy(): void {
-    this.destroying$.next(undefined);
-    this.destroying$.complete();
-  }
+  //#endregion Authentication
 }
