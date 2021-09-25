@@ -11,7 +11,7 @@ Demo on Azure: https://fpng-ui.azurewebsites.net/home
   * Additional Login: ttutone@rdonalson.onmicrosoft.com
   * Pswd: BSM@B4rRyG6qX5ph
 
-## Improvement 
+## Improvements and Consolidations 
   * Better Responsive Behaviour
   * Consolidation of Debits, Credits & Initial Amount in these areas:
      - UI: 
