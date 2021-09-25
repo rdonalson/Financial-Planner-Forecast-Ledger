@@ -23,4 +23,5 @@ Demo on Azure: https://fpng-ui.azurewebsites.net/home
        - Credit, Debit and InitialAmount merged to one table with ItemType marker into new Database, "FPFL"
        - Reconfigured the Ledger Readout procedure to use these changes
   * Added Database Project containing individual SQL Scripts that Drop and Create all of the database objects
+  * Enabled Lazy Loading of Modules in the Features Section.
 
