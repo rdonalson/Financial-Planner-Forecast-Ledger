@@ -11,4 +11,17 @@ Demo on Azure: https://fpng-ui.azurewebsites.net/home
   * Additional Login: ttutone@rdonalson.onmicrosoft.com
   * Pswd: BSM@B4rRyG6qX5ph
 
+## Improvements and Consolidations 
+  * Better Responsive Behaviour
+  * Consolidation of Debits, Credits & Initial Amount in these areas:
+     - UI: 
+       - Credit and Debit components, html, styling and services into single region, Item
+       - VwCredit, VwDebit, Credit, Debit and InitialAmount models to one models, IItem
+     - API:
+       - Credit and Debit API Controllers, Data Structures and Infrastructure to single region, Item
+     - Database:
+       - Credit, Debit and InitialAmount merged to one table with ItemType marker into new Database, "FPFL"
+       - Reconfigured the Ledger Readout procedure to use these changes
+  * Added Database Project containing individual SQL Scripts that Drop and Create all of the database objects
+  * Enabled Lazy Loading of Modules in the Features Section.
 
