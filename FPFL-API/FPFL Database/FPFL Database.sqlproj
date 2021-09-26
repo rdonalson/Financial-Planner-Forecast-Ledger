@@ -62,7 +62,6 @@
     <Folder Include="Seed Data" />
     <Folder Include="Views" />
     <Folder Include="Schemas" />
-    <Folder Include="- Complete Script" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database\FPFL.sql" />
@@ -74,8 +73,5 @@
     <None Include="Procedures\spCreateLedgerReadout.sql" />
     <None Include="Views\vwItems.sql" />
     <None Include="Schemas\ItemDetail.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <Build Include="- Complete Script\Complete Script.sql" />
   </ItemGroup>
 </Project>
