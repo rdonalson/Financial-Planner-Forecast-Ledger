@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="FPFL.API.Infrastructure.Display.Repository.DataTransformation" BaseTypeListCollapsed="true">
+    <Position X="1.5" Y="4.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAACAAAgAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Display\Repository\DataTransformation.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="FPFL.API.Infrastructure.Display.Repository.RepoDisplay" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="4.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgABEAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Display\Repository\RepoDisplay.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="FPFL.API.Infrastructure.ItemDetail.Models.ItemVM">
+    <Position X="7.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABABAAAAAAAAAAATAAAAAAAAAAEAAAAAAAgI=</HashCode>
+      <FileName>Display\Models\ItemVm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FPFL.API.Infrastructure.ItemDetail.Models.LedgerVM">
+    <Position X="3.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAADAAACCAAAAAAAAACAAAAAAAEAEAAAAAAAAQ=</HashCode>
+      <FileName>Display\Models\LedgerVm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FPFL.API.Infrastructure.ItemDetail.Models.Enums">
+    <Position X="5.75" Y="7.5" Width="1.75" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="FPFL.API.Infrastructure.ItemDetail.Models.Enums.ItemTypes">
+        <TypeIdentifier>
+          <NewMemberFileName>ItemDetail\Models\Enums.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ItemDetail\Models\Enums.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FPFL.API.Infrastructure.ItemDetail.Repository.RepoInitialAmount" BaseTypeListCollapsed="true">
+    <Position X="7.75" Y="4.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQACABEQAAAAgAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ItemDetail\Repository\RepoInitialAmount.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="FPFL.API.Infrastructure.ItemDetail.Repository.RepoItems" BaseTypeListCollapsed="true">
+    <Position X="3.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAABEAAAQAAAAAAAAAABgAABAAAAAAAAAA=</HashCode>
+      <FileName>ItemDetail\Repository\RepoItems.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.179" />
+  </Class>
+  <Class Name="FPFL.API.Infrastructure.ItemDetail.Repository.RepoPeriod" BaseTypeListCollapsed="true">
+    <Position X="9.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABEAAAAAAAAAACAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>ItemDetail\Repository\RepoPeriod.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.481" />
+  </Class>
+  <Interface Name="FPFL.API.Infrastructure.Display.Interface.IDataTransformation">
+    <Position X="1.5" Y="2.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Display\Interface\IDataTransformation.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="FPFL.API.Infrastructure.Display.Interface.IRepoDisplay">
+    <Position X="5.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Display\Interface\IRepoDisplay.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="FPFL.API.Infrastructure.ItemDetail.Interface.IRepoInitialAmount">
+    <Position X="7.75" Y="2.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQACAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ItemDetail\Interface\IRepoInitialAmount.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="FPFL.API.Infrastructure.ItemDetail.Interface.IRepoItems">
+    <Position X="3.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAEAAAQAAAAAAAAAABgAAAAAAAAAAAAA=</HashCode>
+      <FileName>ItemDetail\Interface\IRepoItems.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="FPFL.API.Infrastructure.ItemDetail.Interface.IRepoPeriod">
+    <Position X="9.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>ItemDetail\Interface\IRepoPeriod.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

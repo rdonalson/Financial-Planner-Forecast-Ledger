@@ -33,7 +33,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production"
       },
-      "applicationUrl": "https://fpng-api.azurewebsites.net"
+      "applicationUrl": "https://fpng-api.azurewebsites.net/"
     }
   }
 }
