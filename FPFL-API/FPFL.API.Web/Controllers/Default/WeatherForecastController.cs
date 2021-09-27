@@ -1,4 +1,4 @@
-﻿using FPFL.API.Web.Models.Display;
+﻿using FPFL.API.Web.Models.Default;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;

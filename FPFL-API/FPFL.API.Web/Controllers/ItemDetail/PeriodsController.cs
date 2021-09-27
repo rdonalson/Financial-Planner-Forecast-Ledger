@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace FPFL.API.Web.Controllers.ItemDetail
 {
-    // [Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PeriodsController : ControllerBase
@@ -36,7 +36,7 @@ namespace FPFL.API.Web.Controllers.ItemDetail
         [HttpGet]
         public async Task<ActionResult<List<Period>>> GetPeriods()
         {
-            // HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
+            HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
             return await _repoPeriod.GetPeriods();
         }
 
@@ -49,7 +49,7 @@ namespace FPFL.API.Web.Controllers.ItemDetail
         [HttpGet("{id}")]
         public async Task<ActionResult<Period>> GetPeriod(int id)
         {
-            // /HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
+            HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
             var period = await _repoPeriod.GetPeriod(id);
 
             if (period == null)

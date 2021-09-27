@@ -1,6 +1,6 @@
 using System;
 
-namespace FPFL.API.Web.Models.Display
+namespace FPFL.API.Web.Models.Default
 {
     public class WeatherForecast
     {

@@ -45,7 +45,7 @@ namespace FPFL.API.Web.Controllers.Display
         /// <param name="input">LedgerParams: Parameters for input into procedure</param>
         /// <returns>Task<ActionResult<List<LedgerVM>>>: A ledger of financial tansactions for the Authorized User</returns>
         [HttpPost]
-        public async Task<ActionResult<List<LedgerVM>>> createLedger(LedgerParams input)
+        public async Task<ActionResult<List<LedgerVM>>> CreateLedger(LedgerParams input)
         {
             HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
             return await _repoDisplay.CreateLedger(input.TimeFrameBegin, input.TimeFrameEnd, input.UserId, input.GroupingTransform);
