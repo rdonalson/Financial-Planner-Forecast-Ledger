@@ -1,6 +1,0 @@
-2021-09-11 13:56:56,526  INFO Microsoft.Hosting.Lifetime.MoveNext [0] - MESSAGE: Now listening on: https://localhost:5001
- 2021-09-11 13:56:56,599  INFO Microsoft.Hosting.Lifetime.OnApplicationStarted [0] - MESSAGE: Application started. Press Ctrl+C to shut down.
- 2021-09-11 13:56:56,602  INFO Microsoft.Hosting.Lifetime.OnApplicationStarted [0] - MESSAGE: Hosting environment: Development
- 2021-09-11 13:56:56,604  INFO Microsoft.Hosting.Lifetime.OnApplicationStarted [0] - MESSAGE: Content root path: C:\Users\rickd\source\repos\Financial-Planner-Forecast-Ledger\FPFL-API\FPFL.API.Web
- 2021-09-11 13:57:11,692  INFO Microsoft.Hosting.Lifetime.OnApplicationStopping [0] - MESSAGE: Application is shutting down...
- 

@@ -1,6 +1,7 @@
 ﻿using FPFL.API.Data.Domain;
 using FPFL.API.Infrastructure.Display.Interface;
 using FPFL.API.Infrastructure.ItemDetail.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,6 +16,8 @@ namespace FPFL.API.Infrastructure.Display.Repository
     /// </summary>
     public class DataTransformation : IDataTransformation
     {
+        private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         /// <summary>
         ///     Base Constructor
         /// </summary>
@@ -27,9 +30,17 @@ namespace FPFL.API.Infrastructure.Display.Repository
         /// <returns>List<LedgerVM></returns>
         public List<LedgerVM> TransformLedgerData(List<Ledger> ledger)
         {
-            List<LedgerVM> ledgerVm = CreateLedgerVM(ledger);
-            List<ItemVM> itemsVm = GetItemsList(ledger);
-            return AttachItems(ledgerVm, itemsVm);
+            try
+            {
+                List<LedgerVM> ledgerVm = CreateLedgerVM(ledger);
+                List<ItemVM> itemsVm = GetItemsList(ledger);
+                return AttachItems(ledgerVm, itemsVm);
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex.ToString());
+                return null;
+            }
         }
 
         /// <summary>
@@ -41,22 +52,30 @@ namespace FPFL.API.Infrastructure.Display.Repository
         /// <returns>List<LedgerVM></returns>
         private List<LedgerVM> CreateLedgerVM(List<Ledger> ledger)
         {
-            List<LedgerVM> ledgerVm;
-            ledgerVm = (
-                from lvm in ledger
-                group lvm by new { lvm.RollupKey, lvm.Year, lvm.WDate, lvm.CreditSummary, lvm.DebitSummary, lvm.Net, lvm.RunningTotal } into grp
-                select new LedgerVM
-                {
-                    RollupKey = grp.Key.RollupKey,
-                    Year = grp.Key.Year,
-                    WDate = grp.Key.WDate,
-                    CreditSummary = grp.Key.CreditSummary,
-                    DebitSummary = grp.Key.DebitSummary,
-                    Net = grp.Key.Net,
-                    RunningTotal = grp.Key.RunningTotal
-                }
-            ).ToList();
-            return ledgerVm;
+            try
+            {
+                List<LedgerVM> ledgerVm;
+                ledgerVm = (
+                    from lvm in ledger
+                    group lvm by new { lvm.RollupKey, lvm.Year, lvm.WDate, lvm.CreditSummary, lvm.DebitSummary, lvm.Net, lvm.RunningTotal } into grp
+                    select new LedgerVM
+                    {
+                        RollupKey = grp.Key.RollupKey,
+                        Year = grp.Key.Year,
+                        WDate = grp.Key.WDate,
+                        CreditSummary = grp.Key.CreditSummary,
+                        DebitSummary = grp.Key.DebitSummary,
+                        Net = grp.Key.Net,
+                        RunningTotal = grp.Key.RunningTotal
+                    }
+                ).ToList();
+                return ledgerVm;
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex.ToString());
+                return null;
+            }
         }
 
         /// <summary>
@@ -67,23 +86,31 @@ namespace FPFL.API.Infrastructure.Display.Repository
         /// <returns>List<ItemVM></returns>
         private List<ItemVM> GetItemsList(List<Ledger> ledger)
         {
-            List<ItemVM> itemsVm;
-            itemsVm = (
-                from lvm in ledger
-                where !string.IsNullOrEmpty(lvm.OccurrenceDate.ToString())
-                select new ItemVM
-                {
-                    RollupKey = lvm.RollupKey,
-                    ItemKey = 0,
-                    Year = lvm.Year,
-                    OccurrenceDate = lvm.OccurrenceDate.ToString(),
-                    ItemType = lvm.ItemType,
-                    Period = lvm.PeriodName,
-                    Name = lvm.Name,
-                    Amount = lvm.Amount
-                }
-            ).ToList();
-            return itemsVm;
+            try
+            {
+                List<ItemVM> itemsVm;
+                itemsVm = (
+                    from lvm in ledger
+                    where !string.IsNullOrEmpty(lvm.OccurrenceDate.ToString())
+                    select new ItemVM
+                    {
+                        RollupKey = lvm.RollupKey,
+                        ItemKey = 0,
+                        Year = lvm.Year,
+                        OccurrenceDate = lvm.OccurrenceDate.ToString(),
+                        ItemType = lvm.ItemType,
+                        Period = lvm.PeriodName,
+                        Name = lvm.Name,
+                        Amount = lvm.Amount
+                    }
+                ).ToList();
+                return itemsVm;
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex.ToString());
+                return null;
+            }
         }
 
         /// <summary>
@@ -98,21 +125,29 @@ namespace FPFL.API.Infrastructure.Display.Repository
         /// <returns>ist<LedgerVM></returns>
         private List<LedgerVM> AttachItems(List<LedgerVM> ledgerVm, List<ItemVM> itemsVm)
         {
-            foreach (var element in ledgerVm)
+            try
             {
-                List<ItemVM> sublst = (itemsVm.Where(i => i.RollupKey == element.RollupKey && i.Year == element.Year)).ToList();
-                if (sublst.Count > 0)
+                foreach (var element in ledgerVm)
                 {
-                    int cntr = 1;
-                    foreach (var item in sublst.OrderBy(s => s.OccurrenceDate).ThenBy(s => s.ItemType))
+                    List<ItemVM> sublst = (itemsVm.Where(i => i.RollupKey == element.RollupKey && i.Year == element.Year)).ToList();
+                    if (sublst.Count > 0)
                     {
-                        item.ItemKey = cntr;
-                        cntr++;
+                        int cntr = 1;
+                        foreach (var item in sublst.OrderBy(s => s.OccurrenceDate).ThenBy(s => s.ItemType))
+                        {
+                            item.ItemKey = cntr;
+                            cntr++;
+                        }
+                        element.Items.AddRange(sublst.OrderBy(s => s.ItemKey));
                     }
-                    element.Items.AddRange(sublst.OrderBy(s => s.ItemKey));
                 }
+                return ledgerVm;
             }
-            return ledgerVm;
+            catch (Exception ex)
+            {
+                _log.Error(ex.ToString());
+                return null;
+            }
         }
     }
 }
