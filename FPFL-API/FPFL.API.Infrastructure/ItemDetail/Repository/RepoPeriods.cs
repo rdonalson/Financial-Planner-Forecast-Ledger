@@ -12,7 +12,7 @@ namespace FPFL.API.Infrastructure.ItemDetail.Repository
     /// <summary>
     ///     Period Repository
     /// </summary>
-    public class RepoPeriod : IRepoPeriod
+    public class RepoPeriods : IRepoPeriods
     {
         private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private readonly FPFLContext _context;
@@ -21,7 +21,7 @@ namespace FPFL.API.Infrastructure.ItemDetail.Repository
         ///     Constructor
         /// </summary>
         /// <param name="context">FPFLContext: Setup the Data Context</param>
-        public RepoPeriod(FPFLContext context)
+        public RepoPeriods(FPFLContext context)
         {
             _context = context;
         }

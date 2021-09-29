@@ -73,5 +73,7 @@
     <None Include="Procedures\spCreateLedgerReadout.sql" />
     <None Include="Views\vwItems.sql" />
     <None Include="Schemas\ItemDetail.sql" />
+    <None Include="FPFL Database Diagram.png" />
+    <None Include="README" />
   </ItemGroup>
 </Project>

@@ -17,7 +17,7 @@ namespace FPFL.API.Web.Controllers.ItemDetail
     public class PeriodsController : ControllerBase
     {
         static readonly string[] scopeRequiredByApi = new string[] { "access_as_user" };
-        private readonly IRepoPeriod _repoPeriod;
+        private readonly IRepoPeriods _repoPeriod;
 
         /// <summary>
         ///     Periods Controller Constructor
@@ -25,7 +25,7 @@ namespace FPFL.API.Web.Controllers.ItemDetail
         /// <param name="context">FPNgContext: Setup the Data Context</param>
         public PeriodsController(FPFLContext context)
         {
-            _repoPeriod = new RepoPeriod(context);
+            _repoPeriod = new RepoPeriods(context);
         }
 
         /// <summary>
