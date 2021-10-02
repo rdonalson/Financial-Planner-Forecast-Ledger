@@ -14,14 +14,14 @@ namespace FPFL.API.Infrastructure.Display.Repository
     ///     Then the functions in this class will transform the data so the Day row only occurs once and
     ///     any Item data will be placed in an "Items" array. 
     /// </summary>
-    public class DataTransformation : IDataTransformation
+    public class RepoDataTransformation : IRepoDataTransformation
     {
         private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         /// <summary>
         ///     Base Constructor
         /// </summary>
-        public DataTransformation() { }
+        public RepoDataTransformation() { }
 
         /// <summary>
         ///     Primary controlling function that calls the individual tranform features

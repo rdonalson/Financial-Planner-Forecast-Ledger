@@ -17,7 +17,7 @@ namespace FPFL.API.Infrastructure.Display.Repository
     {
         private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private readonly FPFLContext _context;
-        private readonly IDataTransformation _dataTransformation;
+        private readonly IRepoDataTransformation _dataTransformation;
 
         /// <summary>
         ///     Constructor
@@ -26,12 +26,12 @@ namespace FPFL.API.Infrastructure.Display.Repository
         public RepoDisplay(FPFLContext context)
         {
             _context = context;
-            _dataTransformation = new DataTransformation();
+            _dataTransformation = new RepoDataTransformation();
         }
 
         /// <summary>
         ///     Calls the "spCreateLedgerReadout" stored procedure which returns a flatfile of data item
-        ///     that then supplied to the DataTransformation class that will transform the data into
+        ///     that then supplied to the RepoDataTransformation class that will transform the data into
         ///     a form that can be used by the UI Ledger and Chart
         /// </summary>
         /// <param name="timeFrameBegin">DateTime</param>
