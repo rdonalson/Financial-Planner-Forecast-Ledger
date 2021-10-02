@@ -21,7 +21,7 @@ export class ItemDetailCommonService {
     // These could instead be retrieved from a file or database.
     this.messages = {
       // Common Fields
-      Name: { required: 'Required:  Enter a descriptive Name' },
+      Name: { required: 'Required:  Enter a Descriptive Name' },
       Amount: { required: 'Required:  Enter an Amount' },
       Period: { required: 'Required:  Select a Period' },
       // Date Range
@@ -31,14 +31,14 @@ export class ItemDetailCommonService {
       // Weekly & Every Other Week (Every Two Weeks)
       WeeklyDow: { required: 'Required:  Select a Day of the Week.' },
       // One time Occurrence & Every Other Week (Every Two Weeks)
-      InitDateOTO: { required: 'Required:  Select the date of occurrence' },
-      InitDateEOW: { required: 'Required:  Select a date on or before the day you want this Period to Start' },
+      InitDateOTO: { required: 'Required:  Select the Date of occurrence' },
+      InitDateEOW: { required: 'Required:  Select a Date on or before the Day you want this Period to Start' },
       // Monthly & Bi-Monthly
-      MonthlyDay: { required: 'Required:  Select the Day of occurrence' },
+      MonthlyDay: { required: 'Required:  Select the day of occurrence' },
       BiMonthlyDay1: { required: 'Required:  Select the First Day of occurrence' },
       BiMonthlyDay2: { required: 'Required:  Select the Second Day of occurrence' },
       // Annual, Semi-Annual & Quarterly
-      MonthOfOccurrence: { required: 'Required:  Select the Month of Occurence' },
+      MonthOfOccurrence: { required: 'Required:  Select the Month of occurrence' },
       DayInMonthOfOccurrence: { required: 'Required:  Select the Day within that Month' }
     };
   }
@@ -92,9 +92,9 @@ export class ItemDetailCommonService {
   //#region Validation Helpers
   /**
    * Calls all of the update validation functions which turns validation on/off
-   * for various field combination in the "creditForm" formbuild
+   * for various field combination in the "itemForm" formbuild
    * based on user's Period selection
-   * @param {FormGroup} form The Form Group from the CRUD Form
+   * @param {FormGroup} form The Form Group from the item form
    * @param {number} period The Period Key Value
    */
   setPeriodFields(form: FormGroup, period?: number): void {
@@ -128,7 +128,7 @@ export class ItemDetailCommonService {
    * Handles Validation for "Every Two Weeks" and "One Time Occurrence" Fields:
    * "Every Two Weeks" ->
    *    "InitializationDate" Calendar Selector, which represents the Period's first occurrence.
-   *      Note: This value from this formbuild field reuses the "beginDate" field in credit (ICredit)
+   *      Note: This value from this formbuild field reuses the "beginDate" field in item (IItem)
    *            Also if a "Date Range" selected for this period it doesn't need the "BeginDate" because that value is handled
    *            by "InitializationDate".  So part of the Date Range "EndDate" Validation is must be handled here.
    *    "EverOtherWeekDow" Weekday Radio Button Array determines the weekday of occurrence.
@@ -313,10 +313,11 @@ export class ItemDetailCommonService {
   }
 
   /**
-   * Handles Validation for the "Annual" Fields:
-   * "BeginDate" Calendar Selector, allows the user to set a Start Date for a particular Credit
-   * "EndDate" Calendar Selector, allows the user to set a Stop Date for a particular Credit
+   * Allows the user to set a Start and End Date for a particular Item
+   * "BeginDate" Calendar Selector, allows the user to set the Start Date
+   * "EndDate" Calendar Selector, allows the user to set a End Date
    * @param {FormGroup} form The Form Group from the CRUD Form
+   * @param {boolean} toggle? True / False value from the Date Range Checkbox
    * @param {number} period The user's period selection
    */
   updateDateRangeValidation(form: FormGroup, toggle?: boolean, period?: number): void {

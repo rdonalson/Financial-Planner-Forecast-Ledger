@@ -140,7 +140,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
   /**
    * Add New Record
    */
-  addNew(): void {
+  addNewItem(): void {
     this.initializeRecord();
     this.onItemRetrieved(this.item);
   }

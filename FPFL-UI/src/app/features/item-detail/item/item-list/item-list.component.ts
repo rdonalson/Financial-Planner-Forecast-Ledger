@@ -121,7 +121,7 @@ export class ItemListComponent implements OnInit {
    * Prompt User before committing
    * @param {number} id The id of the Credit
    */
-  deleteCredit(id: number): void {
+  deleteItem(id: number): void {
     if (id === 0) {
       // Don't delete, it was never saved.
       this.messageUtilService.onComplete('Credit not Found');

@@ -13,6 +13,11 @@ import { IPeriod } from '../../models/period';
 @Injectable()
 export class PeriodService {
   private url = auth.resources.api.resourceUri + '/periods';
+  /**
+   * Base Constructor
+   * @param {HttpClient} http
+   * @param {GlobalErrorHandlerService} err
+   */
   constructor(
     private http: HttpClient,
     private err: GlobalErrorHandlerService
