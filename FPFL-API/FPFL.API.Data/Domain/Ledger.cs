@@ -14,6 +14,7 @@ namespace FPFL.API.Data.Domain
         public double Net { get; set; }
         public double RunningTotal { get; set; }
         public DateTime? OccurrenceDate { get; set; }
+        public int FkItemType { get; set; }
         public string ItemType { get; set; }
         public string PeriodName { get; set; }
         public string Name { get; set; }

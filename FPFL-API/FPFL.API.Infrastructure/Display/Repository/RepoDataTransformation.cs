@@ -98,6 +98,7 @@ namespace FPFL.API.Infrastructure.Display.Repository
                         ItemKey = 0,
                         Year = lvm.Year,
                         OccurrenceDate = lvm.OccurrenceDate.ToString(),
+                        FkItemType =lvm.FkItemType,
                         ItemType = lvm.ItemType,
                         Period = lvm.PeriodName,
                         Name = lvm.Name,
