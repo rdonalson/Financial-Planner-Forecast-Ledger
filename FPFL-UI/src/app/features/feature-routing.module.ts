@@ -4,7 +4,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { DisplayMainComponent } from './display/display-main.component';
 import { ItemDetailHomeComponent } from './item-detail/item-detail-home.component';
 
-
 const routes: Routes = [
   {
     path: '',

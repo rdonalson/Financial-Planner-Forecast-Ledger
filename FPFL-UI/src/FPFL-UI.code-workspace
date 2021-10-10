@@ -1,21 +1,27 @@
 {
-	"folders": [
-		{
-			"path": ".."
-		}
-	],
-	"settings": {},
-	"launch": {
-		"version": "0.2.0",
-		"configurations": [
-			{
-				"type": "pwa-msedge",
-				"request": "launch",
+  "folders": [{
+    "path": ".."
+  }],
+  "settings": {},
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Launch Chrome",
+        "request": "launch",
         "sourceMaps": true,
-				"name": "Launch Chrome against localhost",
-				"url": "http://localhost:1000",
-				"webRoot": "${workspaceFolder}"
-			}
-		]
-	}
+        "type": "pwa-chrome",
+        "url": "http://localhost:1000",
+        "webRoot": "${workspaceFolder}"
+      },
+      {
+        "name": "Launch Edge",
+        "type": "pwa-msedge",
+        "request": "launch",
+        "sourceMaps": true,
+        "url": "http://localhost:1000",
+        "webRoot": "${workspaceFolder}"
+      }
+    ]
+  }
 }

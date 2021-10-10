@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-
 import { ILedgerVM } from '../shared/view-models/ledger-vm';
 
 @Component({

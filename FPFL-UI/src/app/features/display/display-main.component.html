@@ -22,6 +22,20 @@
           </a>
         </li>
       </ul>
+      <form class="d-flex">
+        <!-- Export to Excel -->
+        <button
+          *ngIf="activeIndex === 1 || activeIndex === 2"
+          pButton
+          pRipple
+          label="Export"
+          type="button"
+          (click)="exportToExcel()"
+          icon="pi pi-file-excel"
+          pTooltip="Export to Excel"
+          class="p-button-success new-button"
+        ></button>
+      </form>
     </div>
   </div>
 </nav>

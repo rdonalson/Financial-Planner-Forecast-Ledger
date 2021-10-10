@@ -6,6 +6,7 @@ import { GeneralUtilService } from 'src/app/core/services/common/general-util.se
 import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
 import { ILedgerParams } from './shared/models/ledger-params';
 import { DisplayService } from './shared/services/display/display.service';
+import { ExportService } from './shared/services/export/export.service';
 import { ILedgerVM } from './shared/view-models/ledger-vm';
 
 @Component({
@@ -44,7 +45,8 @@ export class DisplayMainComponent implements OnInit, OnDestroy {
     private claimsUtilService: GeneralUtilService,
     private err: GlobalErrorHandlerService,
     private displayService: DisplayService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private exportService: ExportService
   ) {
     // Criterial field messages.
     this.messages = {
@@ -55,6 +57,13 @@ export class DisplayMainComponent implements OnInit, OnDestroy {
   }
 
   //#region Events
+  /**
+   * Export to Excel Function
+   */
+  exportToExcel(): void {
+    this.exportService.exportToExcel(this.ledgerList, this.dateRangeDisplay);
+  }
+
   /**
    * Initialize the page
    */
@@ -110,7 +119,7 @@ export class DisplayMainComponent implements OnInit, OnDestroy {
         this.groupingStrategy = 'Weekly';
       }
       if (diffDays > 360 && diffDays <= 1090) {
-        this.groupingStrategy = 'Weekly';
+        this.groupingStrategy = 'Monthly';
       }
       if (diffDays > 1090 && diffDays <= 2850) {
         this.groupingStrategy = 'Quarterly';

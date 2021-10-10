@@ -3,6 +3,7 @@ export interface IItemVM {
   year?: number;
   itemKey?: number;
   occurrenceDate?: string;
+  fkItemType?: number;
   itemType?: string;
   period?: string;
   name?: string;

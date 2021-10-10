@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -16,6 +16,7 @@ import { LedgerComponent } from './ledger/ledger.component';
 import { DisplayService } from './shared/services/display/display.service';
 import { DisplayMainComponent } from './display-main.component';
 import { FeatureRoutingModule } from '../feature-routing.module';
+import { ExportService } from './shared/services/export/export.service';
 
 
 @NgModule({
@@ -39,7 +40,9 @@ import { FeatureRoutingModule } from '../feature-routing.module';
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
-    DisplayService
+    DatePipe,
+    DisplayService,
+    ExportService
   ]
 })
 export class DisplayModule { }

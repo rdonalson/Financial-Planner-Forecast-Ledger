@@ -1,22 +1,37 @@
 <p-table responsiveLayout="scroll" [value]="ledgerList" dataKey="rollupKey">
+  <!-- <ng-template pTemplate="caption">
+    <div class="p-d-flex">
+      <button
+        type="button"
+        pButton
+        pRipple
+        icon="pi pi-file-excel"
+        (click)="exportToExcel()"
+        class="p-button-success p-mr-2"
+        pTooltip="XLS"
+        tooltipPosition="bottom"
+      ></button>
+    </div>
+  </ng-template> -->
+
   <!-- Start of Parent Row -->
   <!-- Column Headers -->
   <ng-template pTemplate="header">
     <tr>
-      <th style="width: 3rem"></th>
-      <th style="width: 20rem" pSortableColumn="wDate">
+      <th style="width: 2rem"></th>
+      <th style="width: 15rem" pSortableColumn="wDate">
         Date <p-sortIcon field="wDate"></p-sortIcon>
       </th>
-      <th pSortableColumn="creditSummary" class="right">
+      <th style="width: 10rem" pSortableColumn="creditSummary" class="right">
         Credit Summary<p-sortIcon field="creditSummary"></p-sortIcon>
       </th>
-      <th pSortableColumn="debitSummary" class="right">
+      <th style="width: 10rem" pSortableColumn="debitSummary" class="right">
         Debits Summary<p-sortIcon field="debitSummary"></p-sortIcon>
       </th>
-      <th pSortableColumn="net" class="right">
+      <th style="width: 10rem" pSortableColumn="net" class="right">
         Net Change<p-sortIcon field="net"></p-sortIcon>
       </th>
-      <th pSortableColumn="runningTotal" class="right">
+      <th style="width: 10rem" pSortableColumn="runningTotal" class="right">
         Balance <p-sortIcon field="runningTotal"></p-sortIcon>
       </th>
     </tr>
@@ -26,7 +41,7 @@
     <tr>
       <!-- Row Expander -->
       <td *ngIf="ledger.items.length === 0">
-        <div style="width: 3rem"></div>
+        <div style="width: 2rem"></div>
       </td>
       <td *ngIf="ledger.items.length !== 0">
         <button
@@ -80,7 +95,7 @@
   <!-- End of Parent Row -->
   <ng-template pTemplate="rowexpansion" let-ledger>
     <tr>
-      <td colspan="6">
+      <td colspan="7">
         <div class="p-p-3">
           <!-- Start of Child Row -->
           <p-table
@@ -91,38 +106,49 @@
             <!-- Column Headers -->
             <ng-template pTemplate="header">
               <tr>
-                <th class="item-header" pSortableColumn="itemType">
+                <th class="item-no-header" style="width: 7rem"></th>
+                <th style="width: 11rem" class="item-header" pSortableColumn="itemType">
                   Item Type <p-sortIcon field="itemType"></p-sortIcon>
                 </th>
-                <th class="item-header" pSortableColumn="period">
-                  Period <p-sortIcon field="period"></p-sortIcon>
+                <th style="width: 7rem" class="right item-header" pSortableColumn="amount">
+                  Credits <p-sortIcon field="amount"></p-sortIcon>
                 </th>
-                <th class="item-header" pSortableColumn="name">
+                <th style="width: 9rem" class="right item-header" pSortableColumn="amount">
+                  Debits <p-sortIcon field="amount"></p-sortIcon>
+                </th>
+                <th style="width: 4rem" class="item-header"></th>
+                <th style="width: 7rem" class="item-header" pSortableColumn="name">
                   Name <p-sortIcon field="name"></p-sortIcon>
                 </th>
-                <th class="right item-header" pSortableColumn="amount">
-                  Amount <p-sortIcon field="amount"></p-sortIcon>
+                <th style="width: 5rem" class="item-header" pSortableColumn="period">
+                  Period <p-sortIcon field="period"></p-sortIcon>
                 </th>
               </tr>
             </ng-template>
             <!-- Data Rows -->
             <ng-template pTemplate="body" let-item>
               <tr>
+                <th ></th>
                 <td class="item-body">{{ item.itemType }}</td>
-                <td class="item-body">{{ item.period }}</td>
-                <td class="item-body">{{ item.name }}</td>
-                <td
-                  class="right item-body"
-                  [ngClass]="{ red: item.amount < 0, green: item.amount > 0 }"
-                >
-                  {{ item.amount | currency: "USD" }}
+                <td class="right item-body green">
+                  {{
+                    item.fkItemType === 1 ? (item.amount | currency: "USD") : ""
+                  }}
                 </td>
+                <td class="right item-body red">
+                  {{
+                    item.fkItemType === 2 ? (item.amount | currency: "USD") : ""
+                  }}
+                </td>
+                <th class="item-body"></th>
+                <td class="item-body">{{ item.name }}</td>
+                <td class="item-body">{{ item.period }}</td>
               </tr>
             </ng-template>
             <!-- Message for no Child Rows -->
             <ng-template pTemplate="emptymessage">
               <tr>
-                <td colspan="6">There are no items for this date.</td>
+                <td colspan="7">There are no items for this date.</td>
               </tr>
             </ng-template>
           </p-table>
