@@ -29,15 +29,13 @@ import { ItemDetailHomeComponent } from './item-detail-home.component';
 import { ItemListComponent } from './item/item-list/item-list.component';
 import { ItemEditComponent } from './item/item-edit/item-edit.component';
 import { ItemService } from './shared/services/item/item.service';
-import { StyleTestComponent } from './style-test/style-test.component';
 
 @NgModule({
   declarations: [
     ItemDetailHomeComponent,
     InitialAmountComponent,
     ItemListComponent,
-    ItemEditComponent,
-    StyleTestComponent,
+    ItemEditComponent
   ],
   imports: [
     CommonModule,

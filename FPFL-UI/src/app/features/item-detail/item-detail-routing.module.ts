@@ -4,7 +4,6 @@ import { InitialAmountComponent } from './initial-amount/initial-amount.componen
 import { ItemDetailHomeComponent } from './item-detail-home.component';
 import { ItemEditComponent } from './item/item-edit/item-edit.component';
 import { ItemListComponent } from './item/item-list/item-list.component';
-import { StyleTestComponent } from './style-test/style-test.component';
 
 const routes: Routes = [
   {
@@ -26,8 +25,7 @@ const routes: Routes = [
                 ]
               }
             ]
-          },
-          { path: 'style-test', component: StyleTestComponent }
+          }
         ]
       }
     ]

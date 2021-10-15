@@ -5,24 +5,41 @@
     <div class="vertical-separator"></div>
     <!-- Progress Spinner -->
     <div class="navbar-brand list-spinner-box">
-      <p-progressSpinner *ngIf="progressSpinner" strokeWidth="6" [style]="{ width: '2rem', height: '2rem' }"
-        fill="#efefef" animationDuration="3s" styleClass="custom-spinner "></p-progressSpinner>
+      <p-progressSpinner
+        *ngIf="progressSpinner"
+        strokeWidth="6"
+        [style]="{ width: '2rem', height: '2rem' }"
+        fill="#efefef"
+        animationDuration="3s"
+        styleClass="custom-spinner "
+      ></p-progressSpinner>
     </div>
     <!-- Responsive Toggle Button -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-0 mb-lg-0">
         <!-- Navigate to Home Link -->
         <li class="nav-item">
-          <a class="nav-link nav-link-helper" aria-current="page" routerLink="/home">
+          <a
+            class="nav-link nav-link-helper"
+            aria-current="page"
+            routerLink="/home"
+          >
             <i>Home</i>
           </a>
         </li>
       </ul>
-      <form class="d-flex">
+      <form class="d-flex" pTooltip="Export to Excel" tooltipPosition="left">
         <!-- Export to Excel -->
         <button
           *ngIf="activeIndex === 1 || activeIndex === 2"
@@ -32,7 +49,6 @@
           type="button"
           (click)="exportToExcel()"
           icon="pi pi-file-excel"
-          pTooltip="Export to Excel"
           class="p-button-success new-button"
         ></button>
       </form>
@@ -52,38 +68,76 @@
         <div class="card-container">
           <!-- Start Date -->
           <div class="field grid">
-            <label for="beginDateId" class="col-12 mb-2 md:col-2 md:mb-0">Start Date</label>
-            <div class="col-5 md:col-4 p-calendar-dropdown-format-helper">
-              <p-calendar [(ngModel)]="ledgerParams.timeFrameBegin" id="beginDateId" placeholder="Select a start date"
-                [showIcon]="true" pTooltip="{{ messages['timeFrameBegin'].informational }}" tooltipPosition="left"
-                (onSelect)="setInvalidDays()">
+            <label for="beginDateId" class="col-12 mb-2 md:col-2 md:mb-0"
+              >Start Date</label
+            >
+            <div
+              class="col-5 md:col-4 p-calendar-dropdown-format-helper"
+              tooltipPosition="left"
+              pTooltip="{{ messages['timeFrameBegin'].informational }}"
+            >
+              <p-calendar
+                [(ngModel)]="ledgerParams.timeFrameBegin"
+                id="beginDateId"
+                placeholder="Select a start date"
+                [showIcon]="true"
+                (onSelect)="setInvalidDays()"
+              >
               </p-calendar>
             </div>
           </div>
           <!-- End Date -->
           <div class="field grid">
-            <label for="endDateId" class="col-12 mb-2 md:col-2 md:mb-0">End Date</label>
-            <div class="col-5 md:col-4 p-calendar-dropdown-format-helper">
-              <p-calendar [(ngModel)]="ledgerParams.timeFrameEnd" id="endDateId" placeholder="Select an end date"
-                [showIcon]="true" pTooltip="{{ messages['timeFrameEnd'].informational }}" tooltipPosition="left"
-                [minDate]="invalidDate" (onSelect)="setInvalidDays()">
+            <label for="endDateId" class="col-12 mb-2 md:col-2 md:mb-0"
+              >End Date</label
+            >
+            <div
+              class="col-5 md:col-4 p-calendar-dropdown-format-helper"
+              tooltipPosition="left"
+              pTooltip="{{ messages['timeFrameEnd'].informational }}"
+            >
+              <p-calendar
+                [(ngModel)]="ledgerParams.timeFrameEnd"
+                id="endDateId"
+                placeholder="Select an end date"
+                [showIcon]="true"
+                [minDate]="invalidDate"
+                (onSelect)="setInvalidDays()"
+              >
               </p-calendar>
             </div>
           </div>
           <!-- Grouping? -->
           <div class="field grid">
-            <label for="groupingTransformId" class="col-12 mb-2 md:col-2 md:mb-0">Grouping?</label>
-            <div class="col-5 md:col-4">
-              <p-checkbox id="groupingTransformId" [(ngModel)]="ledgerParams.groupingTransform" [binary]="true"
-                pTooltip="{{ messages['groupingTransform'].informational }}" tooltipPosition="left">
+            <label
+              for="groupingTransformId"
+              class="col-12 mb-2 md:col-2 md:mb-0"
+              >Grouping?</label
+            >
+            <div
+              class="col-5 md:col-4"
+              tooltipPosition="left"
+              pTooltip="{{ messages['groupingTransform'].informational }}"
+            >
+              <p-checkbox
+                id="groupingTransformId"
+                [(ngModel)]="ledgerParams.groupingTransform"
+                [binary]="true"
+              >
               </p-checkbox>
             </div>
           </div>
           <!-- Control Buttons -->
           <div class="field grid">
             <div class="col-5 md:col-4 top-spacer">
-              <button pButton pRipple label="Calculate" icon="pi pi-clock" class="p-button-success p-mr-2"
-                (click)="calculate()"></button>
+              <button
+                pButton
+                pRipple
+                label="Calculate"
+                icon="pi pi-clock"
+                class="p-button-success p-mr-2"
+                (click)="calculate()"
+              ></button>
             </div>
           </div>
         </div>
