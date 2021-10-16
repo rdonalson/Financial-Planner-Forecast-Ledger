@@ -18,6 +18,10 @@
     <ProjectReference Include="..\FPFL.API.Infrastructure\FPFL.API.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="https://json.schemastore.org/bettercodehub.json" /></VisualStudio></ProjectExtensions>
 
 
