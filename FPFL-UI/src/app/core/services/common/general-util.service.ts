@@ -1,18 +1,53 @@
 import { Injectable } from '@angular/core';
+import { IClaims } from '../../model/claims';
 
 /**
- * General Application Utilities
+ * General Application Utilities: Creates a singleton Service that provides
+ * or createss the Local Storage Claims object or the user OID contained within
  */
 @Injectable({
   providedIn: 'root'
 })
 export class GeneralUtilService {
+  private claims!: IClaims;
+
+  /**
+   * Will create and provide or if already set will provide the Claims object
+   * in Local Storage
+   * @param {any} token The result from logging in
+   * @returns {IClaims}
+   */
+  setClaims(token: any): IClaims {
+    if (this.claims === undefined) {
+      this.claims = JSON.parse(JSON.stringify(token.idTokenClaims || '{}')) as IClaims;
+      localStorage.setItem('claims', JSON.stringify(this.claims));
+    }
+    return this.claims;
+  }
+
+  /**
+   * Returns Claims and if not there will go get it from the Local Storage
+   * in Local Storage
+   * @param {any} token The result from logging in
+   * @returns {IClaims}
+   */
+  getClaims(): IClaims {
+    if (this.claims !== undefined) {
+      return this.claims;
+    }
+    this.claims = JSON.parse(localStorage.getItem('claims') || '{}') as IClaims;
+    return this.claims;
+  }
+
   /**
    * Gets the User's OID Guid for use in CRUD operations
    * @returns {string} User's OID
    */
   getUserOid(): string {
-    const claims = JSON.parse(localStorage.getItem('claims') || '{}');
-    return claims.oid;
+    if (this.claims !== undefined && this.claims.oid !== undefined) {
+      return this.claims.oid?.toString() || '';
+    }
+    this.claims = JSON.parse(localStorage.getItem('claims') || '{}') as IClaims;
+    return this.claims.oid?.toString() || '';
   }
 }

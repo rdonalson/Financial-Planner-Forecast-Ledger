@@ -8,6 +8,8 @@ import { catchError, filter, takeUntil } from 'rxjs/operators';
 import { MenuItem } from 'primeng/api';
 
 import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
+import { GeneralUtilService } from 'src/app/core/services/common/general-util.service';
+import { IClaims } from 'src/app/core/model/claims';
 
 /**
  * This component builds the Header and Navigation
@@ -22,7 +24,7 @@ import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-er
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   menuItems: MenuItem[] = [];
-  claims: any;
+  claims!: IClaims;
   title = 'Financial Planner';
   isIframe: boolean = false;
   loggedIn: boolean = false;
@@ -40,6 +42,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
     private authService: MsalService,
     private msalBroadcastService: MsalBroadcastService,
+    private generalUtilService: GeneralUtilService,
     private err: GlobalErrorHandlerService
 
   ) { }
@@ -52,14 +55,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.getMenuItems();
     this.isIframe = window !== window.parent && !window.opener;
     this.checkAccount();
-    this.claims = JSON.parse(localStorage.getItem('claims') || '{}'); // JSON.parse(obj);
+    this.claims = this.generalUtilService.getClaims();
 
     /**
      * You can subscribe to MSAL events as shown below. For more info,
      * visit: https://github.com/AzureAD/microsoft-authentication-library-for-js/
      * blob/dev/lib/msal-angular/docs/v2-docs/events.md
      */
-    this.msalBroadcastService.msalSubject$
+     this.msalBroadcastService.msalSubject$
       .pipe(
         filter((msg: EventMessage) => msg.eventType === EventType.LOGIN_SUCCESS || msg.eventType === EventType.ACQUIRE_TOKEN_SUCCESS),
         takeUntil(this.destroying$)
@@ -133,9 +136,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
    */
   getClaims(result: any): void {
     this.loggedIn = this.authService.instance.getAllAccounts().length > 0;
-    const claims = JSON.parse(JSON.stringify(result.payload));
-    localStorage.setItem('claims', JSON.stringify(claims.idTokenClaims || '{}'));
-    this.claims = JSON.parse(localStorage.getItem('claims') || '{}');
+    const token = JSON.parse(JSON.stringify(result.payload));
+    this.claims = this.generalUtilService.setClaims(token);
   }
 
   /**
