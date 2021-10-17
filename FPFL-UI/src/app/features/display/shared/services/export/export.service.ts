@@ -19,7 +19,7 @@ import { IItemVM } from '../../view-models/item-vm';
  */
 @Injectable()
 export class ExportService {
-  
+
   /**
    * Constructor
    * @param {DatePipe} datePipe Utility for date formatting
@@ -32,7 +32,7 @@ export class ExportService {
    * @param {string} timeFrame Time frame and grouping strategy from Display
    */
   exportToExcel(ledgerList: ILedgerVM[], timeFrame: string): void {
-    let workbook = this.workbookFactory();
+    const workbook = this.workbookFactory();
     this.buildMainHeader(workbook, timeFrame);
     this.buildMainBody(workbook, ledgerList);
     this.writeToBuffer(workbook);
@@ -78,7 +78,7 @@ export class ExportService {
     ws.mergeCells('A1:E2');
 
     /** Add datetime created and merge accross width of data fields */
-    ws.addRow(['Date : ' + this.datePipe.transform(new Date(), 'medium')]);
+    ws.addRow([`Date : ${this.datePipe.transform(new Date(), 'medium') || ''}`])
     ws.mergeCells('A3:E3');
     /** Add time frame from Display and merge accross width of data fields */
     ws.addRow([timeFrame]);
@@ -220,7 +220,7 @@ export class ExportService {
    * @param {Workbook} wb The working ExcelJs Workbook
    */
   writeToBuffer(wb: Workbook): void {
-    wb.xlsx.writeBuffer().then((data: any) => {
+    void wb.xlsx.writeBuffer().then((data: any) => {
       const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       fs.saveAs(blob, 'Forecast Ledger.xlsx');
     });

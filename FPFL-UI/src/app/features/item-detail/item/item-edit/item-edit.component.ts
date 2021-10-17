@@ -392,7 +392,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     if (this.item.id === 0) {
       this.itemService.createItem(this.item)
         .subscribe({
-          next: () => { },
+          // next: () => { },
           error: catchError((err: any) => {
             this.messageUtilService.onError(`Item Creation Failed`);
             return this.err.handleError(err);
@@ -405,7 +405,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     } else {
       this.itemService.updateItem(this.item)
         .subscribe({
-          next: () => { },
+          // next: () => { },
           error: catchError((err: any) => {
             this.messageUtilService.onError(`Item Update Failed`);
             return this.err.handleError(err);
@@ -439,7 +439,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
           this.progressSpinner = true;
           this.itemService.deleteItem(this.item.id)
             .subscribe({
-              next: () => { },
+              // next: () => { },
               error: catchError((err: any) => {
                 this.messageUtilService.onError(`Item Delete Failed`);
                 return this.err.handleError(err);

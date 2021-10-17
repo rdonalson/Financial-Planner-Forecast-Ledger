@@ -12,6 +12,6 @@ export class ErrorComponent {
 
   constructor(private router: Router) { }
   goHome(): void {
-    this.router.navigate(['home']);
+    void this.router.navigate(['home']);
   }
 }

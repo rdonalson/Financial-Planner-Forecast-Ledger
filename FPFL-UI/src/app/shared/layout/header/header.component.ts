@@ -173,7 +173,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
    */
   logout(): void {
     this.menuItems = [];
-    this.router.navigate(['/home']);
+    void this.router.navigate(['/home']);
     localStorage.removeItem('claims');
     this.authService.logout();
   }

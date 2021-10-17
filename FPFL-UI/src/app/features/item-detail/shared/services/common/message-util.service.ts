@@ -14,10 +14,7 @@ export class MessageUtilService {
    * @param {Router} router For navigation feature
    * @param {MessageService} messageService Message Service from Prime Library
    */
-  constructor(
-    private router: Router,
-    private messageService: MessageService
-  ) { }
+  constructor(private router: Router, private messageService: MessageService) {}
 
   //#region Message Displays
   /**
@@ -25,7 +22,11 @@ export class MessageUtilService {
    * @param {string} message The information to be displayed in the Message
    */
   onComplete(message: string): void {
-    this.messageService.add({ severity: 'success', summary: 'Success', detail: `${message}` });
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: `${message}`,
+    });
     this.timeOut(this.defaultMilliseconds);
   }
 
@@ -37,7 +38,11 @@ export class MessageUtilService {
    * @param {ActivatedRoute} route Relative location to begin navigation from
    */
   onCompleteNav(message: string, path: string, route: ActivatedRoute): void {
-    this.messageService.add({ severity: 'success', summary: 'Success', detail: `${message}` });
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: `${message}`,
+    });
     this.timeOutNav(this.defaultMilliseconds, path, route);
   }
 
@@ -46,7 +51,11 @@ export class MessageUtilService {
    * @param {string} message The information to be displayed in the Message
    */
   onError(message: string): void {
-    this.messageService.add({ severity: 'error', summary: 'Error', detail: `${message}` });
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: `${message}`,
+    });
     this.timeOut(this.defaultMilliseconds);
   }
   //#endregion Message Displays
@@ -69,10 +78,14 @@ export class MessageUtilService {
    * @param {string} path Path to navigate to
    * @param {ActivatedRoute} route Relative location to begin navigation from
    */
-  private timeOutNav(milliseconds: number, path: string, route: ActivatedRoute): void {
+  private timeOutNav(
+    milliseconds: number,
+    path: string,
+    route: ActivatedRoute
+  ): void {
     setTimeout(() => {
       this.messageService.clear();
-      this.router.navigate([path], { relativeTo: route });
+      void this.router.navigate([path], { relativeTo: route });
     }, milliseconds);
   }
   //#endregion Utilities

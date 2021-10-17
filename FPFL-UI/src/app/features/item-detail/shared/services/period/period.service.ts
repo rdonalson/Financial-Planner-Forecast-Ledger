@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 
 import * as auth from '../../../../../shared/auth-config.json';
 import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';

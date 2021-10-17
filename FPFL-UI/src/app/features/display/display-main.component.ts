@@ -111,8 +111,8 @@ export class DisplayMainComponent implements OnInit, OnDestroy {
    * Auto Grouping Strategy being used by the Ledger Readout Procedure
    */
   private getDateDiff(): void {
-    var diff = this.ledgerParams.timeFrameEnd.valueOf() - this.ledgerParams.timeFrameBegin.valueOf();
-    var diffDays = Math.ceil(diff / (1000 * 3600 * 24));
+    const diff = this.ledgerParams.timeFrameEnd.valueOf() - this.ledgerParams.timeFrameBegin.valueOf();
+    const diffDays = Math.ceil(diff / (1000 * 3600 * 24));
 
     if (this.ledgerParams.groupingTransform || diffDays <= 60) {
       if (diffDays > 60 && diffDays <= 360) {

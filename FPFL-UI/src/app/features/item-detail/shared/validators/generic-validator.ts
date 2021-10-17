@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 import { FormGroup } from '@angular/forms';
 
 // Generic validator for Reactive forms

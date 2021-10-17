@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
 import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
 import * as auth from '../../../../../shared/auth-config.json';

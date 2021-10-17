@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -18,7 +18,7 @@ import { GeneralUtilService } from 'src/app/core/services/common/general-util.se
   templateUrl: './item-list.component.html',
   styleUrls: ['./item-list.component.scss']
 })
-export class ItemListComponent implements OnInit {
+export class ItemListComponent implements OnInit, OnDestroy {
   itemTypeName!: string;
   itemTypeValue!: number;
   pageTitle!: string;
@@ -69,7 +69,7 @@ export class ItemListComponent implements OnInit {
       .subscribe((params: any) => {
         this.getItemTypeValue(params.itemType);
         this.pageTitle = `Manage ${this.itemTypeName}`
-        this.getItems(this.userId, this.itemTypeValue);;
+        this.getItems(this.userId, this.itemTypeValue);
       });
   }
 

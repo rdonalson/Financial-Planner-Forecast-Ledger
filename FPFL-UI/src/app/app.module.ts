@@ -1,4 +1,4 @@
-import { NgModule, OnInit } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PrimeNGConfig } from 'primeng/api';
@@ -22,9 +22,8 @@ import { SharedModule } from './shared/shared.module';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule implements OnInit {
-  constructor(public primengConfig: PrimeNGConfig) {}
-  ngOnInit(): void {
+export class AppModule {
+  constructor(public primengConfig: PrimeNGConfig) {
     this.primengConfig.ripple = true;
   }
 }
