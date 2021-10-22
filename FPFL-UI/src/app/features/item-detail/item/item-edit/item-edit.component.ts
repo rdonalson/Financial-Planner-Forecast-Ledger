@@ -159,9 +159,9 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    */
   private setTitleText(): void {
     if (this.recordId === 0) {
-      this.pageTitle = `New ${this.itemTypeName}`
+      this.pageTitle = `New ${this.itemTypeName}`;
     } else {
-      this.pageTitle = `Edit ${this.itemTypeName}`
+      this.pageTitle = `Edit ${this.itemTypeName}`;
     }
   }
   /**

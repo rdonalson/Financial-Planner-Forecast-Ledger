@@ -10,6 +10,14 @@ import { IClaims } from '../../model/claims';
 })
 export class GeneralUtilService {
   private claims!: IClaims;
+  private _loggedin: boolean = false;
+  
+  public get loggedin(): boolean {
+    return this._loggedin;
+  }
+  public set loggedin(value: boolean) {
+    this._loggedin = value;
+  }
 
   /**
    * Will create and provide or if already set will provide the Claims object
@@ -18,7 +26,7 @@ export class GeneralUtilService {
    * @returns {IClaims}
    */
   setClaims(token: any): IClaims {
-    if (this.claims === undefined) {
+    if (this.claims === undefined || this.claims.oid === undefined) {
       this.claims = JSON.parse(JSON.stringify(token.idTokenClaims || '{}')) as IClaims;
       localStorage.setItem('claims', JSON.stringify(this.claims));
     }
@@ -32,9 +40,6 @@ export class GeneralUtilService {
    * @returns {IClaims}
    */
   getClaims(): IClaims {
-    if (this.claims !== undefined) {
-      return this.claims;
-    }
     this.claims = JSON.parse(localStorage.getItem('claims') || '{}') as IClaims;
     return this.claims;
   }

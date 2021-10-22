@@ -108,7 +108,7 @@ export class InitialAmountComponent implements OnInit {
             this.saveInitialAmount();
           } else {
             this.initialAmount = data;
-            console.log(`Record Retrieved: ${JSON.stringify(this.initialAmount)}`);
+            // console.log(`Record Retrieved: ${JSON.stringify(this.initialAmount)}`);
           }
         },
         error: catchError((err: any) => this.err.handleError(err)),

@@ -27,7 +27,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
   claims!: IClaims;
   title = 'Financial Planner';
   isIframe: boolean = false;
-  loggedIn: boolean = false;
+  public get loggedIn(): boolean {
+    return this.generalUtilService.loggedin;
+  }
+  public set loggedIn(value: boolean) {
+    this.generalUtilService.loggedin = value;
+  }
   private readonly destroying$ = new Subject<void>();
 
   /**
@@ -62,7 +67,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
      * visit: https://github.com/AzureAD/microsoft-authentication-library-for-js/
      * blob/dev/lib/msal-angular/docs/v2-docs/events.md
      */
-     this.msalBroadcastService.msalSubject$
+    this.msalBroadcastService.msalSubject$
       .pipe(
         filter((msg: EventMessage) => msg.eventType === EventType.LOGIN_SUCCESS || msg.eventType === EventType.ACQUIRE_TOKEN_SUCCESS),
         takeUntil(this.destroying$)
@@ -77,7 +82,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   /**
    * Unsubscribe from events when component is destroyed
    */
-   ngOnDestroy(): void {
+  ngOnDestroy(): void {
     this.destroying$.next(undefined);
     this.destroying$.complete();
   }
@@ -135,7 +140,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
    * @param {any} result
    */
   getClaims(result: any): void {
-    this.loggedIn = this.authService.instance.getAllAccounts().length > 0;
+    this.checkAccount();
     const token = JSON.parse(JSON.stringify(result.payload));
     this.claims = this.generalUtilService.setClaims(token);
   }
@@ -144,7 +149,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
    * Insure that there is a least one account in the Claims data
    */
   checkAccount(): void {
-    this.loggedIn = this.authService.instance.getAllAccounts().length > 0;
+    if (!this.generalUtilService.loggedin) {
+      if (this.authService.instance.getAllAccounts().length > 0){
+        this.generalUtilService.loggedin = true;
+      }
+    }
   }
   //#endregion Utilities
 
@@ -178,6 +187,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     void this.router.navigate(['/home']);
     localStorage.removeItem('claims');
     this.authService.logout();
+    this.loggedIn = false;
+    this.loggedIn = false;
   }
   //#endregion Authentication
 }
