@@ -42,5 +42,6 @@ Demo on Azure: https://fpng-ui.azurewebsites.net/home
      - Added new Menu on the Home Page
   * Altered the Utility Arrays in the Edit Item Component: 
      - Moved datasets to JSON file, DaysInTheMonth, WeekDays & Month
+     - Created new model for datasets, an array of arrays, IUtilArray
      - Created a Singleton Utility Array Service to provide the items to the Dropdown & Radio Groups Selectors
  
