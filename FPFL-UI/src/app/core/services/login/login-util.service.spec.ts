@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { GeneralUtilService } from './general-util.service';
+import { LoginUtilService } from './login-util.service';
 
 describe('ClaimsUtilService', () => {
-  let service: GeneralUtilService;
+  let service: LoginUtilService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(GeneralUtilService);
+    service = TestBed.inject(LoginUtilService);
   });
 
   it('should be created', () => {
