@@ -25,7 +25,7 @@ Demo on Azure: https://fpng-ui.azurewebsites.net/home
   * Added Database Project containing individual SQL Scripts that Drop and Create all of the database objects
   * Enabled Lazy Loading of Modules in the Features Section.
 
-## 10/10/2021 Updates & Additions
+### 10/10/2021 Updates & Additions
   * Added ExcelJs Excel export to Display on Chart & Ledger
   * Reconfigured Ledger for better display of Credit & Debit Items
   * Excel export & Leger are styled in the same manner.
