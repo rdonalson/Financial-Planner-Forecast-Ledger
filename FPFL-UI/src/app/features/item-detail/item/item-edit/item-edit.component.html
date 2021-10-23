@@ -112,7 +112,7 @@
               <div class="col-6 md:col-5 formgroup-inline">
                 <div
                   id="weeklyDowId"
-                  *ngFor="let day of utilArray.WeekDays"
+                  *ngFor="let day of weekDays"
                   class="p-field-radiobutton"
                   tooltipPosition="left"
                   pTooltip="{{ messages['WeeklyDow'].required }}"
@@ -160,7 +160,7 @@
               <label class="col-12 mb-2 md:col-2 md:mb-0">Day of Week</label>
               <div class="col-6 md:col-5 formgroup-inline">
                 <div
-                  *ngFor="let day of utilArray.WeekDays"
+                  *ngFor="let day of weekDays"
                   class="p-field-radiobutton"
                   tooltipPosition="left"
                   pTooltip="{{ messages['WeeklyDow'].required }}"
@@ -193,7 +193,7 @@
                 <p-dropdown
                   id="monthlyDay1Id"
                   formControlName="BiMonthlyDay1"
-                  [options]="utilArray.DaysInTheMonth"
+                  [options]="daysInMonth"
                   placeholder="Select a Day"
                   optionLabel="key"
                   optionValue="value"
@@ -214,7 +214,7 @@
                 <p-dropdown
                   id="monthlyDay2Id"
                   formControlName="BiMonthlyDay2"
-                  [options]="utilArray.DaysInTheMonth"
+                  [options]="daysInMonth"
                   placeholder="Select a Day"
                   optionLabel="key"
                   optionValue="value"
@@ -239,7 +239,7 @@
                 <p-dropdown
                   id="monthlyDomId"
                   formControlName="MonthlyDom"
-                  [options]="utilArray.DaysInTheMonth"
+                  [options]="daysInMonth"
                   placeholder="Select a Day"
                   optionLabel="key"
                   optionValue="value"
@@ -264,7 +264,7 @@
                 <p-dropdown
                   id="quarterlyMoy1Id"
                   formControlName="Quarterly1Month"
-                  [options]="utilArray.Months"
+                  [options]="months"
                   placeholder="Select a Month"
                   optionLabel="key"
                   optionValue="value"
@@ -278,7 +278,7 @@
               >
                 <p-dropdown
                   formControlName="Quarterly1Day"
-                  [options]="utilArray.DaysInTheMonth"
+                  [options]="daysInMonth"
                   placeholder="Select a Day"
                   optionLabel="key"
                   optionValue="value"
@@ -301,7 +301,7 @@
                 <p-dropdown
                   id="quarterlyMoy2Id"
                   formControlName="Quarterly2Month"
-                  [options]="utilArray.Months"
+                  [options]="months"
                   placeholder="Select a Month"
                   optionLabel="key"
                   optionValue="value"
@@ -315,7 +315,7 @@
               >
                 <p-dropdown
                   formControlName="Quarterly2Day"
-                  [options]="utilArray.DaysInTheMonth"
+                  [options]="daysInMonth"
                   placeholder="Select a Day"
                   optionLabel="key"
                   optionValue="value"
@@ -338,7 +338,7 @@
                 <p-dropdown
                   id="quarterlyMoy3Id"
                   formControlName="Quarterly3Month"
-                  [options]="utilArray.Months"
+                  [options]="months"
                   placeholder="Select a Month"
                   optionLabel="key"
                   optionValue="value"
@@ -352,7 +352,7 @@
               >
                 <p-dropdown
                   formControlName="Quarterly3Day"
-                  [options]="utilArray.DaysInTheMonth"
+                  [options]="daysInMonth"
                   placeholder="Select a Day"
                   optionLabel="key"
                   optionValue="value"
@@ -375,7 +375,7 @@
                 <p-dropdown
                   id="quarterlyMoy4Id"
                   formControlName="Quarterly4Month"
-                  [options]="utilArray.Months"
+                  [options]="months"
                   placeholder="Select a Month"
                   optionLabel="key"
                   optionValue="value"
@@ -389,7 +389,7 @@
               >
                 <p-dropdown
                   formControlName="Quarterly4Day"
-                  [options]="utilArray.DaysInTheMonth"
+                  [options]="daysInMonth"
                   placeholder="Select a Day"
                   optionLabel="key"
                   optionValue="value"
@@ -415,7 +415,7 @@
                 <p-dropdown
                   id="semiAnnualMoy1Id"
                   formControlName="SemiAnnual1Month"
-                  [options]="utilArray.Months"
+                  [options]="months"
                   placeholder="Select a Month"
                   optionLabel="key"
                   optionValue="value"
@@ -429,7 +429,7 @@
               >
                 <p-dropdown
                   formControlName="SemiAnnual1Day"
-                  [options]="utilArray.DaysInTheMonth"
+                  [options]="daysInMonth"
                   placeholder="Select a Day"
                   optionLabel="key"
                   optionValue="value"
@@ -451,7 +451,7 @@
                 <p-dropdown
                   id="semiAnnualMoy2Id"
                   formControlName="SemiAnnual2Month"
-                  [options]="utilArray.Months"
+                  [options]="months"
                   placeholder="Select a Month"
                   optionLabel="key"
                   optionValue="value"
@@ -465,7 +465,7 @@
               >
                 <p-dropdown
                   formControlName="SemiAnnual2Day"
-                  [options]="utilArray.DaysInTheMonth"
+                  [options]="daysInMonth"
                   placeholder="Select a Day"
                   optionLabel="key"
                   optionValue="value"
@@ -490,7 +490,7 @@
                 <p-dropdown
                   id="annualMoyId"
                   formControlName="AnnualMoy"
-                  [options]="utilArray.Months"
+                  [options]="months"
                   placeholder="Select a Month"
                   optionLabel="key"
                   optionValue="value"
@@ -505,7 +505,7 @@
               >
                 <p-dropdown
                   formControlName="AnnualDom"
-                  [options]="utilArray.DaysInTheMonth"
+                  [options]="daysInMonth"
                   placeholder="Select a Day"
                   optionLabel="key"
                   optionValue="value"

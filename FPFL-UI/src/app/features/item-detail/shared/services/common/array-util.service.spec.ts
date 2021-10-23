@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { UtilArrayService } from './util-array.service';
+import { ArrayUtilService } from './array-util.service';
 
 describe('ArrayUtilService', () => {
-  let service: UtilArrayService;
+  let service: ArrayUtilService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(UtilArrayService);
+    service = TestBed.inject(ArrayUtilService);
   });
 
   it('should be created', () => {

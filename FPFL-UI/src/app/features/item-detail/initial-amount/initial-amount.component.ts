@@ -4,7 +4,7 @@ import { catchError } from 'rxjs/operators';
 import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
 import { InitialAmountService } from '../shared/services/initial-amount/initial-amount.service';
 import { MessageUtilService } from '../shared/services/common/message-util.service';
-import { LoginUtilService } from 'src/app/core/services/login/login-util.service';
+import { GeneralUtilService } from 'src/app/core/services/common/general-util.service';
 import { IItem } from '../shared/models/item';
 
 /**
@@ -27,13 +27,13 @@ export class InitialAmountComponent implements OnInit {
 
   /**
    * Base Constructor
-   * @param {LoginUtilService} loginUtilService A common utilities service
+   * @param {GeneralUtilService} generalUtilService A common utilities service
    * @param {MessageUtilService} messageUtilService A common utilities service
    * @param {GlobalErrorHandlerService} err Error Handler
    * @param {InitialAmountService} intialAmountService Initial Amount Service
    */
   constructor(
-    private loginUtilService: LoginUtilService,
+    private generalUtilService: GeneralUtilService,
     private messageUtilService: MessageUtilService,
     private err: GlobalErrorHandlerService,
     private intialAmountService: InitialAmountService
@@ -54,7 +54,7 @@ export class InitialAmountComponent implements OnInit {
    * Prepares the form and "initialAmount" for use
    */
    private initialize(): void {
-    this.userId = this.loginUtilService.getUserOid();
+    this.userId = this.generalUtilService.getUserOid();
     this.initialAmount = {
       id: 0,
       userId: this.userId,

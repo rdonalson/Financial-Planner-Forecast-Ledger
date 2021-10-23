@@ -1,19 +1,12 @@
 :host ::ng-deep {
 
   .left-card {
-    margin-right: 1rem;
+    margin-left: 1rem;
   }
 
   .right-card {
     float: right;
-  }
-
-  .right-card-padding {
     padding: 0.75rem 0.75rem 0 0.75rem;
-  }
-
-  .menu-spacer {
-    margin-left: 1rem;
   }
 
   .button-container {

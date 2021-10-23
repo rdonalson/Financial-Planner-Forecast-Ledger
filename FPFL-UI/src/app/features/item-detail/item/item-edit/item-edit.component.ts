@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import { Component, ElementRef, OnDestroy, OnInit, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControlName, FormGroup } from '@angular/forms';
 import { formatDate } from '@angular/common';
@@ -10,14 +9,14 @@ import { ConfirmationService } from 'primeng/api';
 
 import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
 import { IItem } from '../../shared/models/item';
+import { IKeyValue } from '../../shared/models/key-value';
 import { IPeriod } from '../../shared/models/period';
-import { UtilArrayService } from '../../shared/services/common/util-array.service';
+import { ArrayUtilService } from '../../shared/services/common/array-util.service';
 import { MessageUtilService } from '../../shared/services/common/message-util.service';
 import { ItemService } from '../../shared/services/item/item.service';
 import { PeriodService } from '../../shared/services/period/period.service';
-import { LoginUtilService } from 'src/app/core/services/login/login-util.service';
+import { GeneralUtilService } from 'src/app/core/services/common/general-util.service';
 import { ItemDetailCommonService } from '../../shared/services/common/item-detail-common.service';
-import { IUtilArray } from '../../shared/models/util-array';
 
 /**
  * Reactive CRUD Form for individual items; credit (1) or debit (2)
@@ -39,36 +38,41 @@ export class ItemEditComponent implements OnInit, OnDestroy {
   messages: { [key: string]: { [key: string]: string; }; };
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[] = [];
   periods!: IPeriod[];
-  utilArray!: IUtilArray;
+  months!: IKeyValue[];
+  daysInMonth!: IKeyValue[];
+  weekDays!: IKeyValue[];
   itemForm!: FormGroup;
   periodSwitch: number | undefined;
   dateRangeToggle: boolean | undefined;
 
   /**
    * Constructor
-   * @param {LoginUtilService} claimsUtilService
+   * @param {GeneralUtilService} claimsUtilService
    * @param {ConfirmationService} confirmationService
    * @param {FormBuilder} fb
    * @param {ActivatedRoute} route
    * @param {MessageUtilService} messageUtilService
-   * @param {UtilArrayService} array
+   * @param {ArrayUtilService} array
    * @param {GlobalErrorHandlerService} err
    * @param {itemService} itemService
    * @param {PeriodService} periodService
    */
   constructor(
-    private claimsUtilService: LoginUtilService,
+    private claimsUtilService: GeneralUtilService,
     private confirmationService: ConfirmationService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private messageUtilService: MessageUtilService,
     private itemDetailCommonService: ItemDetailCommonService,
-    private utilArrayService: UtilArrayService,
+    array: ArrayUtilService,
     private err: GlobalErrorHandlerService,
     private itemService: ItemService,
     private periodService: PeriodService
   ) {
     this.messages = this.itemDetailCommonService.Messages;
+    this.months = array.Months;
+    this.daysInMonth = array.DaysInTheMonth;
+    this.weekDays = array.WeekDays;
   }
 
   //#region Events
@@ -76,9 +80,8 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    * Initialize the Item Interface, gets the Period list and initizes the FormBuilder
    */
   ngOnInit(): void {
-    this.getUtilArrayItems();
-    this.getPeriods();
     this.initializeRecord();
+    this.getPeriods();
     this.itemForm = this.itemDetailCommonService.generateForm(this.fb);
     this.getRouteParams();
   }
@@ -328,24 +331,6 @@ export class ItemEditComponent implements OnInit, OnDestroy {
 
   //#region Data Functions
   //#region Reads
-  /**
-   * Returns the list of Utility Array Items,
-   * DaysInTheMonth, Weekdays & Months, for use in
-   * the Dropdown Selectors
-   * @returns {any}
-   */
-  getUtilArrayItems(): any {
-    return this.utilArrayService.getUtilArrayItems()
-      .subscribe({
-        next: (data: IUtilArray): void => {
-          this.utilArray = data;
-          console.log(JSON.stringify(this.utilArray));
-        },
-        error: catchError((err: any) => this.err.handleError(err)),
-        complete: () => { }
-      });
-  }
-
   /**
    * Gets the complete list of Periods
    * @returns {any} result

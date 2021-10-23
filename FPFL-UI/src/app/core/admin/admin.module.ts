@@ -11,7 +11,6 @@ import { DialogModule } from 'primeng/dialog';
 import { PageNotFoundComponent } from './system/page-not-found/page-not-found.component';
 import { AdminRoutingModule } from './admin-routing.module';
 import { ErrorComponent } from './system/error/error.component';
-import { TieredMenuModule } from 'primeng/tieredmenu';
 
 @NgModule({
   declarations: [
@@ -24,7 +23,6 @@ import { TieredMenuModule } from 'primeng/tieredmenu';
     FormsModule,
     ButtonModule,
     InputTextModule,
-    TieredMenuModule,
     GalleriaModule,
     DialogModule,
     AdminRoutingModule

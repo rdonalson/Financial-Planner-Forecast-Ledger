@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { MsalService, MsalBroadcastService, MSAL_GUARD_CONFIG, MsalGuardConfiguration } from '@azure/msal-angular';
@@ -9,9 +8,8 @@ import { catchError, filter, takeUntil } from 'rxjs/operators';
 import { MenuItem } from 'primeng/api';
 
 import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
-import { LoginUtilService } from 'src/app/core/services/login/login-util.service';
+import { GeneralUtilService } from 'src/app/core/services/common/general-util.service';
 import { IClaims } from 'src/app/core/model/claims';
-import { MenuService } from 'src/app/core/services/menu/menu.service';
 
 /**
  * This component builds the Header and Navigation
@@ -30,10 +28,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   title = 'Financial Planner';
   isIframe: boolean = false;
   public get loggedIn(): boolean {
-    return this.loginUtilService.loggedin;
+    return this.generalUtilService.loggedin;
   }
   public set loggedIn(value: boolean) {
-    this.loginUtilService.loggedin = value;
+    this.generalUtilService.loggedin = value;
   }
   private readonly destroying$ = new Subject<void>();
 
@@ -49,8 +47,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
     private authService: MsalService,
     private msalBroadcastService: MsalBroadcastService,
-    private loginUtilService: LoginUtilService,
-    private menuService: MenuService,
+    private generalUtilService: GeneralUtilService,
     private err: GlobalErrorHandlerService
 
   ) { }
@@ -63,7 +60,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.getMenuItems();
     this.isIframe = window !== window.parent && !window.opener;
     this.checkAccount();
-    this.claims = this.loginUtilService.getClaims();
+    this.claims = this.generalUtilService.getClaims();
 
     /**
      * You can subscribe to MSAL events as shown below. For more info,
@@ -93,20 +90,49 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   //#region Utilities
   /**
-   * Gets the Menu Items from the MenuItem Service
-   * to initialize the Menubar Menues
-   * @returns {any}
+   * Initializes the navigation menu
    */
-  getMenuItems(): any {
-    return this.menuService.getMenuItems()
-      .subscribe({
-        next: (data: MenuItem[]): void => {
-          this.menuItems = data;
-          // console.log(JSON.stringify(this.menuItems));
+  private getMenuItems(): void {
+    this.menuItems = [
+      {
+        label: 'Item Details',
+        items: [{
+          label: 'Initial Amount',
+          icon: 'pi pi-link',
+          routerLink: '/feature/item-detail/initial-amount'
         },
-        error: catchError((err: any) => this.err.handleError(err)),
-        complete: () => { }
-      });
+        {
+          label: 'Credits',
+          icon: 'pi pi-link',
+          routerLink: '/feature/item-detail/item/credit'
+        }, {
+          label: 'Debits',
+          icon: 'pi pi-link',
+          routerLink: '/feature/item-detail/item/debit'
+        }
+        ]
+      },
+      {
+        label: 'Display',
+        items: [
+          {
+            label: 'Date Range',
+            icon: 'pi pi-calendar',
+            routerLink: '/feature/display/0'
+          },
+          {
+            label: 'Chart',
+            icon: 'pi pi-chart-line',
+            routerLink: '/feature/display/1'
+          },
+          {
+            label: 'Ledger',
+            icon: 'pi pi-list',
+            routerLink: '/feature/display/2'
+          }
+        ]
+      }
+    ];
   }
 
   /**
@@ -116,16 +142,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   getClaims(result: any): void {
     this.checkAccount();
     const token = JSON.parse(JSON.stringify(result.payload));
-    this.claims = this.loginUtilService.setClaims(token);
+    this.claims = this.generalUtilService.setClaims(token);
   }
 
   /**
    * Insure that there is a least one account in the Claims data
    */
   checkAccount(): void {
-    if (!this.loginUtilService.loggedin) {
-      if (this.authService.instance.getAllAccounts().length > 0) {
-        this.loginUtilService.loggedin = true;
+    if (!this.generalUtilService.loggedin) {
+      if (this.authService.instance.getAllAccounts().length > 0){
+        this.generalUtilService.loggedin = true;
       }
     }
   }

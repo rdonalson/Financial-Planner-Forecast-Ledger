@@ -23,7 +23,7 @@ import { InitialAmountComponent } from './initial-amount/initial-amount.componen
 import { MessageUtilService } from './shared/services/common/message-util.service';
 import { PeriodService } from './shared/services/period/period.service';
 import { InitialAmountService } from './shared/services/initial-amount/initial-amount.service';
-import { UtilArrayService } from './shared/services/common/util-array.service';
+import { ArrayUtilService } from './shared/services/common/array-util.service';
 import { ItemDetailCommonService } from './shared/services/common/item-detail-common.service';
 import { ItemDetailHomeComponent } from './item-detail-home.component';
 import { ItemListComponent } from './item/item-list/item-list.component';
@@ -65,7 +65,7 @@ import { ItemService } from './shared/services/item/item.service';
     PeriodService,
     InitialAmountService,
     ItemService,
-    UtilArrayService,
+    ArrayUtilService,
     ItemDetailCommonService
   ]
 })

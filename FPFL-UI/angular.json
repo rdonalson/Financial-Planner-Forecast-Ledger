@@ -32,7 +32,9 @@
             "inlineStyleLanguage": "scss",
             "aot": true,
             "assets": [
-              "src/assets",
+              "src/assets/icons",
+              "src/assets/images",
+              "src/assets/media",
               "src/web.config"
             ],
             "styles": [
