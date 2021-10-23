@@ -6,7 +6,7 @@ import { catchError } from 'rxjs/operators';
 
 import { IImage } from 'src/app/core/model/image';
 import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
-import { PhotoService } from 'src/app/core/services/photo/photo.service';
+import { ImageService } from 'src/app/core/services/photo/image.service';
 import { LoginUtilService } from '../../services/login/login-util.service';
 import { MenuService } from '../../services/menu/menu.service';
 
@@ -40,18 +40,19 @@ export class HomeComponent implements OnInit {
 
   /**
    * Constructor
-   * @param {MsalService} authService Authentication Login Services
-   * @param {GlobalErrorHandlerService} err Error Handle Service
+   * @param {MsalService} authService
+   * @param {LoginUtilService} loginUtilService
+   * @param {MenuService} menuService
+   * @param {ImageService} imageService
+   * @param {GlobalErrorHandlerService} err
    */
   constructor(
     private authService: MsalService,
     private loginUtilService: LoginUtilService,
     private menuService: MenuService,
+    private imageService: ImageService,
     private err: GlobalErrorHandlerService
-  ) {
-    const photoService: PhotoService = new PhotoService();
-    this.images = photoService.Images;
-  }
+  ) { }
 
   /**
    * Initialize the form
@@ -62,6 +63,7 @@ export class HomeComponent implements OnInit {
       error: catchError((err: any) => this.err.handleError(err)),
     });
     this.getMenuItems();
+    this.getImageItems();
   }
 
   /**
@@ -75,6 +77,23 @@ export class HomeComponent implements OnInit {
         next: (data: MenuItem[]): void => {
           this.menuItems = data;
           // console.log(JSON.stringify(this.menuItems));
+        },
+        error: catchError((err: any) => this.err.handleError(err)),
+        complete: () => { }
+      });
+  }
+
+  /**
+   * Gets the Image Addresses from the Image Service
+   * to initialize the Galleria Component
+   * @returns {any}
+   */
+  getImageItems(): any {
+    return this.imageService.getImageItems()
+      .subscribe({
+        next: (data: IImage[]): void => {
+          this.images = data;
+          // console.log(JSON.stringify(this.images));
         },
         error: catchError((err: any) => this.err.handleError(err)),
         complete: () => { }

@@ -339,7 +339,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (data: IUtilArray): void => {
           this.utilArray = data;
-          console.log(JSON.stringify(this.utilArray));
+          // console.log(JSON.stringify(this.utilArray));
         },
         error: catchError((err: any) => this.err.handleError(err)),
         complete: () => { }

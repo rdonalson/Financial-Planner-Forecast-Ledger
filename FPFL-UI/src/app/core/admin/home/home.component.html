@@ -2,10 +2,23 @@
   <div class="card-body">
     <div class="content-section implementation flex">
       <div id="galleria" class="card left-card">
-        <p-galleria [value]="images" [responsiveOptions]="responsiveOptions" [containerStyle]="{ 'max-width': '640px' }"
-          [numVisible]="5" [circular]="true" [autoPlay]="true" [transitionInterval]="5000">
+        <p-galleria
+          [value]="images"
+          [responsiveOptions]="responsiveOptions"
+          [containerStyle]="{ 'max-width': '750px' }"
+          [numVisible]="5"
+          [showThumbnails]="false"
+          [showIndicators]="true"
+          [changeItemOnIndicatorHover]="true"
+          [autoPlay]="true"
+          [showIndicatorsOnItem]="true"
+          [transitionInterval]="5000"
+        >
           <ng-template pTemplate="item" let-item>
-            <img [src]="item.previewImageSrc" style="width: 100%; display: block" />
+            <img
+              [src]="item.previewImageSrc"
+              style="width: 100%; display: block"
+            />
           </ng-template>
           <ng-template pTemplate="thumbnail" let-item>
             <div class="p-grid p-nogutter p-justify-center">
@@ -18,20 +31,22 @@
         <div class="right-card-padding">
           <ul style="list-style-type: circle">
             <li>
-              This Application enables You to keep your checking or saving account
-              solvent out to any future point in time.
+              This Application enables You to keep your checking or saving
+              account solvent out to any future point in time.
             </li>
             <li>
-              You enter expenses and gratuities with a starting
-              amount, then by entering a time frame, you can easily see a total by
-              end of that time frame.
+              You enter expenses and gratuities with a starting amount, then by
+              entering a time frame, you can easily see a total by end of that
+              time frame.
             </li>
             <li>
               These calculated items can be displayed in either a graphic or
               ledger format.
             </li>
             <li>
-              <a href="assets/media/Financial Planner Guide.pdf" target="_blank">Financial Planner Guide</a>
+              <a href="assets/media/Financial Planner Guide.pdf" target="_blank"
+                >Financial Planner Guide</a
+              >
             </li>
           </ul>
         </div>
@@ -42,3 +57,26 @@
     </div>
   </div>
 </div>
+
+<!-- Archive
+  <p-galleria
+    [value]="images"
+    [containerStyle]="{ 'max-width': '640px' }"
+    [numVisible]="5"
+    [circular]="true"
+    [autoPlay]="true"
+    [transitionInterval]="5000"
+  >
+    <ng-template pTemplate="item" let-item>
+      <img
+        [src]="item.previewImageSrc"
+        style="width: 100%; display: block"
+      />
+    </ng-template>
+    <ng-template pTemplate="thumbnail" let-item>
+      <div class="p-grid p-nogutter p-justify-center">
+        <img [src]="item.thumbnailImageSrc" style="display: block" />
+      </div>
+    </ng-template>
+  </p-galleria>
+-->

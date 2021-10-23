@@ -1,5 +1,4 @@
 :host ::ng-deep {
-
   .left-card {
     margin-right: 1rem;
   }
@@ -21,6 +20,10 @@
   }
 
   @media screen and (max-width: 1000px) {
-    #galleria { display: none;}
+    #galleria {
+      display: none;
+    }
   }
 }
+
+

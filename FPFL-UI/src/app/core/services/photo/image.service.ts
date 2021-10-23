@@ -1,21 +1,18 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { MenuItem } from 'primeng/api';
-
+import { IImage } from '../../model/image';
 import { GlobalErrorHandlerService } from '../error/global-error-handler.service';
 
 /**
- * Supplies menu items to menu items from a json file to Menues in the Home page
- * and Header components.
+ * Image Cycling Service for the Galleria on the Home page
  */
 @Injectable({
   providedIn: 'root'
 })
-export class MenuService {
+export class ImageService {
   /**
    * Constructor
    * @param {HttpClient} http
@@ -27,14 +24,14 @@ export class MenuService {
   ) { }
 
   /**
-   * Returns the list of Menu Items for use in Menu components
-   * @returns {Observable<MenuItem[]>}
+   * Returns the list of Image Addresses for use in Image Galleria components
+   * @returns {Observable<IImage[]>}
    */
-  getMenuItems(): Observable<MenuItem[]> {
-    const url = 'assets/data/menu-items.json';
-    return this.http.get<MenuItem[]>(url)
+  getImageItems(): Observable<IImage[]> {
+    const url = 'assets/data/image-addresses.json';
+    return this.http.get<IImage[]>(url)
       .pipe(
-        // tap((data: MenuItem[]) => console.log('Service getMenuItems: ' + JSON.stringify(data))),
+        // tap((data: IImage[]) => console.log('Service getImageItems: ' + JSON.stringify(data))),
         catchError((err: any) => this.err.handleError(err))
       );
   }

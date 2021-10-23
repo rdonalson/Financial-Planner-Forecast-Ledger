@@ -29,7 +29,7 @@ export class UtilArrayService  {
     const url = 'assets/data/form-utility-items.json';
     return this.http.get<IUtilArray>(url)
       .pipe(
-        tap((data: IUtilArray) => console.log('Service getMenuItems: ' + JSON.stringify(data))),
+        // tap((data: IUtilArray) => console.log('Service getUtilArrayItems: ' + JSON.stringify(data))),
         catchError((err: any) => this.err.handleError(err))
       );
   }
