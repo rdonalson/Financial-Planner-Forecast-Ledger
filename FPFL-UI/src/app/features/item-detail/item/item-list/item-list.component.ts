@@ -8,7 +8,7 @@ import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-er
 import { IItem } from '../../shared/models/item';
 import { MessageUtilService } from '../../shared/services/common/message-util.service';
 import { ItemService } from '../../shared/services/item/item.service';
-import { GeneralUtilService } from 'src/app/core/services/common/general-util.service';
+import { LoginUtilService } from 'src/app/core/services/login/login-util.service';
 
 /**
  * Form that will display the list two types of items; Credit (1) or Debit (2)
@@ -30,14 +30,14 @@ export class ItemListComponent implements OnInit, OnDestroy {
 
   /**
    * Constructor
-   * @param {GeneralUtilService} generalUtilService
+   * @param {LoginUtilService} loginUtilService
    * @param {MessageUtilService} messageUtilService
    * @param {GlobalErrorHandlerService} err
    * @param {ConfirmationService} confirmationService
    * @param {ItemService} itemService
    */
   constructor(
-    private generalUtilService: GeneralUtilService,
+    private loginUtilService: LoginUtilService,
     private messageUtilService: MessageUtilService,
     private route: ActivatedRoute,
     private err: GlobalErrorHandlerService,
@@ -47,7 +47,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
 
   //#region Events
   ngOnInit(): void {
-    this.userId = this.generalUtilService.getUserOid();
+    this.userId = this.loginUtilService.getUserOid();
     this.getRouteParams();
   }
   /**

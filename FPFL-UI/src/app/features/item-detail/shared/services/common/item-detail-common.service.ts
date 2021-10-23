@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+/**
+ * This service handles the Form & Validation operations for the
+ * Credit & Debits Items forms and components
+ */
 @Injectable()
 export class ItemDetailCommonService {
 

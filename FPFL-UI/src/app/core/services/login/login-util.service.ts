@@ -2,16 +2,19 @@ import { Injectable } from '@angular/core';
 import { IClaims } from '../../model/claims';
 
 /**
- * General Application Utilities: Creates a singleton Service that provides
+ * Login Application Utilities: Creates a singleton Service that provides
  * or createss the Local Storage Claims object or the user OID contained within
  */
 @Injectable({
   providedIn: 'root'
 })
-export class GeneralUtilService {
+export class LoginUtilService {
   private claims!: IClaims;
   private _loggedin: boolean = false;
-  
+
+  /**
+   * Properties
+   */
   public get loggedin(): boolean {
     return this._loggedin;
   }

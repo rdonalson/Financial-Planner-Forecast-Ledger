@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { GeneralUtilService } from 'src/app/core/services/common/general-util.service';
+import { LoginUtilService } from 'src/app/core/services/login/login-util.service';
 import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
 import { ILedgerParams } from './shared/models/ledger-params';
 import { DisplayService } from './shared/services/display/display.service';
@@ -37,12 +37,12 @@ export class DisplayMainComponent implements OnInit, OnDestroy {
 
   /**
    * Constructor
-   * @param {GeneralUtilService} claimsUtilService
+   * @param {LoginUtilService} claimsUtilService
    * @param {GlobalErrorHandlerService} err
    * @param {DisplayService} displayService
    */
   constructor(
-    private claimsUtilService: GeneralUtilService,
+    private claimsUtilService: LoginUtilService,
     private err: GlobalErrorHandlerService,
     private displayService: DisplayService,
     private route: ActivatedRoute,
