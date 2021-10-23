@@ -29,3 +29,18 @@ Demo on Azure: https://fpng-ui.azurewebsites.net/home
   * Added ExcelJs Excel export to Display on Chart & Ledger
   * Reconfigured Ledger for better display of Credit & Debit Items
   * Excel export & Leger are styled in the same manner.
+
+### 10/23/2021 Updates & Additions
+  * Altered the Login Operations in the Header:
+     - Created a Singleton Login Service
+     - Handles Claims creation in the LocalStorage
+     - Stores the User's OID 
+     - Stores the LoggedIn status
+  * Altered the Navigation Menu Array: 
+     - Moved data to JSON file 
+     - Created a Singleton Menu Service to provide the items to the Menu Components
+     - Added new Menu on the Home Page
+  * Altered the Utility Arrays in the Edit Item Component: 
+     - Moved datasets to JSON file, DaysInTheMonth, WeekDays & Month
+     - Created a Singleton Utility Array Service to provide the items to the Dropdown & Radio Groups Selectors
+ 
