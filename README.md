@@ -44,4 +44,6 @@ Demo on Azure: https://fpng-ui.azurewebsites.net/home
      - Moved datasets to JSON file, DaysInTheMonth, WeekDays & Month
      - Created new model for datasets, an array of arrays, IUtilArray
      - Created a Singleton Utility Array Service to provide the items to the Dropdown & Radio Groups Selectors
- 
+  * Altered the Image Utility for the Home:
+     - Moved image addresses to JSON file
+     - Created a Singleton Image Service to provide the image addresses to the Galleria component  
