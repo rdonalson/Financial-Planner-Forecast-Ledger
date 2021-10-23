@@ -5,6 +5,10 @@
     "iisExpress": {
       "applicationUrl": "https://localhost:5001/",
       "sslPort": 5001
+    },
+    "iis": {
+      "applicationUrl": "https://localhost/fpfl-api",
+      "sslPort": 443
     }
   },
   "profiles": {
@@ -24,6 +28,14 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "https://localhost:5001"
+    },
+    "IIS": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "api/weatherforecast",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production"
+      }
     }
   }
 }
