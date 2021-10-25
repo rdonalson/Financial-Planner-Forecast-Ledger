@@ -129,7 +129,7 @@ export class ExportService {
       row.getCell(2).value = d.creditSummary > 0 ? d.creditSummary : '-';
       row.getCell(2).font = d.creditSummary > 0 ? { color: { argb: '009A46' }} :  { color: { argb: '000000' }};
 
-      row.getCell(3).value = d.debitSummary > 0 ? d.debitSummary : '-';
+      row.getCell(3).value = d.debitSummary < 0 ? d.debitSummary : '-';
       row.getCell(3).font = d.debitSummary < 0 ? { color: { argb: 'F60000' }} :  { color: { argb: '000000' }};
 
       row.getCell(4).value = d.net !== 0 ? d.net : '-';
