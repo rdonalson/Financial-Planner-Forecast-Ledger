@@ -28,6 +28,16 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-0 mb-lg-0">
+        <!-- Navigate to Item Detail Home Link -->
+        <li class="nav-item">
+          <a
+            class="nav-link nav-link-helper"
+            aria-current="page"
+            routerLink="/feature/item-detail"
+          >
+            <i>Item Detail Home</i>
+          </a>
+        </li>
         <!-- Navigate to Home Link -->
         <li class="nav-item">
           <a
@@ -42,7 +52,7 @@
       <form class="d-flex" pTooltip="Export to Excel" tooltipPosition="left">
         <!-- Export to Excel -->
         <button
-          *ngIf="activeIndex === 1 || activeIndex === 2"
+          *ngIf="ledgerList.length > 0 && (activeIndex === 1 || activeIndex === 2)"
           pButton
           pRipple
           label="Export"

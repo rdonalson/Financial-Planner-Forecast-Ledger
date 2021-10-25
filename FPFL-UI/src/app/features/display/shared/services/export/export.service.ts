@@ -67,7 +67,7 @@ export class ExportService {
     ];
     const worksheetTitle = 'Forecast Ledger';
     const standardAccountingFrmt = '$#,##0.00_);[Red]($#,##0.00)';
-    const customAccountingFrmt = '[Green]_($* #,##0.00_);[Red]_($* (#,##0.00);_($* "-"??_);_(@_)'
+    const customAccountingFrmt = '_($* #,##0.00_);_($* (#,##0.00);_($* "-"??_);_(@_)'
 
     /** Add Title, Date Created and Time */
     const titleRow = ws.addRow([worksheetTitle]);
@@ -100,7 +100,7 @@ export class ExportService {
       cell.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
     });
     /** Set column widths */
-    ws.getColumn(1).width = 15;
+    ws.getColumn(1).width = 17;
     ws.getColumn(2).width = 17;
     ws.getColumn(3).width = 17;
     ws.getColumn(4).width = 20;
@@ -125,10 +125,24 @@ export class ExportService {
     /** Begin iterating through the Ledger List rows */
     ledgerList.forEach(d => {
       const row = ws.addRow(d);
-      row.getCell(1).value = this.datePipe.transform(d.wDate, 'yyyy-MM-dd')
-      row.getCell(2).value = d.creditSummary;
-      row.getCell(3).value = d.debitSummary;
-      row.getCell(4).value = d.net;
+      row.getCell(1).value = this.datePipe.transform(d.wDate, 'yyyy-MM-dd - EEE')
+      row.getCell(2).value = d.creditSummary > 0 ? d.creditSummary : '-';
+      row.getCell(2).font = d.creditSummary > 0 ? { color: { argb: '009A46' }} :  { color: { argb: '000000' }};
+
+      row.getCell(3).value = d.debitSummary > 0 ? d.debitSummary : '-';
+      row.getCell(3).font = d.debitSummary < 0 ? { color: { argb: 'F60000' }} :  { color: { argb: '000000' }};
+
+      row.getCell(4).value = d.net !== 0 ? d.net : '-';
+      row.getCell(4).font = (
+          d.net == 0
+            ? { color: { argb: '000000' }}
+            : d.net > 0
+                ? { color: { argb: '009A46' }}
+                : d.net < 0
+                  ? { color: { argb: 'F60000' }}
+                  :  { color: { argb: '000000' }}
+        );
+
       row.getCell(5).value = d.runningTotal;
 
       /**
@@ -208,9 +222,20 @@ export class ExportService {
     items.forEach(i => {
       const itemRow = ws.addRow(i);
       itemRow.getCell(2).value = i.fkItemType === 1 ? i.amount : '';
+      itemRow.getCell(2).font = { color: { argb: '009A46' }};
       itemRow.getCell(3).value = i.fkItemType === 2 ? i.amount : '';
+      itemRow.getCell(3).font = { color: { argb: 'F60000' }};
       itemRow.getCell(4).value = i.name;
       itemRow.getCell(5).value = i.period;
+      itemRow.eachCell((cell) => {
+        cell.fill= {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'E8E8E8' },
+          bgColor: { argb: 'E8E8E8' }
+        };
+      })
+
       itemRow.outlineLevel = 1;
     });
   }

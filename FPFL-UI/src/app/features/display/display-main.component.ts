@@ -31,18 +31,19 @@ export class DisplayMainComponent implements OnInit, OnDestroy {
   rTotals: string[] = [];
   credits: string[] = [];
   debits: string[] = [];
-
   data: any;
   messages: { [key: string]: { [key: string]: string; }; };
 
   /**
    * Constructor
-   * @param {LoginUtilService} claimsUtilService
+   * @param {LoginUtilService} loginUtilService
    * @param {GlobalErrorHandlerService} err
    * @param {DisplayService} displayService
+   * @param {ActivatedRoute} route
+   * @param {ExportService} exportService
    */
   constructor(
-    private claimsUtilService: LoginUtilService,
+    private loginUtilService: LoginUtilService,
     private err: GlobalErrorHandlerService,
     private displayService: DisplayService,
     private route: ActivatedRoute,
@@ -68,7 +69,7 @@ export class DisplayMainComponent implements OnInit, OnDestroy {
    * Initialize the page
    */
   ngOnInit(): void {
-    this.userId = this.claimsUtilService.getUserOid();
+    this.userId = this.loginUtilService.getUserOid();
     this.getRouteParams();
     this.initializeLedgerParams();
     this.createLedger();
@@ -258,6 +259,7 @@ export class DisplayMainComponent implements OnInit, OnDestroy {
     if (this.ledgerParams.timeFrameBegin === null || this.ledgerParams.timeFrameEnd === null) {
       this.initializeLedgerParams();
     }
+    this.ledgerList = [];
     this.getDateDiff();
     this.generateDateRangeDisplay();
     return this.displayService.createLedger(this.ledgerParams)

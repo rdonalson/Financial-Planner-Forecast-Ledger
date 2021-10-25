@@ -38,7 +38,7 @@
           [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
         ></button>
       </td>
-      <td>{{ ledger.wDate | date: "fullDate" }}</td>
+      <td>{{ ledger.wDate | date: "yyyy-MM-dd - EEE" }}</td>
       <!-- Credit Summary -->
       <td *ngIf="ledger.creditSummary === 0" class="right">-</td>
       <td
