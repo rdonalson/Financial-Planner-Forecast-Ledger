@@ -7,7 +7,7 @@ The DAL is Entity Framework Core 3.1, designed in a Code First approach.
 
 Demo on Azure: https://fpng-ui.azurewebsites.net/home
   * Login: bbusby@rdonalson.onmicrosoft.com
-  * Pswd: I'amAFullStackDevIn2021
+  * Pswd: SciFiSlackerAI-2022
   * Additional Login: ttutone@rdonalson.onmicrosoft.com
   * Pswd: BSM@B4rRyG6qX5ph
 
