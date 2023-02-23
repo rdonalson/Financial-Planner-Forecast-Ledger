@@ -23,6 +23,12 @@ namespace FPFL.API.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Setting up Swagger
+            services.AddSwaggerGen(s =>
+            {
+                s.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo {Title = "FPFL-API", Version = "v1" });
+            });
+
             // Setting configuration for protected web api
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddMicrosoftIdentityWebApi(Configuration);
@@ -50,6 +56,12 @@ namespace FPFL.API.Web
         {
             if (env.IsDevelopment())
             {
+                app.UseSwagger();
+				app.UseSwaggerUI(c =>
+				{
+					c.SwaggerEndpoint("/swagger/v1/swagger.json", "FPFL-API");
+				});
+
                 app.UseDeveloperExceptionPage();
             }
 
