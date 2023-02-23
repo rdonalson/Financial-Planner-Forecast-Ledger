@@ -103,3 +103,13 @@ dist
 # TernJS port file
 .tern-port
 /FPFL-API/FPFL Database/FPFL Database.jfm
+/FPFL-UI/.vscode/settings.json
+/FPFL-UI/src/app/shared/auth-config.json
+*.json
+/FPFL-UI/.vscode
+/FPFL-API/.vs/FPFL-API/DesignTimeBuild/.dtbcache.v2
+/FPFL-API/.vs/FPFL-API/v16/.suo
+/FPFL-API/FPFL.API.Web/appsettings.json
+*.zip
+/FPFL-API/FPFL.API.Web/FPFL.API.Web.csproj.user
+/FPFL-API/FPFL.API.Infrastructure/FPFL.API.Infrastructure.csproj.user

@@ -1,4 +1,0 @@
-{
-    "appService.defaultWebAppToDeploy": "/subscriptions/[Azure Subscription Id]/resourceGroups/FPNG/providers/Microsoft.Web/sites/FPNg-UI",
-    "appService.deploySubpath": "dist\\FPFL-UI"
-}
