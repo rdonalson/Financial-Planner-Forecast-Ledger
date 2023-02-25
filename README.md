@@ -1,4 +1,4 @@
-# Financial-Planner-Forecast-Ledger (Angular 12)
+# Financial-Planner-Forecast-Ledger (Angular 12 Hosted on Azure)
 ## Source Code
 
 This version of the Financial Planner is an Angular 12 SPA using PrimeNg, Material, Bootstrap 5, a .Net Core 3.0 API and using Azure Active Directory securing both. 
