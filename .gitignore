@@ -113,3 +113,4 @@ dist
 *.zip
 /FPFL-API/FPFL.API.Web/FPFL.API.Web.csproj.user
 /FPFL-API/FPFL.API.Infrastructure/FPFL.API.Infrastructure.csproj.user
+/.vs
