@@ -1,7 +1,7 @@
-# Financial-Planner-Forecast-Ledger (Angular 12 Hosted on Azure)
+# Financial-Planner-Forecast-Ledger (Angular 15 Hosted on Azure)
 ## Source Code
 
-This version of the Financial Planner is an Angular 12 SPA using PrimeNg, Material, Bootstrap 5, a .Net Core 3.1 API and using Azure Active Directory securing both. 
+This version of the Financial Planner is an Angular 15 SPA using PrimeNg, Material, Bootstrap 5, a .Net Core 3.1 API and using Azure Active Directory securing both. 
 The UI and API are being hosted on the Azure Cloud. 
 The DAL is Entity Framework Core 3.1, designed in a Code First approach.
 
@@ -11,6 +11,7 @@ Demo on Azure: https://fpng-ui.azurewebsites.net/home
     -	**Note: When prompted click “Ask Later”, don’t click “Next”
 
 ## Improvements and Consolidations 
+  * Upgraded to Angular 15
   * Better Responsive Behaviour
   * Consolidation of Debits, Credits & Initial Amount in these areas:
      - UI: 
