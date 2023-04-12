@@ -1,0 +1,100 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <!-- Page Title -->
+    <a class="navbar-brand" href="#">{{ pageTitle }}</a>
+    <div class="vertical-separator"></div>
+    <!-- Progress Spinner -->
+    <div class="navbar-brand list-spinner-box">
+      <p-progressSpinner
+        *ngIf="progressSpinner"
+        strokeWidth="6"
+        [style]="{ width: '2rem', height: '2rem' }"
+        fill="#efefef"
+        animationDuration="3s"
+        styleClass="custom-spinner "
+      ></p-progressSpinner>
+    </div>
+    <!-- Responsive Toggle Button -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-0 mb-lg-0">
+        <!-- Navigate to Item Detail Home Link -->
+        <li class="nav-item">
+          <a
+            class="nav-link nav-link-helper"
+            aria-current="page"
+            routerLink="/feature/item-detail"
+          >
+            <i>Item Detail Home</i>
+          </a>
+        </li>
+        <!-- Navigate to Display -->
+        <li class="nav-item">
+          <a
+            class="nav-link nav-link-helper"
+            aria-current="page"
+            routerLink="/feature/display/0"
+          >
+            <i>Display</i>
+          </a>
+        </li>
+        <!-- Navigate to Home Link -->
+        <li class="nav-item">
+          <a
+            class="nav-link nav-link-helper"
+            aria-current="page"
+            routerLink="/home"
+          >
+            <i>Home</i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="card">
+  <!-- Card Body -->
+  <div class="card-body" #cardBody>
+    <div class="formgroup-inline">
+      <!-- Initial Amount Input Field Label -->
+      <label for="initialAmount" class="col-12 mb-2 md:col-2 md:mb-0"
+        >Amount</label
+      >
+      <div class="field">
+        <!-- Initial Amount Input Field -->
+        <p-inputNumber
+          id="initialAmount"
+          [(ngModel)]="initialAmount.amount"
+          mode="currency"
+          currency="USD"
+          name="amount"
+          locale="en-US"
+          tabindex="1"
+        >
+        </p-inputNumber>
+      </div>
+      <!-- Update Button -->
+      <button
+        pButton
+        pRipple
+        type="button"
+        label="Update"
+        class="p-button-success"
+        (click)="saveInitialAmount()"
+        tabindex="2"
+      ></button>
+    </div>
+  </div>
+  <!-- Informational Messages -->
+  <p-messages></p-messages>
+</div>

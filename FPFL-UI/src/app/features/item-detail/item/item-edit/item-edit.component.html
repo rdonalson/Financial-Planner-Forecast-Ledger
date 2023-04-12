@@ -1,0 +1,639 @@
+<nav class="navbar navbar-light bg-light">
+  <div class="container-fluid">
+    <!-- Page Title -->
+    <a class="navbar-brand">{{ pageTitle }}</a>
+    <span class="vertical-separator">&nbsp;</span>
+    <form class="d-flex">
+      <!-- Progress Spinner -->
+      <div class="edit-spinner-box">
+        <p-progressSpinner
+          *ngIf="progressSpinner"
+          strokeWidth="6"
+          [style]="{ width: '2rem', height: '2rem' }"
+          fill="#efefef"
+          animationDuration="3s"
+          styleClass="custom-spinner "
+        ></p-progressSpinner>
+      </div>
+      <!-- New Button -->
+      <button
+        *ngIf="recordId !== 0"
+        pButton
+        pRipple
+        label="New"
+        icon="pi pi-plus"
+        class="p-button-success new-button"
+        (click)="addNewItem()"
+      ></button>
+    </form>
+  </div>
+</nav>
+<div class="card">
+  <div class="card-body">
+    <div class="card-container">
+      <!-- Item Reactive Form -->
+      <form novalidate (ngSubmit)="saveItem()" [formGroup]="itemForm">
+        <div class="p-fluid">
+          <!-- Common fields -->
+          <!-- Name -->
+          <div class="field grid">
+            <label for="nameId" class="col-12 mb-2 md:col-2 md:mb-0"
+              >Name</label
+            >
+            <div
+              class="col-12 md:col-10"
+              tooltipPosition="left"
+              pTooltip="{{ messages['Name.required']}}"
+            >
+              <input
+                pInputText
+                id="nameId"
+                type="text"
+                class="p-inputtext"
+                placeholder="Enter an Item Name"
+                formControlName="Name"
+                [ngClass]="{ 'is-invalid': 'ng-invalid ng-dirty' }"
+              />
+            </div>
+          </div>
+          <!-- Amount -->
+          <div class="field grid">
+            <label for="amountId" class="col-12 mb-2 md:col-2 md:mb-0"
+              >Amount</label
+            >
+            <div
+              class="col-12 md:col-10"
+              tooltipPosition="left"
+              pTooltip="{{ messages['Amount.required']}}"
+            >
+              <p-inputNumber
+                id="amountId"
+                formControlName="Amount"
+                mode="currency"
+                currency="USD"
+                placeholder="Enter an amount"
+                locale="en-US"
+                [ngClass]="{ 'is-invalid': 'ng-invalid ng-dirty' }"
+              >
+              </p-inputNumber>
+            </div>
+          </div>
+          <!-- Period -->
+          <div class="field grid">
+            <label for="periodId" class="col-12 mb-2 md:col-2 md:mb-0"
+              >Period</label
+            >
+            <div
+              class="col-5 md:col-4 p-calendar-dropdown-format-helper"
+              tooltipPosition="left"
+              pTooltip="{{ messages['Period.required']}}"
+            >
+              <p-dropdown
+                id="periodId"
+                formControlName="Period"
+                [options]="periods"
+                placeholder="Select a Period"
+                optionLabel="name"
+                optionValue="id"
+                (onChange)="getPeriod($event)"
+                [ngClass]="{ 'is-invalid': 'ng-invalid ng-dirty' }"
+              >
+              </p-dropdown>
+            </div>
+          </div>
+
+          <!-- *** Period -> Show / Hide Sections *** -->
+          <!-- Weekly -->
+          <div *ngIf="periodSwitch === 3">
+            <div class="field grid">
+              <label for="weeklyDowId" class="col-12 mb-2 md:col-2 md:mb-0"
+                >Day of Week</label
+              >
+              <div class="col-6 md:col-5 formgroup-inline">
+                <div
+                  id="weeklyDowId"
+                  *ngFor="let day of utilArray.WeekDays"
+                  class="p-field-radiobutton"
+                  tooltipPosition="left"
+                  pTooltip="{{ messages['WeeklyDow.required']}}"
+                >
+                  <p-radioButton
+                    [inputId]="day.key"
+                    [value]="day.value"
+                    formControlName="WeeklyDow"
+                    [ngClass]="{ 'is-invalid': 'ng-invalid ng-dirty' }"
+                  >
+                  </p-radioButton>
+                  <label [for]="day.key">{{ day.key }}</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Initialization Date for Every Two Weeks & One Time Occurence -->
+          <div *ngIf="periodSwitch === 4 || periodSwitch === 1">
+            <div class="field grid">
+              <label for="initDateId" class="col-12 mb-2 md:col-2 md:mb-0"
+                >Initialization Date</label
+              >
+              <div
+                class="col-5 md:col-4 p-calendar-dropdown-format-helper"
+                tooltipPosition="left"
+                pTooltip="{{
+                  periodSwitch === 4
+                    ? messages['InitDateEOW.required']
+                    : messages['InitDateOTO.required']
+                }}"
+              >
+                <p-calendar
+                  id="initDateId"
+                  placeholder="Select a date"
+                  formControlName="InitializationDate"
+                  [showIcon]="true"
+                  [ngClass]="{ 'is-invalid': 'ng-invalid ng-dirty' }"
+                ></p-calendar>
+              </div>
+            </div>
+          </div>
+          <!-- Every Other Week -->
+          <div *ngIf="periodSwitch === 4">
+            <div class="field grid">
+              <label class="col-12 mb-2 md:col-2 md:mb-0">Day of Week</label>
+              <div class="col-6 md:col-5 formgroup-inline">
+                <div
+                  *ngFor="let day of utilArray.WeekDays"
+                  class="p-field-radiobutton"
+                  tooltipPosition="left"
+                  pTooltip="{{ messages['WeeklyDow.required']}}"
+                >
+                  <p-radioButton
+                    [inputId]="day.key"
+                    [value]="day.value"
+                    formControlName="EverOtherWeekDow"
+                    [ngClass]="{ 'is-invalid': 'ng-invalid ng-dirty' }"
+                  >
+                  </p-radioButton>
+                  <label [for]="day.key">{{ day.key }}</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bi-Monthly -->
+          <div *ngIf="periodSwitch === 5">
+            <!-- 1st Day of Month -->
+            <div class="field grid">
+              <label for="monthlyDay1Id" class="col-12 mb-2 md:col-2 md:mb-0"
+                >1st Day of Month</label
+              >
+              <div
+                class="col-5 md:col-4 p-calendar-dropdown-format-helper"
+                tooltipPosition="left"
+                pTooltip="{{ messages['BiMonthlyDay1.required']}}"
+              >
+                <p-dropdown
+                  id="monthlyDay1Id"
+                  formControlName="BiMonthlyDay1"
+                  [options]="utilArray.DaysInTheMonth"
+                  placeholder="Select a Day"
+                  optionLabel="key"
+                  optionValue="value"
+                  [ngClass]="{ 'is-invalid': 'ng-invalid ng-dirty' }"
+                ></p-dropdown>
+              </div>
+            </div>
+            <!-- 2nd Day of Month -->
+            <div class="field grid">
+              <label for="monthlyDay2Id" class="col-12 mb-2 md:col-2 md:mb-0"
+                >2nd Day of Month</label
+              >
+              <div
+                class="col-5 md:col-4 p-calendar-dropdown-format-helper"
+                tooltipPosition="left"
+                pTooltip="{{ messages['BiMonthlyDay2.required']}}"
+              >
+                <p-dropdown
+                  id="monthlyDay2Id"
+                  formControlName="BiMonthlyDay2"
+                  [options]="utilArray.DaysInTheMonth"
+                  placeholder="Select a Day"
+                  optionLabel="key"
+                  optionValue="value"
+                  [ngClass]="{ 'is-invalid': 'ng-invalid ng-dirty' }"
+                ></p-dropdown>
+              </div>
+            </div>
+          </div>
+
+          <!-- Monthly -->
+          <div *ngIf="periodSwitch === 6">
+            <!-- Day of Month -->
+            <div class="field grid">
+              <label for="monthlyDomId" class="col-12 mb-2 md:col-2 md:mb-0"
+                >Day of the Month</label
+              >
+              <div
+                class="col-5 md:col-4 p-calendar-dropdown-format-helper"
+                tooltipPosition="left"
+                pTooltip="{{ messages['MonthlyDay.required']}}"
+              >
+                <p-dropdown
+                  id="monthlyDomId"
+                  formControlName="MonthlyDom"
+                  [options]="utilArray.DaysInTheMonth"
+                  placeholder="Select a Day"
+                  optionLabel="key"
+                  optionValue="value"
+                  [ngClass]="{ 'is-invalid': 'ng-invalid ng-dirty' }"
+                ></p-dropdown>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quarterly -->
+          <div *ngIf="periodSwitch === 7">
+            <!-- 1st Quarter -->
+            <div class="field grid">
+              <label for="quarterlyMoy1Id" class="col-12 mb-2 md:col-2 md:mb-0"
+                >1st Quarter</label
+              >
+              <div
+                class="col-5 md:col-4 p-calendar-dropdown-format-helper"
+                tooltipPosition="left"
+                pTooltip="{{ messages['MonthOfOccurrence.required']}}"
+              >
+                <p-dropdown
+                  id="quarterlyMoy1Id"
+                  formControlName="Quarterly1Month"
+                  [options]="utilArray.Months"
+                  placeholder="Select a Month"
+                  optionLabel="key"
+                  optionValue="value"
+                  [ngClass]="{ 'is-invalid': 'ng-invalid ng-dirty' }"
+                ></p-dropdown>
+              </div>
+              <div
+                class="col-5 md:col-4 p-calendar-dropdown-format-helper"
+                tooltipPosition="left"
+                pTooltip="{{ messages['DayInMonthOfOccurrence.required']}}"
+              >
+                <p-dropdown
+                  formControlName="Quarterly1Day"
+                  [options]="utilArray.DaysInTheMonth"
+                  placeholder="Select a Day"
+                  optionLabel="key"
+                  optionValue="value"
+                  [ngClass]="{ 'is-invalid': 'ng-invalid ng-dirty' }"
+                >
+                </p-dropdown>
+              </div>
+            </div>
+
+            <!-- 2nd Quarter -->
+            <div class="field grid">
+              <label for="quarterlyMoy2Id" class="col-12 mb-2 md:col-2 md:mb-0"
+                >2nd Quarter</label
+              >
+              <div
+                class="col-5 md:col-4 p-calendar-dropdown-format-helper"
+                tooltipPosition="left"
+                pTooltip="{{ messages['MonthOfOccurrence.required']}}"
+              >
+                <p-dropdown
+                  id="quarterlyMoy2Id"
+                  formControlName="Quarterly2Month"
+                  [options]="utilArray.Months"
+                  placeholder="Select a Month"
+                  optionLabel="key"
+                  optionValue="value"
+                  [ngClass]="{ 'is-invalid': 'ng-invalid ng-dirty' }"
+                ></p-dropdown>
+              </div>
+              <div
+                class="col-5 md:col-4 p-calendar-dropdown-format-helper"
+                tooltipPosition="left"
+                pTooltip="{{ messages['DayInMonthOfOccurrence.required']}}"
+              >
+                <p-dropdown
+                  formControlName="Quarterly2Day"
+                  [options]="utilArray.DaysInTheMonth"
+                  placeholder="Select a Day"
+                  optionLabel="key"
+                  optionValue="value"
+                  [ngClass]="{ 'is-invalid': 'ng-invalid ng-dirty' }"
+                >
+                </p-dropdown>
+              </div>
+            </div>
+
+            <!-- 3rd Quarter -->
+            <div class="field grid">
+              <label for="quarterlyMoy3Id" class="col-12 mb-2 md:col-2 md:mb-0"
+                >3rd Quarter</label
+              >
+              <div
+                class="col-5 md:col-4 p-calendar-dropdown-format-helper"
+                tooltipPosition="left"
+                pTooltip="{{ messages['MonthOfOccurrence.required']}}"
+              >
+                <p-dropdown
+                  id="quarterlyMoy3Id"
+                  formControlName="Quarterly3Month"
+                  [options]="utilArray.Months"
+                  placeholder="Select a Month"
+                  optionLabel="key"
+                  optionValue="value"
+                  [ngClass]="{ 'is-invalid': 'ng-invalid ng-dirty' }"
+                ></p-dropdown>
+              </div>
+              <div
+                class="col-5 md:col-4 p-calendar-dropdown-format-helper"
+                tooltipPosition="left"
+                pTooltip="{{ messages['DayInMonthOfOccurrence.required']}}"
+              >
+                <p-dropdown
+                  formControlName="Quarterly3Day"
+                  [options]="utilArray.DaysInTheMonth"
+                  placeholder="Select a Day"
+                  optionLabel="key"
+                  optionValue="value"
+                  [ngClass]="{ 'is-invalid': 'ng-invalid ng-dirty' }"
+                >
+                </p-dropdown>
+              </div>
+            </div>
+
+            <!-- 4th Quarter -->
+            <div class="field grid">
+              <label for="quarterlyMoy4Id" class="col-12 mb-2 md:col-2 md:mb-0"
+                >4th Quarter</label
+              >
+              <div
+                class="col-5 md:col-4 p-calendar-dropdown-format-helper"
+                tooltipPosition="left"
+                pTooltip="{{ messages['MonthOfOccurrence.required']}}"
+              >
+                <p-dropdown
+                  id="quarterlyMoy4Id"
+                  formControlName="Quarterly4Month"
+                  [options]="utilArray.Months"
+                  placeholder="Select a Month"
+                  optionLabel="key"
+                  optionValue="value"
+                  [ngClass]="{ 'is-invalid': 'ng-invalid ng-dirty' }"
+                ></p-dropdown>
+              </div>
+              <div
+                class="col-5 md:col-4 p-calendar-dropdown-format-helper"
+                tooltipPosition="left"
+                pTooltip="{{ messages['DayInMonthOfOccurrence.required']}}"
+              >
+                <p-dropdown
+                  formControlName="Quarterly4Day"
+                  [options]="utilArray.DaysInTheMonth"
+                  placeholder="Select a Day"
+                  optionLabel="key"
+                  optionValue="value"
+                  [ngClass]="{ 'is-invalid': 'ng-invalid ng-dirty' }"
+                >
+                </p-dropdown>
+              </div>
+            </div>
+          </div>
+
+          <!-- Semi-Annual -->
+          <div *ngIf="periodSwitch === 8">
+            <!-- 1st Annum -->
+            <div class="field grid">
+              <label for="semiAnnualMoy1Id" class="col-12 mb-2 md:col-2 md:mb-0"
+                >1st Annum</label
+              >
+              <div
+                class="col-5 md:col-4 p-calendar-dropdown-format-helper"
+                tooltipPosition="left"
+                pTooltip="{{ messages['MonthOfOccurrence.required']}}"
+              >
+                <p-dropdown
+                  id="semiAnnualMoy1Id"
+                  formControlName="SemiAnnual1Month"
+                  [options]="utilArray.Months"
+                  placeholder="Select a Month"
+                  optionLabel="key"
+                  optionValue="value"
+                  [ngClass]="{ 'is-invalid': 'ng-invalid ng-dirty' }"
+                ></p-dropdown>
+              </div>
+              <div
+                class="col-5 md:col-4 p-calendar-dropdown-format-helper"
+                tooltipPosition="left"
+                pTooltip="{{ messages['DayInMonthOfOccurrence.required']}}"
+              >
+                <p-dropdown
+                  formControlName="SemiAnnual1Day"
+                  [options]="utilArray.DaysInTheMonth"
+                  placeholder="Select a Day"
+                  optionLabel="key"
+                  optionValue="value"
+                  [ngClass]="{ 'is-invalid': 'ng-invalid ng-dirty' }"
+                >
+                </p-dropdown>
+              </div>
+            </div>
+            <!-- 2nd Annum -->
+            <div class="field grid">
+              <label for="semiAnnualMoy2Id" class="col-12 mb-2 md:col-2 md:mb-0"
+                >2nd Annum</label
+              >
+              <div
+                class="col-5 md:col-4 p-calendar-dropdown-format-helper"
+                tooltipPosition="left"
+                pTooltip="{{ messages['MonthOfOccurrence'].required']}}"
+              >
+                <p-dropdown
+                  id="semiAnnualMoy2Id"
+                  formControlName="SemiAnnual2Month"
+                  [options]="utilArray.Months"
+                  placeholder="Select a Month"
+                  optionLabel="key"
+                  optionValue="value"
+                  [ngClass]="{ 'is-invalid': 'ng-invalid ng-dirty' }"
+                ></p-dropdown>
+              </div>
+              <div
+                class="col-5 md:col-4 p-calendar-dropdown-format-helper"
+                tooltipPosition="left"
+                pTooltip="{{ messages['DayInMonthOfOccurrence.required']}}"
+              >
+                <p-dropdown
+                  formControlName="SemiAnnual2Day"
+                  [options]="utilArray.DaysInTheMonth"
+                  placeholder="Select a Day"
+                  optionLabel="key"
+                  optionValue="value"
+                  [ngClass]="{ 'is-invalid': 'ng-invalid ng-dirty' }"
+                >
+                </p-dropdown>
+              </div>
+            </div>
+          </div>
+
+          <!-- Annual -->
+          <div *ngIf="periodSwitch === 9">
+            <div class="field grid">
+              <label for="annualMoyId" class="col-12 mb-2 md:col-2 md:mb-0"
+                >Month & Day</label
+              >
+              <div
+                class="col-5 md:col-4 p-calendar-dropdown-format-helper"
+                tooltipPosition="left"
+                pTooltip="{{ messages['MonthOfOccurrence.required']}}"
+              >
+                <p-dropdown
+                  id="annualMoyId"
+                  formControlName="AnnualMoy"
+                  [options]="utilArray.Months"
+                  placeholder="Select a Month"
+                  optionLabel="key"
+                  optionValue="value"
+                  [ngClass]="{ 'is-invalid': 'ng-invalid ng-dirty' }"
+                >
+                </p-dropdown>
+              </div>
+              <div
+                class="col-5 md:col-4 p-calendar-dropdown-format-helper"
+                tooltipPosition="left"
+                pTooltip="{{ messages['DayInMonthOfOccurrence.required']}}"
+              >
+                <p-dropdown
+                  formControlName="AnnualDom"
+                  [options]="utilArray.DaysInTheMonth"
+                  placeholder="Select a Day"
+                  optionLabel="key"
+                  optionValue="value"
+                  [ngClass]="{ 'is-invalid': 'ng-invalid ng-dirty' }"
+                >
+                </p-dropdown>
+              </div>
+            </div>
+          </div>
+          <!-- Date Range -->
+          <div *ngIf="periodSwitch !== 1">
+            <!-- Date Range for Item: Date Range Checkbox, Show Date Range DIV, Start Date & End Date Calendars -->
+            <div class="field grid">
+              <label for="dateRangeReqId" class="col-12 mb-2 md:col-2 md:mb-0"
+                >Date Range?</label
+              >
+              <div
+                class="col-5 md:col-4"
+                tooltipPosition="left"
+                pTooltip="{{ messages['DateRangeReq.optional'] }}"
+              >
+                <p-checkbox
+                  formControlName="DateRangeReq"
+                  [binary]="true"
+                  (onChange)="showHideDateRange($event)"
+                >
+                </p-checkbox>
+              </div>
+            </div>
+          </div>
+          <!-- Show Date Range DIV -->
+          <div
+            *ngIf="dateRangeToggle && periodSwitch !== 4 && periodSwitch !== 1"
+          >
+            <!-- Start Date -->
+            <div class="field grid">
+              <label for="beginDateId" class="col-12 mb-2 md:col-2 md:mb-0"
+                >Start Date</label
+              >
+              <div
+                class="col-5 md:col-4 p-calendar-dropdown-format-helper"
+                tooltipPosition="left"
+                pTooltip="{{ messages['BeginDate.required']}}"
+              >
+                <p-calendar
+                  id="beginDateId"
+                  placeholder="Select a start date"
+                  formControlName="BeginDate"
+                  [showIcon]="true"
+                  [ngClass]="{ 'is-invalid': 'ng-invalid ng-dirty' }"
+                ></p-calendar>
+              </div>
+            </div>
+          </div>
+          <!-- Show Date Range DIV -->
+          <div *ngIf="dateRangeToggle">
+            <!-- End Date -->
+            <div class="field grid">
+              <label for="endDateId" class="col-12 mb-2 md:col-2 md:mb-0"
+                >End Date</label
+              >
+              <div
+                class="col-5 md:col-4 p-calendar-dropdown-format-helper"
+                tooltipPosition="left"
+                pTooltip="{{ messages['EndDate.required']}}"
+              >
+                <p-calendar
+                  id="endDateId"
+                  placeholder="Select an end date"
+                  formControlName="EndDate"
+                  [showIcon]="true"
+                  [ngClass]="{ 'is-invalid': 'ng-invalid ng-dirty' }"
+                ></p-calendar>
+              </div>
+            </div>
+          </div>
+
+          <!-- Control Buttons -->
+          <div class="field grid">
+            <div class="col-5 md:col-4 top-spacer">
+              <button
+                pButton
+                type="button"
+                label="Save"
+                class="vertical-button-spacer"
+                style="width: 80px"
+                type="submit"
+                [title]="
+                  itemForm.valid
+                    ? 'Save your entered data'
+                    : 'Disabled until the form data is valid'
+                "
+              ></button>
+              <button
+                pButton
+                type="button"
+                label="Cancel"
+                class="
+                  p-button-secondary p-button-outlined
+                  vertical-button-spacer
+                "
+                style="width: 80px"
+                title="Cancel your edits"
+                [routerLink]="[defaultPath]"
+              ></button>
+              <button
+                *ngIf="recordId !== 0"
+                pButton
+                type="button"
+                label="Delete"
+                class="p-button-danger p-button-outlined vertical-button-spacer"
+                style="width: 80px"
+                title="Delete this product"
+                (click)="deleteItem()"
+              ></button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- Delete Confirm Dialog -->
+<p-confirmDialog
+  position="top"
+  [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
+  [style]="{ width: '50vw' }"
+>
+</p-confirmDialog>
+<!-- Informational Messages -->
+<p-messages></p-messages>&nbsp;

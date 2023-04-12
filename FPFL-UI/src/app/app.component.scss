@@ -1,0 +1,39 @@
+
+app-header {
+  border-width: .15rem;
+  border-style: solid;
+  border-color: rgb(0 0 0 / 25%);
+}
+
+.card-header {
+  border-width: thin;
+  border-style: solid;
+  border-color: rgb(0 0 0 / 15%);
+  background-color: #efefef;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 16px;
+}
+
+.card-body {
+  border-width: thin;
+  border-style: solid;
+  border-color: rgb(0 0 0 / 15%);
+}
+
+.p-paginator {
+  .p-paginator-current {
+    margin-left: auto;
+  }
+}
+
+@media screen and (min-width: 480px) {
+  .margins {
+    margin: .75rem;
+  }
+}
+@media screen and (max-width: 480px) {
+  .margins {
+    margin: 0 !important;
+  }
+}

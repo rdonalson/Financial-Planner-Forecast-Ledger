@@ -1,0 +1,30 @@
+@import url(../shared/styles/feature-common.scss);
+
+:host ::ng-deep {
+  .vertical-button-spacer {
+    margin: 0 0.5rem 0.5rem 0;
+  }
+
+  @media screen and (max-width: 480px) {
+    #chart {
+      display: none;
+    }
+    #ledger {
+      display: none;
+    }
+    #chartDateRange {
+      display: none;
+    }
+    #ledgerDateRange {
+      display: none;
+    }
+  }
+  @media screen and (min-width: 480px) {
+    #chartMessage {
+      display: none;
+    }
+    #ledgerMessage {
+      display: none;
+    }
+  }
+}
