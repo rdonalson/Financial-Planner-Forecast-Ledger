@@ -11,7 +11,7 @@ Demo on Azure: https://fpng-ui.azurewebsites.net/home
     -	**Note: When prompted click “Ask Later”, don’t click “Next”
 
 ## Improvements and Consolidations 
-  * Upgraded to Angular 15
+  * Upgraded Angular 12 to 15
   * Better Responsive Behaviour
   * Consolidation of Debits, Credits & Initial Amount in these areas:
      - UI: 
