@@ -1,5 +1,7 @@
-export interface IPeriod {
-  pkPeriod: number;
-  name: string;
+import { IItem } from "./item";
 
+export interface IPeriod {
+  id: number;
+  name: string;
+  items: IItem[];
 }

@@ -1,5 +1,11 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { Component, ElementRef, OnDestroy, OnInit, ViewChildren } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChildren,
+} from '@angular/core';
 import { FormBuilder, FormControlName, FormGroup } from '@angular/forms';
 import { formatDate } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -18,31 +24,41 @@ import { PeriodService } from '../../shared/services/period/period.service';
 import { LoginUtilService } from 'src/app/core/services/login/login-util.service';
 import { ItemDetailCommonService } from '../../shared/services/common/item-detail-common.service';
 import { IUtilArray } from '../../shared/models/util-array';
+import { Store } from '@ngrx/store';
+import {
+  State,
+  getCurrentPeriod,
+  getPeriods,
+} from '../../shared/state/period.reducer';
 
 /**
  * Reactive CRUD Form for individual items; credit (1) or debit (2)
  */
 @Component({
   templateUrl: './item-edit.component.html',
-  styleUrls: ['./item-edit.component.scss']
+  styleUrls: ['./item-edit.component.scss'],
 })
 export class ItemEditComponent implements OnInit, OnDestroy {
   private item!: IItem;
   private sub!: Subscription;
   private userId: string = '';
+
   itemTypeName!: string;
   itemTypeValue!: number;
   recordId!: number;
   pageTitle!: string;
   defaultPath: string = '../../';
   progressSpinner: boolean = false;
-  messages: { [key: string]: { [key: string]: string; }; };
-  @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[] = [];
+  messages: { [key: string]: { [key: string]: string } };
   periods!: IPeriod[];
   utilArray!: IUtilArray;
   itemForm!: FormGroup;
+  currentPeriod!: IPeriod | null;
   periodSwitch: number | undefined;
   dateRangeToggle: boolean | undefined;
+
+  @ViewChildren(FormControlName, { read: ElementRef })
+  formInputElements: ElementRef[] = [];
 
   /**
    * Constructor
@@ -51,10 +67,12 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    * @param {FormBuilder} fb
    * @param {ActivatedRoute} route
    * @param {MessageUtilService} messageUtilService
-   * @param {UtilArrayService} array
+   * @param {ItemDetailCommonService} itemDetailCommonService
+   * @param {UtilArrayService} utilArrayService
    * @param {GlobalErrorHandlerService} err
    * @param {itemService} itemService
    * @param {PeriodService} periodService
+   * @param {Store<State>} periodStore
    */
   constructor(
     private claimsUtilService: LoginUtilService,
@@ -66,7 +84,8 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     private utilArrayService: UtilArrayService,
     private err: GlobalErrorHandlerService,
     private itemService: ItemService,
-    private periodService: PeriodService
+    private periodService: PeriodService,
+    private periodStore: Store<State>
   ) {
     this.messages = this.itemDetailCommonService.Messages;
   }
@@ -76,6 +95,14 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    * Initialize the Item Interface, gets the Period list and initizes the FormBuilder
    */
   ngOnInit(): void {
+    this.periodStore
+      .select(getPeriods)
+      .subscribe((periods) => (this.periods = periods)
+    );
+    this.periodStore
+      .select(getCurrentPeriod)
+      .subscribe((period) => (this.currentPeriod = period)
+    );
     this.getUtilArrayItems();
     this.getPeriods();
     this.initializeRecord();
@@ -87,13 +114,12 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    * Get Primary Key from Route Paramters
    */
   private getRouteParams(): void {
-    this.sub = this.route.params
-      .subscribe((params: any) => {
-        this.recordId = +params.id;
-        this.getItemTypeValue(params.itemType);
-        this.setTitleText();
-        this.getItem(this.recordId);
-      });
+    this.sub = this.route.params.subscribe((params: any) => {
+      this.recordId = +params.id;
+      this.getItemTypeValue(params.itemType);
+      this.setTitleText();
+      this.getItem(this.recordId);
+    });
   }
 
   private getItemTypeValue(type: string): void {
@@ -117,9 +143,12 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    */
   getPeriod(e: any): void {
     this.periodSwitch = e.value;
-    this.itemDetailCommonService.setPeriodFields(this.itemForm, this.periodSwitch);
+    this.currentPeriod = this.periodService.getPeriod(+e.value);
+    this.itemDetailCommonService.setPeriodFields(
+      this.itemForm,
+      this.periodSwitch
+    );
   }
-
 
   /**
    * Allows the user to select a Date Range by showing the Date Range fields
@@ -199,7 +228,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
       semiAnnual2Month: undefined,
       semiAnnual2Day: undefined,
       annualMoy: undefined,
-      annualDom: undefined
+      annualDom: undefined,
     };
   }
 
@@ -223,21 +252,25 @@ export class ItemEditComponent implements OnInit, OnDestroy {
       Period: this.item.fkPeriod,
       // Date Range
       DateRangeReq: this.item.dateRangeReq,
-      BeginDate: (
-        (this.item.beginDate !== null && this.item.beginDate !== undefined
-          && (this.periodSwitch !== 4 && this.periodSwitch !== 1))
+      BeginDate:
+        this.item.beginDate !== null &&
+        this.item.beginDate !== undefined &&
+        this.periodSwitch !== 4 &&
+        this.periodSwitch !== 1
           ? formatDate(this.item.beginDate, 'MM/dd/yyyy', 'en')
-          : ''),
-      EndDate: (this.item.endDate !== null && this.item.endDate !== undefined
-        ? formatDate(this.item.endDate, 'MM/dd/yyyy', 'en')
-        : ''),
+          : '',
+      EndDate:
+        this.item.endDate !== null && this.item.endDate !== undefined
+          ? formatDate(this.item.endDate, 'MM/dd/yyyy', 'en')
+          : '',
       // "InitializationDate" is used With "One Time Occurrence" and with
       // "Every Other Week", with the latter it is used in the place of "BeginDate"
-      InitializationDate: (
-        (this.item.beginDate !== null && this.item.beginDate !== undefined
-          && (this.periodSwitch === 4 || this.periodSwitch === 1))
+      InitializationDate:
+        this.item.beginDate !== null &&
+        this.item.beginDate !== undefined &&
+        (this.periodSwitch === 4 || this.periodSwitch === 1)
           ? formatDate(this.item.beginDate, 'MM/dd/yyyy', 'en')
-          : ''),
+          : '',
 
       // Weekly
       WeeklyDow: this.item.weeklyDow,
@@ -266,7 +299,10 @@ export class ItemEditComponent implements OnInit, OnDestroy {
       AnnualMoy: this.item.annualMoy,
       AnnualDom: this.item.annualDom,
     });
-    this.itemDetailCommonService.setPeriodFields(this.itemForm, this.periodSwitch);
+    this.itemDetailCommonService.setPeriodFields(
+      this.itemForm,
+      this.periodSwitch
+    );
   }
 
   /**
@@ -279,25 +315,24 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     this.item.name = this.itemForm.value.Name;
     this.item.amount = this.itemForm.value.Amount;
     this.item.fkPeriod = this.itemForm.value.Period;
-    this.item.fkItemType = this.itemTypeValue,
-      this.item.itemType = undefined,
-      this.item.period = undefined,
+    (this.item.fkItemType = this.itemTypeValue),
+      (this.item.itemType = undefined),
+      (this.item.period = undefined),
       // Date Range Switch
-      this.item.dateRangeReq = this.itemForm.value.DateRangeReq;
+      (this.item.dateRangeReq = this.itemForm.value.DateRangeReq);
     // Start Date for Date Range / Initialization Date for Periods: Single Occurrence & Every Two Weeks
-    this.item.beginDate = (
-      this.itemForm.value.InitializationDate !== null && (this.periodSwitch === 4 || this.periodSwitch === 1)
+    this.item.beginDate =
+      this.itemForm.value.InitializationDate !== null &&
+      (this.periodSwitch === 4 || this.periodSwitch === 1)
         ? new Date(this.itemForm.value.InitializationDate)
-        : (
-          ((this.itemForm.value.BeginDate !== null)
-            ? new Date(this.itemForm.value.BeginDate)
-            : undefined)
-        )
-    );
+        : this.itemForm.value.BeginDate !== null
+        ? new Date(this.itemForm.value.BeginDate)
+        : undefined;
     // End Date for Date Range
-    this.item.endDate = (this.itemForm.value.EndDate !== null)
-      ? new Date(this.itemForm.value.EndDate)
-      : undefined;
+    this.item.endDate =
+      this.itemForm.value.EndDate !== null
+        ? new Date(this.itemForm.value.EndDate)
+        : undefined;
     // Every Two Weeks (Every Other Week)
     this.item.weeklyDow = this.itemForm.value.WeeklyDow;
     this.item.everOtherWeekDow = this.itemForm.value.EverOtherWeekDow;
@@ -335,15 +370,14 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    * @returns {any}
    */
   getUtilArrayItems(): any {
-    return this.utilArrayService.getUtilArrayItems()
-      .subscribe({
-        next: (data: IUtilArray): void => {
-          this.utilArray = data;
-          // console.log(JSON.stringify(this.utilArray));
-        },
-        error: catchError((err: any) => this.err.handleError(err)),
-        complete: () => { }
-      });
+    return this.utilArrayService.getUtilArrayItems().subscribe({
+      next: (data: IUtilArray): void => {
+        this.utilArray = data;
+        // console.log(JSON.stringify(this.utilArray));
+      },
+      error: catchError((err: any) => this.err.handleError(err)),
+      complete: () => {},
+    });
   }
 
   /**
@@ -352,17 +386,16 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    */
   getPeriods(): any {
     this.progressSpinner = true;
-    return this.periodService.getPeriods()
-      .subscribe({
-        next: (data: IPeriod[]): void => {
-          this.periods = data;
-          // console.log(`Item-Edit getPriods: ${JSON.stringify(this.periods)}`);
-        },
-        error: catchError((err: any) => this.err.handleError(err)),
-        complete: () => {
-          this.progressSpinner = false;
-        }
-      });
+    return this.periodService.getPeriods().subscribe({
+      next: (data: IPeriod[]): void => {
+        this.periods = data;
+        console.log(`Item-Edit getPriods: ${JSON.stringify(this.periods)}`);
+      },
+      error: catchError((err: any) => this.err.handleError(err)),
+      complete: () => {
+        this.progressSpinner = false;
+      },
+    });
   }
 
   /**
@@ -375,18 +408,17 @@ export class ItemEditComponent implements OnInit, OnDestroy {
       return undefined;
     }
     this.progressSpinner = true;
-    return this.itemService.getItem(id)
-      .subscribe({
-        next: (data: IItem): void => {
-          this.onItemRetrieved(data);
-          // console.log(`Item-Edit patchValue: ${JSON.stringify(this.itemForm.value)}`);
-          // console.log(`Item-Edit getItem: ${JSON.stringify(data)}`);
-        },
-        error: catchError((err: any) => this.err.handleError(err)),
-        complete: () => {
-          this.progressSpinner = false;
-        }
-      });
+    return this.itemService.getItem(id).subscribe({
+      next: (data: IItem): void => {
+        this.onItemRetrieved(data);
+        // console.log(`Item-Edit patchValue: ${JSON.stringify(this.itemForm.value)}`);
+        // console.log(`Item-Edit getItem: ${JSON.stringify(data)}`);
+      },
+      error: catchError((err: any) => this.err.handleError(err)),
+      complete: () => {
+        this.progressSpinner = false;
+      },
+    });
   }
   //#endregion Reads
   //#region Writes
@@ -397,7 +429,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    */
   saveItem(): any {
     if (this.itemForm.invalid) {
-      Object.keys(this.itemForm.controls).forEach(key => {
+      Object.keys(this.itemForm.controls).forEach((key) => {
         this.itemForm.controls[key].markAsDirty();
       });
       return null;
@@ -405,31 +437,37 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     this.progressSpinner = true;
     this.patchFormValuesBackToObject();
     if (this.item.id === 0) {
-      this.itemService.createItem(this.item)
-        .subscribe({
-          // next: () => { },
-          error: catchError((err: any) => {
-            this.messageUtilService.onError(`Item Creation Failed`);
-            return this.err.handleError(err);
-          }),
-          complete: () => {
-            this.progressSpinner = false;
-            this.messageUtilService.onCompleteNav('Item Created', this.defaultPath, this.route);
-          }
-        });
+      this.itemService.createItem(this.item).subscribe({
+        // next: () => { },
+        error: catchError((err: any) => {
+          this.messageUtilService.onError(`Item Creation Failed`);
+          return this.err.handleError(err);
+        }),
+        complete: () => {
+          this.progressSpinner = false;
+          this.messageUtilService.onCompleteNav(
+            'Item Created',
+            this.defaultPath,
+            this.route
+          );
+        },
+      });
     } else {
-      this.itemService.updateItem(this.item)
-        .subscribe({
-          // next: () => { },
-          error: catchError((err: any) => {
-            this.messageUtilService.onError(`Item Update Failed`);
-            return this.err.handleError(err);
-          }),
-          complete: () => {
-            this.progressSpinner = false;
-            this.messageUtilService.onCompleteNav('Item Updated', this.defaultPath, this.route);
-          }
-        });
+      this.itemService.updateItem(this.item).subscribe({
+        // next: () => { },
+        error: catchError((err: any) => {
+          this.messageUtilService.onError(`Item Update Failed`);
+          return this.err.handleError(err);
+        }),
+        complete: () => {
+          this.progressSpinner = false;
+          this.messageUtilService.onCompleteNav(
+            'Item Updated',
+            this.defaultPath,
+            this.route
+          );
+        },
+      });
     }
   }
 
@@ -452,19 +490,22 @@ export class ItemEditComponent implements OnInit, OnDestroy {
         icon: 'pi pi-info-circle',
         accept: () => {
           this.progressSpinner = true;
-          this.itemService.deleteItem(this.item.id)
-            .subscribe({
-              // next: () => { },
-              error: catchError((err: any) => {
-                this.messageUtilService.onError(`Item Delete Failed`);
-                return this.err.handleError(err);
-              }),
-              complete: () => {
-                this.progressSpinner = true;
-                this.messageUtilService.onCompleteNav('Item Deleted', this.defaultPath, this.route);
-              }
-            });
-        }
+          this.itemService.deleteItem(this.item.id).subscribe({
+            // next: () => { },
+            error: catchError((err: any) => {
+              this.messageUtilService.onError(`Item Delete Failed`);
+              return this.err.handleError(err);
+            }),
+            complete: () => {
+              this.progressSpinner = true;
+              this.messageUtilService.onCompleteNav(
+                'Item Deleted',
+                this.defaultPath,
+                this.route
+              );
+            },
+          });
+        },
       });
     }
   }

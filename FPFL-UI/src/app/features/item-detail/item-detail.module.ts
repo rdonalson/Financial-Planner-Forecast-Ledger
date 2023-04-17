@@ -1,6 +1,7 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { StoreModule } from '@ngrx/store';
 
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
@@ -22,6 +23,7 @@ import { ItemDetailRoutingModule } from './item-detail-routing.module';
 import { InitialAmountComponent } from './initial-amount/initial-amount.component';
 import { MessageUtilService } from './shared/services/common/message-util.service';
 import { PeriodService } from './shared/services/period/period.service';
+import { periodReducer } from './shared/state/period.reducer';
 import { InitialAmountService } from './shared/services/initial-amount/initial-amount.service';
 import { UtilArrayService } from './shared/services/common/util-array.service';
 import { ItemDetailCommonService } from './shared/services/common/item-detail-common.service';
@@ -55,7 +57,8 @@ import { ItemService } from './shared/services/item/item.service';
     TableModule,
     TooltipModule,
     ToolbarModule,
-    ItemDetailRoutingModule
+    ItemDetailRoutingModule,
+    StoreModule.forFeature('periods', periodReducer)
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [

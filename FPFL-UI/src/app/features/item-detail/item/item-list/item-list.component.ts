@@ -49,6 +49,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.userId = this.loginUtilService.getUserOid();
     this.getRouteParams();
+    
   }
   /**
    * Removes the "sub" observable for Prameter retrieval
