@@ -23,7 +23,7 @@ import { ItemDetailRoutingModule } from './item-detail-routing.module';
 import { InitialAmountComponent } from './initial-amount/initial-amount.component';
 import { MessageUtilService } from './shared/services/common/message-util.service';
 import { PeriodService } from './shared/services/period/period.service';
-import { periodReducer } from './shared/state/period.reducer';
+import { periodReducer } from './shared/services/period/state/period.reducer';
 import { InitialAmountService } from './shared/services/initial-amount/initial-amount.service';
 import { UtilArrayService } from './shared/services/common/util-array.service';
 import { ItemDetailCommonService } from './shared/services/common/item-detail-common.service';

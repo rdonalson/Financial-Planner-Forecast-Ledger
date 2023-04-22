@@ -28,8 +28,10 @@ import { Store } from '@ngrx/store';
 import {
   State,
   getCurrentPeriod,
+  getError,
   getPeriods,
-} from '../../shared/state/period.reducer';
+} from '../../shared/services/period/state/period.reducer';
+import * as PeriodActions from '../../shared/services/period/state/period.actions';
 
 /**
  * Reactive CRUD Form for individual items; credit (1) or debit (2)
@@ -59,6 +61,9 @@ export class ItemEditComponent implements OnInit, OnDestroy {
 
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements: ElementRef[] = [];
+  periodErrorMessage$: any;
+  periods$: any;
+  selectedPeriod$: any;
 
   /**
    * Constructor
@@ -95,14 +100,14 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    * Initialize the Item Interface, gets the Period list and initizes the FormBuilder
    */
   ngOnInit(): void {
-    this.periodStore
-      .select(getPeriods)
-      .subscribe((periods) => (this.periods = periods)
-    );
-    this.periodStore
-      .select(getCurrentPeriod)
-      .subscribe((period) => (this.currentPeriod = period)
-    );
+
+    this.periods$ = this.periodStore.select(getPeriods);
+    this.periodErrorMessage$ = this.periodStore.select(getError);
+
+    this.periodStore.dispatch(PeriodActions.loadPeriods());
+
+    this.selectedPeriod$ = this.periodStore.select(getCurrentPeriod);
+
     this.getUtilArrayItems();
     this.getPeriods();
     this.initializeRecord();
