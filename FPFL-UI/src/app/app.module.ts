@@ -8,6 +8,9 @@ import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core/core.module';
 import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
+import { environment } from 'src/environments/environment.prod';
 
 @NgModule({
   declarations: [
@@ -18,6 +21,12 @@ import { StoreModule } from '@ngrx/store';
     BrowserAnimationsModule,
     AppRoutingModule,
     StoreModule.forRoot({}),
+    StoreDevtoolsModule.instrument({
+      name: 'FPFL UI App Devtools',
+      maxAge: 25,
+      logOnly: environment.production,
+    }),
+    EffectsModule.forRoot([]),
     CoreModule,
     SharedModule
   ],

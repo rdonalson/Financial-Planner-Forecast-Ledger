@@ -9,7 +9,7 @@ import {
 import { FormBuilder, FormControlName, FormGroup } from '@angular/forms';
 import { formatDate } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { ConfirmationService } from 'primeng/api';
@@ -52,7 +52,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
   defaultPath: string = '../../';
   progressSpinner: boolean = false;
   messages: { [key: string]: { [key: string]: string } };
-  periods!: IPeriod[];
+  //periods!: IPeriod[];
   utilArray!: IUtilArray;
   itemForm!: FormGroup;
   currentPeriod!: IPeriod | null;
@@ -62,8 +62,8 @@ export class ItemEditComponent implements OnInit, OnDestroy {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements: ElementRef[] = [];
   periodErrorMessage$: any;
-  periods$: any;
-  selectedPeriod$: any;
+  periods$!: Observable<IPeriod[]>;
+  selectedPeriod$!: Observable<IPeriod | null>;
 
   /**
    * Constructor
@@ -109,7 +109,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     this.selectedPeriod$ = this.periodStore.select(getCurrentPeriod);
 
     this.getUtilArrayItems();
-    this.getPeriods();
+    //this.getPeriods();
     this.initializeRecord();
     this.itemForm = this.itemDetailCommonService.generateForm(this.fb);
     this.getRouteParams();
@@ -190,7 +190,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    */
   private setTitleText(): void {
     if (this.recordId === 0) {
-      this.pageTitle = `New ${this.itemTypeName}`;
+      // this.pageTitle = `New ${this.itemTypeName}`;
     } else {
       this.pageTitle = `Edit ${this.itemTypeName}`;
     }
@@ -200,8 +200,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    * Also initializes a new IItem class
    */
   private initializeRecord(): void {
-    this.recordId = 0;
-    this.setTitleText();
+    // this.setTitleText();
     this.userId = this.claimsUtilService.getUserOid();
     this.item = {
       id: this.recordId,
@@ -389,19 +388,19 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    * Gets the complete list of Periods
    * @returns {any} result
    */
-  getPeriods(): any {
-    this.progressSpinner = true;
-    return this.periodService.getPeriods().subscribe({
-      next: (data: IPeriod[]): void => {
-        this.periods = data;
-        console.log(`Item-Edit getPriods: ${JSON.stringify(this.periods)}`);
-      },
-      error: catchError((err: any) => this.err.handleError(err)),
-      complete: () => {
-        this.progressSpinner = false;
-      },
-    });
-  }
+  // getPeriods(): any {
+  //   this.progressSpinner = true;
+  //   return this.periodService.getPeriods().subscribe({
+  //     next: (data: IPeriod[]): void => {
+  //       this.periods = data;
+  //       console.log(`Item-Edit getPriods: ${JSON.stringify(this.periods)}`);
+  //     },
+  //     error: catchError((err: any) => this.err.handleError(err)),
+  //     complete: () => {
+  //       this.progressSpinner = false;
+  //     },
+  //   });
+  // }
 
   /**
    * Get a specific Item

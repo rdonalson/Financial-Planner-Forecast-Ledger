@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Actions, createEffect, ofType } from '@ngrx/effects/src';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { mergeMap, map, catchError, of } from 'rxjs';
 
 import { PeriodService } from '../period.service';
@@ -7,6 +7,7 @@ import * as PeriodActions from '../state/period.actions';
 
 @Injectable()
 export class PeriodEffects {
+  
   constructor(
     private actions$: Actions,
     private periodService: PeriodService

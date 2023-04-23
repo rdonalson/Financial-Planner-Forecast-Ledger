@@ -79,7 +79,7 @@
             </div>
           </div>
           <!-- Period -->
-          <div class="field grid">
+          <div class="field grid" *ngIf="(periods$ | async) as periods">
             <label for="periodId" class="col-12 mb-2 md:col-2 md:mb-0"
               >Period</label
             >

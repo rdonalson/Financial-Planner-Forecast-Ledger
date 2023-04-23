@@ -31,6 +31,8 @@ import { ItemDetailHomeComponent } from './item-detail-home.component';
 import { ItemListComponent } from './item/item-list/item-list.component';
 import { ItemEditComponent } from './item/item-edit/item-edit.component';
 import { ItemService } from './shared/services/item/item.service';
+import { EffectsModule } from '@ngrx/effects';
+import { PeriodEffects } from './shared/services/period/state/period.effects';
 
 @NgModule({
   declarations: [
@@ -58,7 +60,8 @@ import { ItemService } from './shared/services/item/item.service';
     TooltipModule,
     ToolbarModule,
     ItemDetailRoutingModule,
-    StoreModule.forFeature('periods', periodReducer)
+    StoreModule.forFeature('periods', periodReducer),
+    EffectsModule.forFeature([PeriodEffects])
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [

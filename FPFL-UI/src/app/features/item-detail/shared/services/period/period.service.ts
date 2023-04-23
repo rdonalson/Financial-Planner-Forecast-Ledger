@@ -34,16 +34,11 @@ export class PeriodService {
    * @returns {Observable<IPeriod[]>} returns the records
    */
   getPeriods(): Observable<IPeriod[]> {
-    if (this.periods) {
-      return of(this.periods);
-    }
-    return this.http.get<IPeriod[]>(this.url).pipe(
-      tap((data: IPeriod[]) =>
-        console.log('Service getPeriods: ' + JSON.stringify(data))
-      ),
-      tap((data) => (this.periods = data)),
-      catchError((err: any) => this.err.handleError(err))
-    );
+    return this.http.get<IPeriod[]>(this.url)
+      .pipe(
+          tap((data: IPeriod[]) => console.log('Service getPeriods: ' + JSON.stringify(data))),
+          catchError((err: any) => this.err.handleError(err))
+      );
   }
 
   /**
@@ -55,8 +50,10 @@ export class PeriodService {
     if (this.currentPeriod && this.currentPeriod.id === id) {
       return this.currentPeriod;
     } else {
-      const period = <IPeriod>this.periods.find((period: IPeriod) => period.id === id);
-      return this.currentPeriod = period ? period : null;
+      const period = <IPeriod>(
+        this.periods.find((period: IPeriod) => period.id === id)
+      );
+      return (this.currentPeriod = period ? period : null);
     }
   }
   //#endregion Reads
