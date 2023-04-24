@@ -6,7 +6,7 @@ import { catchError, map } from 'rxjs/operators';
 import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
 import { IItem } from '../../models/item';
 
-const auth = require('../../../../../../assets/data/auth-config.json')
+import auth from '../../../../../../assets/data/auth-config.json'
 
 /**
  * Initial Amount Service

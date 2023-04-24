@@ -7,7 +7,7 @@ import { catchError, filter, map, tap } from 'rxjs/operators';
 import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
 import { IPeriod } from '../../models/period';
 
-const auth = require('../../../../../../assets/data/auth-config.json');
+import auth from '../../../../../../assets/data/auth-config.json'
 
 /**
  * Period Service

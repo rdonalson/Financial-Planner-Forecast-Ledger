@@ -28,7 +28,7 @@ import { MenuModule } from 'primeng/menu';
 import { MenubarModule } from 'primeng/menubar';
 import { TooltipModule } from 'primeng/tooltip';
 
-const auth = require('../../assets/data/auth-config.json')
+import auth from '../../assets/data/auth-config.json'
 
 const isIE =
   window.navigator.userAgent.indexOf('MSIE ') > -1 ||

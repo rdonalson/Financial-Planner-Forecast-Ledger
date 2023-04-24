@@ -4,5 +4,7 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"CodeGPT.model": "gpt-4"
+	}
 }

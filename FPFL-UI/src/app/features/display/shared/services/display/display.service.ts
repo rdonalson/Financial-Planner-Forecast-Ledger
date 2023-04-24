@@ -9,7 +9,7 @@ import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-er
 import { ILedgerParams } from '../../models/ledger-params';
 import { ILedgerVM } from '../../view-models/ledger-vm';
 
-const auth = require('../../../../../../assets/data/auth-config.json')
+import auth from '../../../../../../assets/data/auth-config.json'
 
 /**
  * Display Service
