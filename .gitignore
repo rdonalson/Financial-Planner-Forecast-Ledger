@@ -114,3 +114,7 @@ dist
 /FPFL-API/FPFL.API.Web/FPFL.API.Web.csproj.user
 /FPFL-API/FPFL.API.Infrastructure/FPFL.API.Infrastructure.csproj.user
 /.vs
+FPFL-UI/.vs/slnx.sqlite
+FPFL-UI/.vs/FPFL-UI/FileContentIndex/263500b5-dfc9-4bcd-beb1-cd23a95dc269.vsidx
+FPFL-UI/.vs/FPFL-UI/FileContentIndex/read.lock
+FPFL-UI/.vs/FPFL-UI/v17/.wsuo
