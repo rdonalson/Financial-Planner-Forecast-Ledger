@@ -1,6 +1,8 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
 
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
@@ -29,6 +31,9 @@ import { ItemDetailHomeComponent } from './item-detail-home.component';
 import { ItemListComponent } from './item/item-list/item-list.component';
 import { ItemEditComponent } from './item/item-edit/item-edit.component';
 import { ItemService } from './shared/services/item/item.service';
+import { PeriodEffects } from './shared/services/period/state/period.effects';
+import { periodReducer } from './shared/services/period/state/period.reducer';
+import { itemReducer } from './shared/services/item/state/item.reducer';
 
 @NgModule({
   declarations: [
@@ -40,6 +45,9 @@ import { ItemService } from './shared/services/item/item.service';
   imports: [
     CommonModule,
     FormsModule,
+    StoreModule.forFeature('periods', periodReducer),
+    EffectsModule.forFeature([PeriodEffects]),
+    StoreModule.forFeature('items', itemReducer),
     ReactiveFormsModule,
     ProgressSpinnerModule,
     ConfirmDialogModule,
