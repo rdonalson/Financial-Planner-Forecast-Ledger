@@ -18,6 +18,8 @@ import { PeriodService } from '../../shared/services/period/period.service';
 import { LoginUtilService } from 'src/app/core/services/login/login-util.service';
 import { ItemDetailCommonService } from '../../shared/services/common/item-detail-common.service';
 import { IUtilArray } from '../../shared/models/util-array';
+import { Store } from '@ngrx/store';
+import { State, getCurrentItem } from '../../shared/services/item/state/item.reducer';
 
 /**
  * Reactive CRUD Form for individual items; credit (1) or debit (2)
@@ -43,6 +45,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
   itemForm!: FormGroup;
   periodSwitch: number | undefined;
   dateRangeToggle: boolean | undefined;
+  selectedItem$: any;
 
   /**
    * Constructor
@@ -66,10 +69,13 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     private utilArrayService: UtilArrayService,
     private err: GlobalErrorHandlerService,
     private itemService: ItemService,
-    private periodService: PeriodService
+    private periodService: PeriodService,
+    private store: Store<State>
   ) {
     this.messages = this.itemDetailCommonService.Messages;
   }
+
+  private data!: any;
 
   //#region Events
   /**
@@ -81,6 +87,11 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     this.initializeRecord();
     this.itemForm = this.itemDetailCommonService.generateForm(this.fb);
     this.getRouteParams();
+
+    //this.selectedItem$ = this.store.select(getCurrentItem);
+    this.store.select(getCurrentItem).subscribe(item => {
+      this.data = item;
+    })
   }
 
   /**

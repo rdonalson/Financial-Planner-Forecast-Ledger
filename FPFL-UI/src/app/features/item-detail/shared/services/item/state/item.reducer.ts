@@ -6,7 +6,7 @@ import { IItem } from '../../../models/item';
 
 
 export interface State extends AppState.State {
-  periods: ItemState;
+  itemstate: ItemState;
 }
 
 export interface ItemState {

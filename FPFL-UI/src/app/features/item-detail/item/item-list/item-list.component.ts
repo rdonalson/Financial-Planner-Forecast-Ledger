@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ConfirmationService } from 'primeng/api';
@@ -9,6 +9,9 @@ import { IItem } from '../../shared/models/item';
 import { MessageUtilService } from '../../shared/services/common/message-util.service';
 import { ItemService } from '../../shared/services/item/item.service';
 import { LoginUtilService } from 'src/app/core/services/login/login-util.service';
+import { Store } from '@ngrx/store';
+import { State } from '../../shared/services/item/state/item.reducer';
+import * as ItemActions from '../../shared/services/item/state/item.actions';
 
 /**
  * Form that will display the list two types of items; Credit (1) or Debit (2)
@@ -40,9 +43,11 @@ export class ItemListComponent implements OnInit, OnDestroy {
     private loginUtilService: LoginUtilService,
     private messageUtilService: MessageUtilService,
     private route: ActivatedRoute,
+    private router: Router,
     private err: GlobalErrorHandlerService,
     private confirmationService: ConfirmationService,
-    private itemService: ItemService
+    private itemService: ItemService,
+    private store: Store<State>
   ) { }
 
   //#region Events
@@ -50,6 +55,12 @@ export class ItemListComponent implements OnInit, OnDestroy {
     this.userId = this.loginUtilService.getUserOid();
     this.getRouteParams();
   }
+
+  openEdit(item: IItem): void {  // [routerLink]="['./edit', item.id]"
+    this.store.dispatch(ItemActions.setCurrentItem({ item }));
+    this.router.navigate(['./edit', item.id], { relativeTo: this.route });
+  }
+
   /**
    * Removes the "sub" observable for Prameter retrieval
    */

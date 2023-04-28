@@ -6,17 +6,17 @@ import * as ItemActions from '../../../../shared/services/item/state/item.action
 import { ItemService } from '../item.service';
 
 @Injectable()
-export class PeriodEffects {
+export class ItemEffects {
 
   constructor(
     private actions$: Actions,
-    private periodService: ItemService
+    private itemService: ItemService
   ) {}
 
-  // loadPeriods$ = createEffect(() => {
+  // loadItems$ = createEffect((arg 1, arg 2) => {
   //   return this.actions$.pipe(
   //     ofType(ItemActions.loadItems),
-  //     mergeMap(() => this.periodService.getItems().pipe(
+  //     mergeMap(() => this.itemService.getItems().pipe(
   //       map(items => ItemActions.loadItemsSuccess({ items})),
   //       catchError(error => of(ItemActions.loadItemsFailure({ error })))
   //     ))

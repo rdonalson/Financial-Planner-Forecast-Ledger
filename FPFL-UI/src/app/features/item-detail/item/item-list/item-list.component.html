@@ -130,7 +130,7 @@
                 pButton
                 pRipple
                 icon="pi pi-pencil"
-                [routerLink]="['./edit', item.id]"
+                (click)="openEdit(item)"
                 class="p-button-rounded p-button-success"
               ></button>
               <button
