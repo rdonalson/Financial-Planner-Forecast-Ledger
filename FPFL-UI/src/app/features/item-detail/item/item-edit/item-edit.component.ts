@@ -2,10 +2,11 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControlName, FormGroup } from '@angular/forms';
 import { formatDate } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+
 import { Subscription } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-
 import { ConfirmationService } from 'primeng/api';
 
 import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
@@ -18,7 +19,6 @@ import { PeriodService } from '../../shared/services/period/period.service';
 import { LoginUtilService } from 'src/app/core/services/login/login-util.service';
 import { ItemDetailCommonService } from '../../shared/services/common/item-detail-common.service';
 import { IUtilArray } from '../../shared/models/util-array';
-import { Store } from '@ngrx/store';
 import { State, getCurrentItem } from '../../shared/services/item/state/item.reducer';
 
 /**
@@ -53,8 +53,9 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    * @param {ConfirmationService} confirmationService
    * @param {FormBuilder} fb
    * @param {ActivatedRoute} route
+   * @param {Router} router
    * @param {MessageUtilService} messageUtilService
-   * @param {UtilArrayService} array
+   * @param {UtilArrayService} utilArrayService
    * @param {GlobalErrorHandlerService} err
    * @param {itemService} itemService
    * @param {PeriodService} periodService
@@ -64,6 +65,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     private confirmationService: ConfirmationService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
+    private router: Router,
     private messageUtilService: MessageUtilService,
     private itemDetailCommonService: ItemDetailCommonService,
     private utilArrayService: UtilArrayService,
@@ -75,8 +77,6 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     this.messages = this.itemDetailCommonService.Messages;
   }
 
-  private data!: any;
-
   //#region Events
   /**
    * Initialize the Item Interface, gets the Period list and initizes the FormBuilder
@@ -85,28 +85,38 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     this.getUtilArrayItems();
     this.getPeriods();
     this.initializeRecord();
-    this.itemForm = this.itemDetailCommonService.generateForm(this.fb);
     this.getRouteParams();
-
-    //this.selectedItem$ = this.store.select(getCurrentItem);
-    this.store.select(getCurrentItem).subscribe(item => {
-      this.data = item;
+    this.itemForm = this.itemDetailCommonService.generateForm(this.fb);
+    /** The item to edit is passed from the item list to here */
+    this.store.select(getCurrentItem).subscribe(data => {
+      if (data) {
+        this.item = data
+      }
     })
   }
 
   /**
-   * Get Primary Key from Route Paramters
+   * Stop edit or create and move back parent item list
+   */
+  cancel(): void {
+    this.router.navigate([this.defaultPath.toString()], { relativeTo: this.route });
+  }
+
+  /**
+   * Get Primary Key & Item Type from Route Paramters
    */
   private getRouteParams(): void {
     this.sub = this.route.params
       .subscribe((params: any) => {
         this.recordId = +params.id;
         this.getItemTypeValue(params.itemType);
-        this.setTitleText();
-        this.getItem(this.recordId);
       });
   }
 
+  /**
+   * Sets the type of item, 1 -> "Credit" or 2 -> "Debit"
+   * @param type
+   */
   private getItemTypeValue(type: string): void {
     switch (type) {
       case 'credit':
@@ -130,7 +140,6 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     this.periodSwitch = e.value;
     this.itemDetailCommonService.setPeriodFields(this.itemForm, this.periodSwitch);
   }
-
 
   /**
    * Allows the user to select a Date Range by showing the Date Range fields
@@ -165,8 +174,8 @@ export class ItemEditComponent implements OnInit, OnDestroy {
   /**
    * Sets the page title value
    */
-  private setTitleText(): void {
-    if (this.recordId === 0) {
+  private setTitleText(recordId: number): void {
+    if (recordId === 0) {
       this.pageTitle = `New ${this.itemTypeName}`;
     } else {
       this.pageTitle = `Edit ${this.itemTypeName}`;
@@ -178,7 +187,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    */
   private initializeRecord(): void {
     this.recordId = 0;
-    this.setTitleText();
+    this.setTitleText(this.recordId);
     this.userId = this.claimsUtilService.getUserOid();
     this.item = {
       id: this.recordId,
@@ -381,24 +390,24 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    * @param {number} id The id of the Item
    * @returns {any} result
    */
-  getItem(id: number): any {
-    if (id === 0) {
-      return undefined;
-    }
-    this.progressSpinner = true;
-    return this.itemService.getItem(id)
-      .subscribe({
-        next: (data: IItem): void => {
-          this.onItemRetrieved(data);
-          // console.log(`Item-Edit patchValue: ${JSON.stringify(this.itemForm.value)}`);
-          // console.log(`Item-Edit getItem: ${JSON.stringify(data)}`);
-        },
-        error: catchError((err: any) => this.err.handleError(err)),
-        complete: () => {
-          this.progressSpinner = false;
-        }
-      });
-  }
+  // getItem(id: number): any {
+  //   if (id === 0) {
+  //     return undefined;
+  //   }
+  //   this.progressSpinner = true;
+  //   return this.itemService.getItem(id)
+  //     .subscribe({
+  //       next: (data: IItem): void => {
+  //         this.onItemRetrieved(data);
+  //         // console.log(`Item-Edit patchValue: ${JSON.stringify(this.itemForm.value)}`);
+  //         // console.log(`Item-Edit getItem: ${JSON.stringify(data)}`);
+  //       },
+  //       error: catchError((err: any) => this.err.handleError(err)),
+  //       complete: () => {
+  //         this.progressSpinner = false;
+  //       }
+  //     });
+  // }
   //#endregion Reads
   //#region Writes
   /**

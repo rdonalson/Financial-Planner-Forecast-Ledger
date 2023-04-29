@@ -38,7 +38,6 @@ export const getError = createSelector(
   (state) => state.error
 );
 
-
 export const itemReducer = createReducer<ItemState>(
   initialState,
   on(ItemActions.setCurrentItem, (state, action): ItemState => {

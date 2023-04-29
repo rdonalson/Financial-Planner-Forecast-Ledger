@@ -56,7 +56,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
     this.getRouteParams();
   }
 
-  openEdit(item: IItem): void {  // [routerLink]="['./edit', item.id]"
+  openEdit(item: IItem): void { 
     this.store.dispatch(ItemActions.setCurrentItem({ item }));
     this.router.navigate(['./edit', item.id], { relativeTo: this.route });
   }
