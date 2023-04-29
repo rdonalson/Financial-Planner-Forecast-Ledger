@@ -11,7 +11,7 @@ import { formatDate } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ConfirmationService } from 'primeng/api';
 
@@ -21,14 +21,12 @@ import { IPeriod } from '../../shared/models/period';
 import { UtilArrayService } from '../../shared/services/common/util-array.service';
 import { MessageUtilService } from '../../shared/services/common/message-util.service';
 import { ItemService } from '../../shared/services/item/item.service';
-import { PeriodService } from '../../shared/services/period/period.service';
 import { LoginUtilService } from 'src/app/core/services/login/login-util.service';
 import { ItemDetailCommonService } from '../../shared/services/common/item-detail-common.service';
 import { IUtilArray } from '../../shared/models/util-array';
-import {
-  State,
-  getCurrentItem,
-} from '../../shared/services/item/state/item.reducer';
+import { State, getCurrentItem } from '../../shared/services/item/state/item.reducer';
+import { getCurrentPeriod, getError, getPeriods } from '../../shared/services/period/state/period.reducer';
+import * as PeriodActions from '../../shared/services/period/state/period.actions';
 
 /**
  * Reactive CRUD Form for individual items; credit (1) or debit (2)
@@ -38,9 +36,14 @@ import {
   styleUrls: ['./item-edit.component.scss'],
 })
 export class ItemEditComponent implements OnInit, OnDestroy {
+  @ViewChildren(FormControlName, { read: ElementRef })
+
   private item!: IItem;
-  private sub!: Subscription;
+  private paramSub$!: Subscription;
+  private periodsSub$!: Subscription;
+  private currentItemSub$!: Subscription;
   private userId: string = '';
+
   itemTypeName!: string;
   itemTypeValue!: number;
   recordId!: number;
@@ -48,14 +51,15 @@ export class ItemEditComponent implements OnInit, OnDestroy {
   defaultPath: string = '../../';
   progressSpinner: boolean = false;
   messages: { [key: string]: { [key: string]: string } };
-  @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements: ElementRef[] = [];
   periods!: IPeriod[];
   utilArray!: IUtilArray;
   itemForm!: FormGroup;
   periodSwitch: number | undefined;
   dateRangeToggle: boolean | undefined;
-  selectedItem$: any;
+  periodErrorMessage$!: Observable<string>;
+  selectedPeriod$!: Observable<IPeriod | null>;
+
 
   /**
    * Constructor
@@ -68,7 +72,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    * @param {UtilArrayService} utilArrayService
    * @param {GlobalErrorHandlerService} err
    * @param {itemService} itemService
-   * @param {PeriodService} periodService
+   * @param {Store<State>} store
    */
   constructor(
     private claimsUtilService: LoginUtilService,
@@ -81,7 +85,6 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     private utilArrayService: UtilArrayService,
     private err: GlobalErrorHandlerService,
     private itemService: ItemService,
-    private periodService: PeriodService,
     private store: Store<State>
   ) {
     this.messages = this.itemDetailCommonService.Messages;
@@ -92,15 +95,23 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    * Initialize the Item Interface, gets the Period list and initizes the FormBuilder
    */
   ngOnInit(): void {
+
+    this.periodsSub$ = this.store.select(getPeriods).subscribe((periods: IPeriod[]) => {
+      this.periods = periods;
+    });
+    this.periodErrorMessage$ = this.store.select(getError);
+    this.store.dispatch(PeriodActions.loadPeriods());
+    this.selectedPeriod$ = this.store.select(getCurrentPeriod);
+
     this.getUtilArrayItems();
-    this.getPeriods();
     this.initializeRecord();
     this.getRouteParams();
     this.itemForm = this.itemDetailCommonService.generateForm(this.fb);
     /** The item to edit is passed from the item list to here */
-    this.store.select(getCurrentItem).subscribe((data) => {
+    this.currentItemSub$ = this.store.select(getCurrentItem).subscribe((data) => {
       if (data) {
         this.item = data;
+        this.onItemRetrieved(this.item);
       }
     });
   }
@@ -118,7 +129,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    * Get Primary Key & Item Type from Route Paramters
    */
   private getRouteParams(): void {
-    this.sub = this.route.params.subscribe((params: any) => {
+    this.paramSub$ = this.route.params.subscribe((params: any) => {
       this.recordId = +params.id;
       this.getItemTypeValue(params.itemType);
     });
@@ -149,6 +160,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    */
   getPeriod(e: any): void {
     this.periodSwitch = e.value;
+    //this.store.dispatch(PeriodActions.setCurrentPeriod({ item }));
     this.itemDetailCommonService.setPeriodFields(
       this.itemForm,
       this.periodSwitch
@@ -177,10 +189,12 @@ export class ItemEditComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Removes the "sub" observable for Prameter retrieval
+   * Removes the subscriptions
    */
   ngOnDestroy(): void {
-    this.sub.unsubscribe();
+    this.paramSub$.unsubscribe();
+    this.periodsSub$.unsubscribe();
+    this.currentItemSub$.unsubscribe();
   }
   //#endregion Events
 
@@ -382,24 +396,6 @@ export class ItemEditComponent implements OnInit, OnDestroy {
       },
       error: catchError((err: any) => this.err.handleError(err)),
       complete: () => {},
-    });
-  }
-
-  /**
-   * Gets the complete list of Periods
-   * @returns {any} result
-   */
-  getPeriods(): any {
-    this.progressSpinner = true;
-    return this.periodService.getPeriods().subscribe({
-      next: (data: IPeriod[]): void => {
-        this.periods = data;
-        // console.log(`Item-Edit getPriods: ${JSON.stringify(this.periods)}`);
-      },
-      error: catchError((err: any) => this.err.handleError(err)),
-      complete: () => {
-        this.progressSpinner = false;
-      },
     });
   }
   //#endregion Reads

@@ -22,11 +22,12 @@ import * as ItemActions from '../../shared/services/item/state/item.actions';
   styleUrls: ['./item-list.component.scss']
 })
 export class ItemListComponent implements OnInit, OnDestroy {
+  private sub!: Subscription;
+  
   itemTypeName!: string;
   itemTypeValue!: number;
   pageTitle!: string;
   progressSpinner: boolean = false;
-  private sub!: Subscription;
   itemList: IItem[] = [];
   selectedCredits: IItem[] = [];
   userId: string = '';
@@ -56,7 +57,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
     this.getRouteParams();
   }
 
-  openEdit(item: IItem): void { 
+  openEdit(item: IItem): void {
     this.store.dispatch(ItemActions.setCurrentItem({ item }));
     this.router.navigate(['./edit', item.id], { relativeTo: this.route });
   }
