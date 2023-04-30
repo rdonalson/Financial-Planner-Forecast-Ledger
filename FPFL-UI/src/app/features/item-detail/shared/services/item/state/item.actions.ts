@@ -3,7 +3,7 @@ import { IItem } from "../../../models/item";
 
 /** Item */
 export const setCurrentItem = createAction(
-  '[Item] Set Current Period',
+  '[Item] Set Current Item',
   props<{ item: IItem }>()
 );
 
@@ -11,7 +11,10 @@ export const clearCurrentItem = createAction('[Item] Clear Current Item]');
 export const initializeCurrentItem = createAction('[Item] Init Current Item');
 
 /** Items */
-export const loadItems = createAction('[Item] Load');
+export const loadItems = createAction(
+  '[Item] Load',
+  (userId: string, itemType: number) => ({ payload: { userId, itemType } })
+);
 
 export const loadItemsSuccess = createAction(
   '[Item] Load Success',

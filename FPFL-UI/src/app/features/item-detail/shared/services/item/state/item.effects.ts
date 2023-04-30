@@ -13,13 +13,13 @@ export class ItemEffects {
     private itemService: ItemService
   ) {}
 
-  // loadItems$ = createEffect((arg 1, arg 2) => {
-  //   return this.actions$.pipe(
-  //     ofType(ItemActions.loadItems),
-  //     mergeMap(() => this.itemService.getItems().pipe(
-  //       map(items => ItemActions.loadItemsSuccess({ items})),
-  //       catchError(error => of(ItemActions.loadItemsFailure({ error })))
-  //     ))
-  //   )
-  // })
+  loadItems$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(ItemActions.loadItems),
+      mergeMap((action) => this.itemService.getItems( action.payload.userId, action.payload.itemType ).pipe(
+        map(items => ItemActions.loadItemsSuccess({ items })),
+        catchError(error => of(ItemActions.loadItemsFailure({ error })))
+      ))
+    )
+  })
 }

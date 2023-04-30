@@ -106,6 +106,8 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     this.getUtilArrayItems();
     this.initializeRecord();
     this.getRouteParams();
+    this.setTitleText(this.recordId);
+
     this.itemForm = this.itemDetailCommonService.generateForm(this.fb);
     /** The item to edit is passed from the item list to here */
     this.currentItemSub$ = this.store.select(getCurrentItem).subscribe((data) => {

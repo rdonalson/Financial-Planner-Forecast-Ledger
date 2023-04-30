@@ -34,6 +34,7 @@ import { ItemService } from './shared/services/item/item.service';
 import { PeriodEffects } from './shared/services/period/state/period.effects';
 import { periodReducer } from './shared/services/period/state/period.reducer';
 import { itemReducer } from './shared/services/item/state/item.reducer';
+import { ItemEffects } from './shared/services/item/state/item.effects';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,7 @@ import { itemReducer } from './shared/services/item/state/item.reducer';
     CommonModule,
     FormsModule,
     StoreModule.forFeature('periods', periodReducer),
-    EffectsModule.forFeature([PeriodEffects]),
+    EffectsModule.forFeature([PeriodEffects, ItemEffects]),
     StoreModule.forFeature('items', itemReducer),
     ReactiveFormsModule,
     ProgressSpinnerModule,

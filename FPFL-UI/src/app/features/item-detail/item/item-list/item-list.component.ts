@@ -10,7 +10,7 @@ import { MessageUtilService } from '../../shared/services/common/message-util.se
 import { ItemService } from '../../shared/services/item/item.service';
 import { LoginUtilService } from 'src/app/core/services/login/login-util.service';
 import { Store } from '@ngrx/store';
-import { State } from '../../shared/services/item/state/item.reducer';
+import { State, getItems } from '../../shared/services/item/state/item.reducer';
 import * as ItemActions from '../../shared/services/item/state/item.actions';
 
 /**
@@ -23,7 +23,7 @@ import * as ItemActions from '../../shared/services/item/state/item.actions';
 })
 export class ItemListComponent implements OnInit, OnDestroy {
   private sub!: Subscription;
-  
+
   itemTypeName!: string;
   itemTypeValue!: number;
   pageTitle!: string;
@@ -31,6 +31,8 @@ export class ItemListComponent implements OnInit, OnDestroy {
   itemList: IItem[] = [];
   selectedCredits: IItem[] = [];
   userId: string = '';
+  getItemsSub$: any;
+  newItems!: IItem[];
 
   /**
    * Constructor
@@ -55,6 +57,9 @@ export class ItemListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.userId = this.loginUtilService.getUserOid();
     this.getRouteParams();
+    this.getItemsSub$ = this.store.select(getItems).subscribe((items: IItem[]) => {
+      this.itemList = items;
+    });
   }
 
   openEdit(item: IItem): void {
@@ -81,7 +86,8 @@ export class ItemListComponent implements OnInit, OnDestroy {
       .subscribe((params: any) => {
         this.getItemTypeValue(params.itemType);
         this.pageTitle = `Manage ${this.itemTypeName}`
-        this.getItems(this.userId, this.itemTypeValue);
+        this.store.dispatch(ItemActions.loadItems(this.userId, this.itemTypeValue));
+        //this.getItems(this.userId, this.itemTypeValue);
       });
   }
 
@@ -112,20 +118,20 @@ export class ItemListComponent implements OnInit, OnDestroy {
    * @param {string} userId User's OID
    * @returns {any}
    */
-  getItems(userId: string, itemType: number): any {
-    this.progressSpinner = true;
-    return this.itemService.getItems(userId, itemType)
-      .subscribe({
-        next: (data: IItem[]): void => {
-          this.itemList = data;
-          // console.log(JSON.stringify(this.creditList));
-        },
-        error: catchError((err: any) => this.err.handleError(err)),
-        complete: () => {
-          this.progressSpinner = false;
-        }
-      });
-  }
+  // getItems(userId: string, itemType: number): any {
+  //   this.progressSpinner = true;
+  //   return this.itemService.getItems(userId, itemType)
+  //     .subscribe({
+  //       next: (data: IItem[]): void => {
+  //         this.itemList = data;
+  //         // console.log(JSON.stringify(this.creditList));
+  //       },
+  //       error: catchError((err: any) => this.err.handleError(err)),
+  //       complete: () => {
+  //         this.progressSpinner = false;
+  //       }
+  //     });
+  // }
   //#endregion Reads
   //#region Writes
   /**
