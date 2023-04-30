@@ -8,6 +8,7 @@ export const setCurrentItem = createAction(
 );
 
 export const clearCurrentItem = createAction('[Item] Clear Current Item]');
+export const initializeCurrentItem = createAction('[Item] Init Current Item');
 
 /** Items */
 export const loadItems = createAction('[Item] Load');

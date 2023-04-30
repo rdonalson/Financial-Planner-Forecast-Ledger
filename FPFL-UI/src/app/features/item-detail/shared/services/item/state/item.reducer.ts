@@ -52,6 +52,43 @@ export const itemReducer = createReducer<ItemState>(
       currentItem: null
     };
   }),
+  on(ItemActions.initializeCurrentItem, (state): ItemState => {
+    return {
+      ...state,
+      currentItem: {
+        id: 0,
+        userId: '',
+        name: '',
+        amount: 0,
+        fkItemType: 0,
+        itemType: '',
+        fkPeriod: 0,
+        period: '',
+        dateRangeReq: false,
+        beginDate: undefined,
+        endDate: undefined,
+        weeklyDow: undefined,
+        everOtherWeekDow: undefined,
+        biMonthlyDay1: undefined,
+        biMonthlyDay2: undefined,
+        monthlyDom: undefined,
+        quarterly1Month: undefined,
+        quarterly1Day: undefined,
+        quarterly2Month: undefined,
+        quarterly2Day: undefined,
+        quarterly3Month: undefined,
+        quarterly3Day: undefined,
+        quarterly4Month: undefined,
+        quarterly4Day: undefined,
+        semiAnnual1Month: undefined,
+        semiAnnual1Day: undefined,
+        semiAnnual2Month: undefined,
+        semiAnnual2Day: undefined,
+        annualMoy: undefined,
+        annualDom: undefined,
+      }
+    };
+  }),
   on(ItemActions.loadItemsSuccess, (state, action): ItemState => {
     return {
       ...state,
