@@ -22,7 +22,8 @@ import * as ItemActions from '../../shared/services/item/state/item.actions';
   styleUrls: ['./item-list.component.scss']
 })
 export class ItemListComponent implements OnInit, OnDestroy {
-  private sub!: Subscription;
+  private paramsSub$!: Subscription;
+  private getItemsSub$!: Subscription;
 
   itemTypeName!: string;
   itemTypeValue!: number;
@@ -31,8 +32,6 @@ export class ItemListComponent implements OnInit, OnDestroy {
   itemList: IItem[] = [];
   selectedCredits: IItem[] = [];
   userId: string = '';
-  getItemsSub$: any;
-  newItems!: IItem[];
 
   /**
    * Constructor
@@ -71,7 +70,8 @@ export class ItemListComponent implements OnInit, OnDestroy {
    * Removes the "sub" observable for Prameter retrieval
    */
   ngOnDestroy(): void {
-    this.sub.unsubscribe();
+    this.paramsSub$.unsubscribe();
+    this.getItemsSub$.unsubscribe();
   }
   //#endregion Events
 
@@ -82,7 +82,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
    * Get the item list
    */
   private getRouteParams(): void {
-    this.sub = this.route.params
+    this.paramsSub$ = this.route.params
       .subscribe((params: any) => {
         this.getItemTypeValue(params.itemType);
         this.pageTitle = `Manage ${this.itemTypeName}`
