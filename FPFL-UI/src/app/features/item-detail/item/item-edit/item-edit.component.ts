@@ -11,7 +11,7 @@ import { formatDate } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 
 import { ConfirmationService } from 'primeng/api';
 
@@ -21,7 +21,6 @@ import { IPeriod } from '../../shared/models/period';
 import { UtilArrayService } from '../../shared/services/common/util-array.service';
 import { MessageUtilService } from '../../shared/services/common/message-util.service';
 import { ItemService } from '../../shared/services/item/item.service';
-import { PeriodService } from '../../shared/services/period/period.service';
 import { LoginUtilService } from 'src/app/core/services/login/login-util.service';
 import { ItemDetailCommonService } from '../../shared/services/common/item-detail-common.service';
 import { IUtilArray } from '../../shared/models/util-array';
@@ -44,8 +43,14 @@ import { getCurrentItem } from '../../shared/services/item/state/item.reducer';
 })
 export class ItemEditComponent implements OnInit, OnDestroy {
   private item!: IItem;
-  private sub!: Subscription;
   private userId: string = '';
+
+  private sub$!: Subscription;
+  private periodErrorMessage$!: Observable<string>;
+  private selectedPeriod$!: Observable<IPeriod | null>;
+  private periods$!: Observable<IPeriod[]>;
+  private currentItem$!: Observable<IItem | null>;
+
   itemTypeName!: string;
   itemTypeValue!: number;
   recordId!: number;
@@ -60,11 +65,6 @@ export class ItemEditComponent implements OnInit, OnDestroy {
   itemForm!: FormGroup;
   periodSwitch: number | undefined;
   dateRangeToggle!: boolean;
-
-  periodErrorMessage$!: Observable<string>;
-  selectedPeriod$!: Observable<IPeriod | null>;
-  periods$!: Observable<IPeriod[]>;
-  currentItem$!: Observable<IItem | null>;
 
   /**
    * Constructor
@@ -106,7 +106,6 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     this.store.dispatch(PeriodActions.loadPeriods());
     this.currentItem$ = this.store.select(getCurrentItem);
 
-
     this.getUtilArrayItems();
     this.getPeriods();
     this.initializeRecord();
@@ -118,7 +117,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    * Get Primary Key from Route Paramters
    */
   private getRouteParams(): void {
-    this.sub = this.route.params.subscribe((params: any) => {
+    this.sub$ = this.route.params.subscribe((params: any) => {
       this.recordId = +params.id;
       this.getItemTypeValue(params.itemType);
       this.setTitleText();
@@ -187,7 +186,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    * Removes the "sub" observable for Prameter retrieval
    */
   ngOnDestroy(): void {
-    this.sub.unsubscribe();
+    this.sub$.unsubscribe();
   }
   //#endregion Events
 
@@ -249,7 +248,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    * Initializes varibles necessary for operation
    * @param {IItem} item The retrieved Item record
    */
-  onItemRetrieved(item: IItem): void {
+  private onItemRetrieved(item: IItem): void {
     if (this.itemForm) {
       this.itemForm.reset();
     }
@@ -322,54 +321,56 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    * before being sent back to the APIs by "saveItem" for updating the
    * database item record
    */
-  patchFormValuesBackToObject(): void {
+  private patchFormValuesBackToObject(oldItem: IItem, itemForm: FormGroup): IItem {
+    let newItem: IItem = {...oldItem};
     // Common Fields
-    this.item.name = this.itemForm.value.Name;
-    this.item.amount = this.itemForm.value.Amount;
-    this.item.fkPeriod = this.itemForm.value.Period;
-    (this.item.fkItemType = this.itemTypeValue),
-      (this.item.itemType = undefined),
-      (this.item.period = undefined),
-      // Date Range Switch
-      (this.item.dateRangeReq = this.itemForm.value.DateRangeReq);
+    newItem.name = itemForm.value.Name;
+    newItem.amount = itemForm.value.Amount;
+    newItem.fkPeriod = itemForm.value.Period;
+    newItem.fkItemType = this.itemTypeValue;
+    newItem.itemType = undefined;
+    newItem.period = undefined;
+    // Date Range Switch
+    newItem.dateRangeReq = itemForm.value.DateRangeReq;
     // Start Date for Date Range / Initialization Date for Periods: Single Occurrence & Every Two Weeks
-    this.item.beginDate =
-      this.itemForm.value.InitializationDate !== null &&
+    newItem.beginDate =
+      itemForm.value.InitializationDate !== null &&
       (this.periodSwitch === 4 || this.periodSwitch === 1)
-        ? new Date(this.itemForm.value.InitializationDate)
-        : this.itemForm.value.BeginDate !== null
-        ? new Date(this.itemForm.value.BeginDate)
+        ? new Date(itemForm.value.InitializationDate)
+        : itemForm.value.BeginDate !== null
+        ? new Date(itemForm.value.BeginDate)
         : undefined;
     // End Date for Date Range
-    this.item.endDate =
-      this.itemForm.value.EndDate !== null
-        ? new Date(this.itemForm.value.EndDate)
+    newItem.endDate =
+      itemForm.value.EndDate !== null
+        ? new Date(itemForm.value.EndDate)
         : undefined;
     // Every Two Weeks (Every Other Week)
-    this.item.weeklyDow = this.itemForm.value.WeeklyDow;
-    this.item.everOtherWeekDow = this.itemForm.value.EverOtherWeekDow;
+    newItem.weeklyDow = itemForm.value.WeeklyDow;
+    newItem.everOtherWeekDow = itemForm.value.EverOtherWeekDow;
     // Monthly
-    this.item.biMonthlyDay1 = this.itemForm.value.BiMonthlyDay1;
-    this.item.biMonthlyDay2 = this.itemForm.value.BiMonthlyDay2;
+    newItem.biMonthlyDay1 = itemForm.value.BiMonthlyDay1;
+    newItem.biMonthlyDay2 = itemForm.value.BiMonthlyDay2;
     // Monthly
-    this.item.monthlyDom = this.itemForm.value.MonthlyDom;
+    newItem.monthlyDom = itemForm.value.MonthlyDom;
     // Quarterly
-    this.item.quarterly1Month = this.itemForm.value.Quarterly1Month;
-    this.item.quarterly1Day = this.itemForm.value.Quarterly1Day;
-    this.item.quarterly2Month = this.itemForm.value.Quarterly2Month;
-    this.item.quarterly2Day = this.itemForm.value.Quarterly2Day;
-    this.item.quarterly3Month = this.itemForm.value.Quarterly3Month;
-    this.item.quarterly3Day = this.itemForm.value.Quarterly3Day;
-    this.item.quarterly4Month = this.itemForm.value.Quarterly4Month;
-    this.item.quarterly4Day = this.itemForm.value.Quarterly4Day;
+    newItem.quarterly1Month = itemForm.value.Quarterly1Month;
+    newItem.quarterly1Day = itemForm.value.Quarterly1Day;
+    newItem.quarterly2Month = itemForm.value.Quarterly2Month;
+    newItem.quarterly2Day = itemForm.value.Quarterly2Day;
+    newItem.quarterly3Month = itemForm.value.Quarterly3Month;
+    newItem.quarterly3Day = itemForm.value.Quarterly3Day;
+    newItem.quarterly4Month = itemForm.value.Quarterly4Month;
+    newItem.quarterly4Day = itemForm.value.Quarterly4Day;
     // Semi-Annual
-    this.item.semiAnnual1Month = this.itemForm.value.SemiAnnual1Month;
-    this.item.semiAnnual1Day = this.itemForm.value.SemiAnnual1Day;
-    this.item.semiAnnual2Month = this.itemForm.value.SemiAnnual2Month;
-    this.item.semiAnnual2Day = this.itemForm.value.SemiAnnual2Day;
+    newItem.semiAnnual1Month = itemForm.value.SemiAnnual1Month;
+    newItem.semiAnnual1Day = itemForm.value.SemiAnnual1Day;
+    newItem.semiAnnual2Month = itemForm.value.SemiAnnual2Month;
+    newItem.semiAnnual2Day = itemForm.value.SemiAnnual2Day;
     // Annual
-    this.item.annualMoy = this.itemForm.value.AnnualMoy;
-    this.item.annualDom = this.itemForm.value.AnnualDom;
+    newItem.annualMoy = itemForm.value.AnnualMoy;
+    newItem.annualDom = itemForm.value.AnnualDom;
+    return newItem;
   }
   //#endregion Utilities
 
@@ -397,16 +398,13 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    * @returns {any} result
    */
   getPeriods(): any {
-    //this.progressSpinner = true;
     return this.periods$?.subscribe({
       next: (periods: IPeriod[]): void => {
         this.periods = periods;
         console.log(`Item-Edit getPriods: ${JSON.stringify(this.periods)}`);
       },
       error: catchError((err: any) => this.err.handleError(err)),
-      complete: () => {
-        //this.progressSpinner = false;
-      },
+      complete: () => {},
     });
   }
 
@@ -453,7 +451,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
       return null;
     }
     this.progressSpinner = true;
-    this.patchFormValuesBackToObject();
+    this.item = this.patchFormValuesBackToObject(this.item, this.itemForm);
     if (this.item.id === 0) {
       this.itemService.createItem(this.item).subscribe({
         // next: () => { },
