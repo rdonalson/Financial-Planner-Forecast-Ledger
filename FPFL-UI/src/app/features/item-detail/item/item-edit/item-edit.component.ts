@@ -320,9 +320,15 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    * Updates the "item" fields with the values from the "itemForm" fields
    * before being sent back to the APIs by "saveItem" for updating the
    * database item record
+   * @param {IItem} oldItem
+   * @param {FormGroup} itemForm
+   * @returns {IItem}
    */
-  private patchFormValuesBackToObject(oldItem: IItem, itemForm: FormGroup): IItem {
-    let newItem: IItem = {...oldItem};
+  private patchFormValuesBackToObject(
+    oldItem: IItem,
+    itemForm: FormGroup
+  ): IItem {
+    let newItem: IItem = { ...oldItem };
     // Common Fields
     newItem.name = itemForm.value.Name;
     newItem.amount = itemForm.value.Amount;
@@ -423,8 +429,6 @@ export class ItemEditComponent implements OnInit, OnDestroy {
         if (item) {
           this.onItemRetrieved(item);
           this.progressSpinner = false;
-          // console.log(`Item-Edit patchValue: ${JSON.stringify(this.itemForm.value)}`);
-          // console.log(`Item-Edit getItem: ${JSON.stringify(data)}`);
         } else {
           this.initializeRecord;
           this.progressSpinner = false;
