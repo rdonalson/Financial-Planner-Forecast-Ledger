@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
+import { catchError, flatMap, mergeMap, switchMap } from 'rxjs/operators';
 import { ConfirmationService } from 'primeng/api';
 
 import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
@@ -9,8 +10,8 @@ import { IItem } from '../../shared/models/item';
 import { MessageUtilService } from '../../shared/services/common/message-util.service';
 import { ItemService } from '../../shared/services/item/item.service';
 import { LoginUtilService } from 'src/app/core/services/login/login-util.service';
-import { Store } from '@ngrx/store';
-import { State, getItems } from '../../shared/services/item/state/item.reducer';
+import { State } from 'src/app/state/app.state';
+import { getItems } from '../../shared/services/item/state/item.actions';
 import * as ItemActions from '../../shared/services/item/state/item.actions';
 
 /**
@@ -19,7 +20,7 @@ import * as ItemActions from '../../shared/services/item/state/item.actions';
  */
 @Component({
   templateUrl: './item-list.component.html',
-  styleUrls: ['./item-list.component.scss']
+  styleUrls: ['./item-list.component.scss'],
 })
 export class ItemListComponent implements OnInit, OnDestroy {
   private paramsSub$!: Subscription;
@@ -29,9 +30,10 @@ export class ItemListComponent implements OnInit, OnDestroy {
   itemTypeValue!: number;
   pageTitle!: string;
   progressSpinner: boolean = false;
-  itemList: IItem[] = [];
+  //itemList: IItem[] = [];
   selectedCredits: IItem[] = [];
   userId: string = '';
+  items$!: Observable<IItem[]>;
 
   /**
    * Constructor
@@ -50,17 +52,23 @@ export class ItemListComponent implements OnInit, OnDestroy {
     private confirmationService: ConfirmationService,
     private itemService: ItemService,
     private store: Store<State>
-  ) { }
+  ) {}
 
   //#region Events
   ngOnInit(): void {
     this.userId = this.loginUtilService.getUserOid();
+    this.items$ = this.store.select(getItems).pipe(switchMap(o$ => o$));
     this.getRouteParams();
-    this.getItemsSub$ = this.store.select(getItems).subscribe((items: IItem[]) => {
-      this.itemList = items;
-    });
+
+    // this.getItemsSub$ = this.store.select(getItems).subscribe((items: IItem[]) => {
+    //   this.itemList = items;
+    // });
   }
 
+  /**
+   * Capture the current record and navigate to Item-Edit
+   * @param item
+   */
   openEdit(item: IItem): void {
     this.store.dispatch(ItemActions.setCurrentItem({ item }));
     this.router.navigate(['./edit', item.id], { relativeTo: this.route });
@@ -82,13 +90,14 @@ export class ItemListComponent implements OnInit, OnDestroy {
    * Get the item list
    */
   private getRouteParams(): void {
-    this.paramsSub$ = this.route.params
-      .subscribe((params: any) => {
-        this.getItemTypeValue(params.itemType);
-        this.pageTitle = `Manage ${this.itemTypeName}`
-        this.store.dispatch(ItemActions.loadItems(this.userId, this.itemTypeValue));
-        //this.getItems(this.userId, this.itemTypeValue);
-      });
+    this.paramsSub$ = this.route.params.subscribe((params: any) => {
+      this.getItemTypeValue(params.itemType);
+      this.pageTitle = `Manage ${this.itemTypeName}`;
+      this.store.dispatch(
+        ItemActions.loadItems(this.userId, this.itemTypeValue)
+      );
+      this.getItems();
+    });
   }
 
   /**
@@ -118,20 +127,20 @@ export class ItemListComponent implements OnInit, OnDestroy {
    * @param {string} userId User's OID
    * @returns {any}
    */
-  // getItems(userId: string, itemType: number): any {
-  //   this.progressSpinner = true;
-  //   return this.itemService.getItems(userId, itemType)
-  //     .subscribe({
-  //       next: (data: IItem[]): void => {
-  //         this.itemList = data;
-  //         // console.log(JSON.stringify(this.creditList));
-  //       },
-  //       error: catchError((err: any) => this.err.handleError(err)),
-  //       complete: () => {
-  //         this.progressSpinner = false;
-  //       }
-  //     });
-  // }
+  getItems(): any {
+    this.progressSpinner = true;
+    return this.items$.subscribe({
+      next: (items: IItem[]): void => {
+        //this.itemList = items;
+        //console.log(`Item-List getItems: ${JSON.stringify(this.itemList)}`);
+      },
+      error: catchError((err: any) => this.err.handleError(err)),
+      complete: () => {
+        this.progressSpinner = false;
+      },
+    });
+  }
+
   //#endregion Reads
   //#region Writes
   /**
@@ -150,19 +159,18 @@ export class ItemListComponent implements OnInit, OnDestroy {
         icon: 'pi pi-info-circle',
         accept: () => {
           this.progressSpinner = true;
-          this.itemService.deleteItem(id)
-            .subscribe({
-              next: () => this.messageUtilService.onComplete(`Credit Deleted`),
-              error: catchError((err: any) => {
-                this.messageUtilService.onError(`Credit Delete Failed`);
-                return this.err.handleError(err);
-              }),
-              complete: () => {
-                this.progressSpinner = false;
-                location.reload();
-              }
-            });
-        }
+          this.itemService.deleteItem(id).subscribe({
+            next: () => this.messageUtilService.onComplete(`Credit Deleted`),
+            error: catchError((err: any) => {
+              this.messageUtilService.onError(`Credit Delete Failed`);
+              return this.err.handleError(err);
+            }),
+            complete: () => {
+              this.progressSpinner = false;
+              location.reload();
+            },
+          });
+        },
       });
     }
   }
