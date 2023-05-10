@@ -75,7 +75,7 @@
   </div>
 </nav>
 <div class="card">
-  <div *ngIf="(items$ | async) as itemList" class="card-body" #cardBody>
+  <div  class="card-body" #cardBody>
     <div *ngIf="itemList.length === 0" class="p-grid p-fluid">
       Add some {{ itemTypeName }}
     </div>

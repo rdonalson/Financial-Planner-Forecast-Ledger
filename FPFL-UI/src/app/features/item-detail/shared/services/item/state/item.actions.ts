@@ -25,7 +25,4 @@ export const loadItemsFailure = createAction(
   '[Item] Load Failure',
   props<{ error: string }>()
 )
-export function getItems(getItems: any): import("rxjs").Observable<IItem[]> {
-  throw new Error('Function not implemented.');
-}
 

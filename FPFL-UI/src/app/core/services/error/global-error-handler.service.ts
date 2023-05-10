@@ -9,7 +9,7 @@ import { ObservableInput, throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class GlobalErrorHandlerService implements ErrorHandler {
-  public handleError(err: HttpErrorResponse): ObservableInput<any> {
+  public handleError(err: HttpErrorResponse): ObservableInput<never> {
     // in a real world app, we may send the server to some remote logging infrastructure
     // instead of just logging it to the console
     let errormessage = '';
@@ -21,6 +21,7 @@ export class GlobalErrorHandlerService implements ErrorHandler {
       // the response body may contain clues as to what went wrong,
       errormessage = `server returned code: ${err.status}, error message is: ${err.message}`;
     }
-    return throwError(errormessage);
+    console.log(`GlobalErrorHandlerService: ${errormessage}`);
+    return throwError(() => new Error(errormessage));
   }
 }

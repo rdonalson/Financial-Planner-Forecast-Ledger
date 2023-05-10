@@ -4,11 +4,10 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
-//import * as auth from '../../../../../shared/auth-config.json';
 import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
 import { IItem } from '../../models/item';
 
-const auth = require('../../../../../../assets/data/auth-config.json')
+import * as auth from '../../../../../../assets/data/auth-config.json';
 
 /**
  * Item Service
@@ -104,7 +103,7 @@ export class ItemService {
     const url = `${this.url}/${id}`;
     return this.http.delete<IItem>(url, { headers })
       .pipe(
-        // tap((data: any) => console.log('Service deleteItem: ' + JSON.stringify(data))),
+        tap((data: any) => console.log('Service deleteItem: ' + JSON.stringify(data))),
         catchError((err: any) => this.err.handleError(err))
       );
   }

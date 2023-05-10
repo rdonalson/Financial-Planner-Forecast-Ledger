@@ -11,7 +11,7 @@ import { formatDate } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 
 import { ConfirmationService } from 'primeng/api';
 
@@ -31,7 +31,6 @@ import {
 } from '../../shared/services/period/state/period.reducer';
 import { State } from 'src/app/state/app.state';
 import * as PeriodActions from '../../shared/services/period/state/period.actions';
-import { ofType } from '@ngrx/effects';
 import { getCurrentItem } from '../../shared/services/item/state/item.reducer';
 
 /**
@@ -42,7 +41,6 @@ import { getCurrentItem } from '../../shared/services/item/state/item.reducer';
   styleUrls: ['./item-edit.component.scss'],
 })
 export class ItemEditComponent implements OnInit, OnDestroy {
-  private item!: IItem;
   private userId: string = '';
 
   private sub$!: Subscription;
@@ -51,6 +49,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
   private periods$!: Observable<IPeriod[]>;
   private currentItem$!: Observable<IItem | null>;
 
+  item!: IItem;
   itemTypeName!: string;
   itemTypeValue!: number;
   recordId!: number;
@@ -407,7 +406,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     return this.periods$?.subscribe({
       next: (periods: IPeriod[]): void => {
         this.periods = periods;
-        console.log(`Item-Edit getPriods: ${JSON.stringify(this.periods)}`);
+        //console.log(`Item-Edit getPriods: ${JSON.stringify(this.periods)}`);
       },
       error: catchError((err: any) => this.err.handleError(err)),
       complete: () => {},

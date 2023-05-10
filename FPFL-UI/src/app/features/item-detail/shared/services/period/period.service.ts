@@ -4,11 +4,10 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
-//import * as auth from '../../../../../shared/auth-config.json';
 import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
 import { IPeriod } from '../../models/period';
 
-const auth = require('../../../../../../assets/data/auth-config.json')
+import * as auth from '../../../../../../assets/data/auth-config.json';
 
 /**
  * Period Service

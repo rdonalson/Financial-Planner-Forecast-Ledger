@@ -11,7 +11,8 @@ import { MessageUtilService } from '../../shared/services/common/message-util.se
 import { ItemService } from '../../shared/services/item/item.service';
 import { LoginUtilService } from 'src/app/core/services/login/login-util.service';
 import { State } from 'src/app/state/app.state';
-import { getItems } from '../../shared/services/item/state/item.actions';
+import { getItems } from '../../shared/services/item/state/item.reducer';
+
 import * as ItemActions from '../../shared/services/item/state/item.actions';
 
 /**
@@ -24,16 +25,15 @@ import * as ItemActions from '../../shared/services/item/state/item.actions';
 })
 export class ItemListComponent implements OnInit, OnDestroy {
   private paramsSub$!: Subscription;
-  private getItemsSub$!: Subscription;
+  private items$!: Observable<IItem[]>;
 
   itemTypeName!: string;
   itemTypeValue!: number;
   pageTitle!: string;
   progressSpinner: boolean = false;
-  //itemList: IItem[] = [];
+  itemList: IItem[] = [];
   selectedCredits: IItem[] = [];
   userId: string = '';
-  items$!: Observable<IItem[]>;
 
   /**
    * Constructor
@@ -57,12 +57,8 @@ export class ItemListComponent implements OnInit, OnDestroy {
   //#region Events
   ngOnInit(): void {
     this.userId = this.loginUtilService.getUserOid();
-    this.items$ = this.store.select(getItems).pipe(switchMap(o$ => o$));
+    this.items$ = this.store.select(getItems);
     this.getRouteParams();
-
-    // this.getItemsSub$ = this.store.select(getItems).subscribe((items: IItem[]) => {
-    //   this.itemList = items;
-    // });
   }
 
   /**
@@ -79,7 +75,6 @@ export class ItemListComponent implements OnInit, OnDestroy {
    */
   ngOnDestroy(): void {
     this.paramsSub$.unsubscribe();
-    this.getItemsSub$.unsubscribe();
   }
   //#endregion Events
 
@@ -131,13 +126,17 @@ export class ItemListComponent implements OnInit, OnDestroy {
     this.progressSpinner = true;
     return this.items$.subscribe({
       next: (items: IItem[]): void => {
-        //this.itemList = items;
-        //console.log(`Item-List getItems: ${JSON.stringify(this.itemList)}`);
+        this.itemList = items;
+        this.progressSpinner = false;
+        console.log(`Item-List getItems: ${JSON.stringify(this.itemList)}`);
       },
-      error: catchError((err: any) => this.err.handleError(err)),
+      error: catchError((err) => {
+        this.messageUtilService.onError(`Get Items Failed`);
+        return this.err.handleError(err);
+      }),
       complete: () => {
         this.progressSpinner = false;
-      },
+      }
     });
   }
 
