@@ -7,13 +7,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
  */
 @Injectable()
 export class ItemDetailCommonService {
-
-  private messages: { [key: string]: { [key: string]: string; }; };
+  private messages: { [key: string]: { [key: string]: string } };
 
   /**
    * Messages used in the field tooltips
    */
-  public get Messages(): { [key: string]: { [key: string]: string; }; } {
+  public get Messages(): { [key: string]: { [key: string]: string } } {
     return this.messages;
   }
 
@@ -29,21 +28,35 @@ export class ItemDetailCommonService {
       Amount: { required: 'Required:  Enter an Amount' },
       Period: { required: 'Required:  Select a Period' },
       // Date Range
-      DateRangeReq: { optional: 'Optional:  Only select if this Period is going to be for a limited period of time' },
+      DateRangeReq: {
+        optional:
+          'Optional:  Only select if this Period is going to be for a limited period of time',
+      },
       BeginDate: { required: 'Required:  Select a Start Date' },
       EndDate: { required: 'Required:  Select an End Date' },
       // Weekly & Every Other Week (Every Two Weeks)
       WeeklyDow: { required: 'Required:  Select a Day of the Week.' },
       // One time Occurrence & Every Other Week (Every Two Weeks)
       InitDateOTO: { required: 'Required:  Select the Date of occurrence' },
-      InitDateEOW: { required: 'Required:  Select a Date on or before the Day you want this Period to Start' },
+      InitDateEOW: {
+        required:
+          'Required:  Select a Date on or before the Day you want this Period to Start',
+      },
       // Monthly & Bi-Monthly
       MonthlyDay: { required: 'Required:  Select the day of occurrence' },
-      BiMonthlyDay1: { required: 'Required:  Select the First Day of occurrence' },
-      BiMonthlyDay2: { required: 'Required:  Select the Second Day of occurrence' },
+      BiMonthlyDay1: {
+        required: 'Required:  Select the First Day of occurrence',
+      },
+      BiMonthlyDay2: {
+        required: 'Required:  Select the Second Day of occurrence',
+      },
       // Annual, Semi-Annual & Quarterly
-      MonthOfOccurrence: { required: 'Required:  Select the Month of occurrence' },
-      DayInMonthOfOccurrence: { required: 'Required:  Select the Day within that Month' }
+      MonthOfOccurrence: {
+        required: 'Required:  Select the Month of occurrence',
+      },
+      DayInMonthOfOccurrence: {
+        required: 'Required:  Select the Day within that Month',
+      },
     };
   }
 
@@ -142,7 +155,10 @@ export class ItemDetailCommonService {
    * @param {FormGroup} form The Form Group from the CRUD Form
    * @param {number} period The user's period selection
    */
-  private updateEveryTwoWeeksAndOneTimeValidation(form: FormGroup, period?: number): void {
+  private updateEveryTwoWeeksAndOneTimeValidation(
+    form: FormGroup,
+    period?: number
+  ): void {
     if (period === 4 || period === 1) {
       form.controls['InitializationDate'].setValidators([Validators.required]);
     } else {
@@ -324,7 +340,11 @@ export class ItemDetailCommonService {
    * @param {boolean} toggle? True / False value from the Date Range Checkbox
    * @param {number} period The user's period selection
    */
-  updateDateRangeValidation(form: FormGroup, toggle?: boolean, period?: number): void {
+  updateDateRangeValidation(
+    form: FormGroup,
+    toggle?: boolean,
+    period?: number
+  ): void {
     if (toggle) {
       if (period !== 4 && period !== 1) {
         form.controls['BeginDate'].setValidators([Validators.required]);

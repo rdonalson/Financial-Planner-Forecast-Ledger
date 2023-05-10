@@ -7,7 +7,6 @@ import * as PeriodActions from '../state/period.actions';
 
 @Injectable()
 export class PeriodEffects {
-  
   constructor(
     private actions$: Actions,
     private periodService: PeriodService
@@ -16,10 +15,12 @@ export class PeriodEffects {
   loadPeriods$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(PeriodActions.loadPeriods),
-      mergeMap(() => this.periodService.getPeriods().pipe(
-        map(periods => PeriodActions.loadPeriodsSuccess({ periods})),
-        catchError(error => of(PeriodActions.loadPeriodsFailure({ error })))
-      ))
-    )
-  })
+      mergeMap(() =>
+        this.periodService.getPeriods().pipe(
+          map((periods) => PeriodActions.loadPeriodsSuccess({ periods })),
+          catchError((error) => of(PeriodActions.loadPeriodsFailure({ error })))
+        )
+      )
+    );
+  });
 }

@@ -109,8 +109,6 @@ export class ItemListComponent implements OnInit, OnDestroy {
         this.itemTypeName = 'Debits';
         this.itemTypeValue = 2;
         break;
-      default:
-        break;
     }
   }
   //#endregion Utilities

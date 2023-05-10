@@ -7,14 +7,13 @@ import { catchError, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 @Injectable()
-export class UtilArrayService  {
-
+export class UtilArrayService {
   /**
    * Constructor
    * @param {HttpClient} http
    * @param {GlobalErrorHandlerService} err
    */
-   constructor(
+  constructor(
     private http: HttpClient,
     private err: GlobalErrorHandlerService
   ) {}
@@ -27,11 +26,9 @@ export class UtilArrayService  {
    */
   getUtilArrayItems(): Observable<IUtilArray> {
     const url = 'assets/data/form-utility-items.json';
-    return this.http.get<IUtilArray>(url)
-      .pipe(
-        // tap((data: IUtilArray) => console.log('Service getUtilArrayItems: ' + JSON.stringify(data))),
-        catchError((err: any) => this.err.handleError(err))
-      );
+    return this.http.get<IUtilArray>(url).pipe(
+      // tap((data: IUtilArray) => console.log('Service getUtilArrayItems: ' + JSON.stringify(data))),
+      catchError((err: any) => this.err.handleError(err))
+    );
   }
-
 }

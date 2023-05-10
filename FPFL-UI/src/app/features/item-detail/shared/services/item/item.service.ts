@@ -37,7 +37,7 @@ export class ItemService {
     const url = `${this.url}/${userId}/list/${itemType}`;
     return this.http.get<IItem[]>(url)
       .pipe(
-        tap((data: IItem[]) => console.log('Service getItems: ' + JSON.stringify(data))),
+        //tap((data: IItem[]) => console.log('Service getItems: ' + JSON.stringify(data))),
         catchError((err: any) => this.err.handleError(err))
       );
   }

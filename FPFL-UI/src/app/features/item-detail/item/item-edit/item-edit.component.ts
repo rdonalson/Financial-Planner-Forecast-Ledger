@@ -67,16 +67,6 @@ export class ItemEditComponent implements OnInit, OnDestroy {
 
   /**
    * Constructor
-   * @param {LoginUtilService} claimsUtilService
-   * @param {ConfirmationService} confirmationService
-   * @param {FormBuilder} fb
-   * @param {ActivatedRoute} route
-   * @param {Router} router
-   * @param {MessageUtilService} messageUtilService
-   * @param {UtilArrayService} utilArrayService
-   * @param {GlobalErrorHandlerService} err
-   * @param {itemService} itemService
-   * @param {PeriodService} periodService
    */
   constructor(
     private claimsUtilService: LoginUtilService,
@@ -133,8 +123,6 @@ export class ItemEditComponent implements OnInit, OnDestroy {
       case 'debit':
         this.itemTypeName = 'Debit';
         this.itemTypeValue = 2;
-        break;
-      default:
         break;
     }
   }
