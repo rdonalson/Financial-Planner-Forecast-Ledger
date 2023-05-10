@@ -134,7 +134,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
       }),
       complete: () => {
         this.progressSpinner = false;
-      }
+      },
     });
   }
 
