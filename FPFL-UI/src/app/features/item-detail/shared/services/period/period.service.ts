@@ -37,7 +37,7 @@ export class PeriodService {
     }
     return this.http.get<IPeriod[]>(this.url)
       .pipe(
-        tap((periods: IPeriod[]) => console.log('Periods Service - getPeriods: ' + JSON.stringify(periods))),
+        //tap((periods: IPeriod[]) => console.log('Periods Service - getPeriods: ' + JSON.stringify(periods))),
         tap((periods: IPeriod[]) => {
           this.periods = periods;
         }),

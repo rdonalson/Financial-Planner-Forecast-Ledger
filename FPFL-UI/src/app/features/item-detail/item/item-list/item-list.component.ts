@@ -126,7 +126,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
       next: (items: IItem[]): void => {
         this.itemList = items;
         this.progressSpinner = false;
-        console.log(`Item-List getItems: ${JSON.stringify(this.itemList)}`);
+        // console.log(`Item-List getItems: ${JSON.stringify(this.itemList)}`);
       },
       error: catchError((err) => {
         this.messageUtilService.onError(`Get Items Failed`);
