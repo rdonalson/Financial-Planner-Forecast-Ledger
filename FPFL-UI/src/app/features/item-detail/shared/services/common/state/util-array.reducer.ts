@@ -11,24 +11,25 @@ import * as UtilArrayActions from '../state/util-array.actions';
 import { IUtilArray } from '../../../models/util-array';
 
 export interface State extends AppState.State {
-  utilArrays: UtilArrayState;
+  utilArray: UtilArrayState;
 }
 
 export interface UtilArrayState {
-  utilArrays: IUtilArray | null;
+  utilArray: IUtilArray | null;
   error: string;
 }
 
 const initialState: UtilArrayState = {
-  utilArrays: null,
+  utilArray: null,
   error: '',
 };
 
-const getUtilArrayFeatureState = createFeatureSelector<UtilArrayState>('utilArrays');
+const getUtilArrayFeatureState =
+  createFeatureSelector<UtilArrayState>('utilArray');
 
 export const getUtilArrays = createSelector(
   getUtilArrayFeatureState,
-  (state) => state.utilArrays
+  (state) => state.utilArray
 );
 
 export const getError = createSelector(
@@ -36,19 +37,19 @@ export const getError = createSelector(
   (state) => state.error
 );
 
-export const periodReducer = createReducer<UtilArrayState>(
+export const utilArrayReducer = createReducer<UtilArrayState>(
   initialState,
-  on(UtilArrayActions.loadUtilArraysSuccess, (state, action): UtilArrayState => {
+  on(UtilArrayActions.loadUtilArraySuccess, (state, action): UtilArrayState => {
     return {
       ...state,
-      utilArrays: action.utilArrays,
+      utilArray: action.utilArray,
       error: '',
     };
   }),
-  on(UtilArrayActions.loadUtilArraysFailure, (state, action): UtilArrayState => {
+  on(UtilArrayActions.loadUtilArrayFailure, (state, action): UtilArrayState => {
     return {
       ...state,
-      utilArrays: null,
+      utilArray: null,
       error: action.error,
     };
   })

@@ -4,14 +4,15 @@ import { Injectable } from '@angular/core';
 import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
 import { IUtilArray } from '../../models/util-array';
 import { catchError, tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 @Injectable()
 export class UtilArrayService {
+  private url = 'assets/data/form-utility-items.json';
+  private utilArray!: IUtilArray;
+
   /**
    * Constructor
-   * @param {HttpClient} http
-   * @param {GlobalErrorHandlerService} err
    */
   constructor(
     private http: HttpClient,
@@ -25,9 +26,14 @@ export class UtilArrayService {
    * @returns {Observable<IUtilArray>}
    */
   getUtilArrayItems(): Observable<IUtilArray> {
-    const url = 'assets/data/form-utility-items.json';
-    return this.http.get<IUtilArray>(url).pipe(
+    if (this.utilArray) {
+      return of(this.utilArray);
+    }
+    return this.http.get<IUtilArray>(this.url).pipe(
       // tap((data: IUtilArray) => console.log('Service getUtilArrayItems: ' + JSON.stringify(data))),
+      tap((utilArray: IUtilArray) => {
+        this.utilArray = utilArray;
+      }),
       catchError((err: any) => this.err.handleError(err))
     );
   }

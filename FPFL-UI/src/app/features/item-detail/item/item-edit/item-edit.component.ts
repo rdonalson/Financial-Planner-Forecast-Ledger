@@ -31,7 +31,9 @@ import {
 } from '../../shared/services/period/state/period.reducer';
 import { State } from 'src/app/state/app.state';
 import * as PeriodActions from '../../shared/services/period/state/period.actions';
+import * as UtilArrayActions from '../../shared/services/common/state/util-array.actions';
 import { getCurrentItem } from '../../shared/services/item/state/item.reducer';
+import { getUtilArrays } from '../../shared/services/common/state/util-array.reducer';
 
 /**
  * Reactive CRUD Form for individual items; credit (1) or debit (2)
@@ -42,10 +44,7 @@ import { getCurrentItem } from '../../shared/services/item/state/item.reducer';
 })
 export class ItemEditComponent implements OnInit, OnDestroy {
   private userId: string = '';
-
   private sub$!: Subscription;
-  private periodErrorMessage$!: Observable<string>;
-  private selectedPeriod$!: Observable<IPeriod | null>;
   private periods$!: Observable<IPeriod[]>;
   private currentItem$!: Observable<IItem | null>;
 
@@ -64,6 +63,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
   itemForm!: FormGroup;
   periodSwitch: number | undefined;
   dateRangeToggle!: boolean;
+  utilArray$!: Observable<IUtilArray | null>;
 
   /**
    * Constructor
@@ -90,9 +90,9 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     this.periods$ = this.store.select(getPeriods);
-    this.periodErrorMessage$ = this.store.select(getError);
-    this.selectedPeriod$ = this.store.select(getCurrentPeriod);
+    this.utilArray$ = this.store.select(getUtilArrays);
     this.store.dispatch(PeriodActions.loadPeriods());
+    this.store.dispatch(UtilArrayActions.loadUtilArray());
     this.currentItem$ = this.store.select(getCurrentItem);
 
     this.getUtilArrayItems();

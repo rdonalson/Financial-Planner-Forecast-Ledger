@@ -2,15 +2,14 @@ import { createAction, props } from '@ngrx/store';
 import { IUtilArray } from '../../../models/util-array';
 
 /** Util-Arrays */
-export const loadUtilArrays = createAction('[Util-Array] Load');
+export const loadUtilArray = createAction('[Util-Array] Load');
 
-export const loadUtilArraysSuccess = createAction(
+export const loadUtilArraySuccess = createAction(
   '[Util-Array] Load Success',
-  props<{ utilArrays: IUtilArray }>()
+  props<{ utilArray: IUtilArray }>()
 );
 
-export const loadUtilArraysFailure = createAction(
+export const loadUtilArrayFailure = createAction(
   '[Util-Array] Load Failure',
   props<{ error: string }>()
-)
-
+);

@@ -10,18 +10,25 @@ export interface State extends AppState.State {
 }
 
 export interface ItemState {
+  progressSpinner: boolean
   currentItem: IItem | null;
   items: IItem[];
   error: string;
 }
 
 const initialState: ItemState = {
+  progressSpinner: false,
   currentItem: null,
   items: [],
   error: '',
 };
 
 const getItemFeatureState = createFeatureSelector<ItemState>('items');
+
+export const getProgressSpinner = createSelector(
+  getItemFeatureState,
+  (state) => state.progressSpinner
+);
 
 export const getCurrentItem = createSelector(
   getItemFeatureState,
@@ -40,6 +47,12 @@ export const getError = createSelector(
 
 export const itemReducer = createReducer<ItemState>(
   initialState,
+  on(ItemActions.setProgressSpinner, (state, action): ItemState => {
+    return {
+      ...state,
+      progressSpinner: action.show
+    };
+  }),
   on(ItemActions.setCurrentItem, (state, action): ItemState => {
     return {
       ...state,

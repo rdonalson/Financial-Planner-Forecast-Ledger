@@ -14,11 +14,15 @@ export class UtilArrayEffects {
 
   loadUtilArrays$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(UtilArrayActions.loadUtilArrays),
+      ofType(UtilArrayActions.loadUtilArray),
       mergeMap(() =>
         this.utilArrayService.getUtilArrayItems().pipe(
-          map((utilArrays) => UtilArrayActions.loadUtilArraysSuccess({ utilArrays })),
-          catchError((error) => of(UtilArrayActions.loadUtilArraysFailure({ error })))
+          map((utilArray) =>
+            UtilArrayActions.loadUtilArraySuccess({ utilArray })
+          ),
+          catchError((error) =>
+            of(UtilArrayActions.loadUtilArrayFailure({ error }))
+          )
         )
       )
     );

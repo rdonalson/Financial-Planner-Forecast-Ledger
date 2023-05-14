@@ -54,7 +54,7 @@ export const periodReducer = createReducer<PeriodState>(
   on(PeriodActions.clearCurrentPeriod, (state): PeriodState => {
     return {
       ...state,
-      currentPeriod: null
+      currentPeriod: null,
     };
   }),
   on(PeriodActions.loadPeriodsSuccess, (state, action): PeriodState => {

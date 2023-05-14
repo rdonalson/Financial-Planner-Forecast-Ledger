@@ -11,7 +11,7 @@ import { MessageUtilService } from '../../shared/services/common/message-util.se
 import { ItemService } from '../../shared/services/item/item.service';
 import { LoginUtilService } from 'src/app/core/services/login/login-util.service';
 import { State } from 'src/app/state/app.state';
-import { getItems } from '../../shared/services/item/state/item.reducer';
+import { getItems, getProgressSpinner } from '../../shared/services/item/state/item.reducer';
 
 import * as ItemActions from '../../shared/services/item/state/item.actions';
 
@@ -34,6 +34,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
   itemList: IItem[] = [];
   selectedCredits: IItem[] = [];
   userId: string = '';
+  progressSpinner$!: Observable<boolean>;
 
   /**
    * Constructor
@@ -57,7 +58,16 @@ export class ItemListComponent implements OnInit, OnDestroy {
   //#region Events
   ngOnInit(): void {
     this.userId = this.loginUtilService.getUserOid();
+
+    this.progressSpinner$ = this.store.select(getProgressSpinner);
     this.items$ = this.store.select(getItems);
+
+    this.progressSpinner$.subscribe({
+      next: (show: boolean): void => {
+        this.progressSpinner = show;
+      }
+    });
+
     this.getRouteParams();
   }
 
@@ -121,20 +131,18 @@ export class ItemListComponent implements OnInit, OnDestroy {
    * @returns {any}
    */
   getItems(): any {
-    this.progressSpinner = true;
+    //this.progressSpinner = true;
     return this.items$.subscribe({
       next: (items: IItem[]): void => {
         this.itemList = items;
-        this.progressSpinner = false;
+        this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
         // console.log(`Item-List getItems: ${JSON.stringify(this.itemList)}`);
       },
       error: catchError((err) => {
         this.messageUtilService.onError(`Get Items Failed`);
         return this.err.handleError(err);
       }),
-      complete: () => {
-        this.progressSpinner = false;
-      },
+      complete: () => {}
     });
   }
 

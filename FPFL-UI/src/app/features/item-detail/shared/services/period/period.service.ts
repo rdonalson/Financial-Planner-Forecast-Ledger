@@ -16,15 +16,14 @@ import * as auth from '../../../../../../assets/data/auth-config.json';
 export class PeriodService {
   private url = auth.resources.api.resourceUri + '/periods';
   private periods!: IPeriod[];
+
   /**
    * Base Constructor
-   * @param {HttpClient} http
-   * @param {GlobalErrorHandlerService} err
    */
   constructor(
     private http: HttpClient,
     private err: GlobalErrorHandlerService
-  ) { }
+  ) {}
 
   //#region Reads
   /**
@@ -35,14 +34,13 @@ export class PeriodService {
     if (this.periods && this.periods.length > 0) {
       return of(this.periods);
     }
-    return this.http.get<IPeriod[]>(this.url)
-      .pipe(
-        //tap((periods: IPeriod[]) => console.log('Periods Service - getPeriods: ' + JSON.stringify(periods))),
-        tap((periods: IPeriod[]) => {
-          this.periods = periods;
-        }),
-        catchError((err: any) => this.err.handleError(err))
-      );
+    return this.http.get<IPeriod[]>(this.url).pipe(
+      //tap((periods: IPeriod[]) => console.log('Periods Service - getPeriods: ' + JSON.stringify(periods))),
+      tap((periods: IPeriod[]) => {
+        this.periods = periods;
+      }),
+      catchError((err: any) => this.err.handleError(err))
+    );
   }
 
   /**
@@ -53,11 +51,10 @@ export class PeriodService {
    */
   getPeriod(id: number): Observable<IPeriod> {
     const url = `${this.url}/${id}`;
-    return this.http.get<IPeriod>(url)
-      .pipe(
-        // tap((data: Period) => console.log('Service getPeriod: ' + JSON.stringify(data))),
-        catchError((err: any) => this.err.handleError(err))
-      );
+    return this.http.get<IPeriod>(url).pipe(
+      // tap((data: Period) => console.log('Service getPeriod: ' + JSON.stringify(data))),
+      catchError((err: any) => this.err.handleError(err))
+    );
   }
   //#endregion Reads
 }

@@ -1,6 +1,11 @@
 import { createAction, props } from "@ngrx/store";
 import { IItem } from "../../../models/item";
 
+export const setProgressSpinner = createAction(
+  '[Item] Set Progress Spinner',
+  props<{ show: boolean }>()
+);
+
 /** Item */
 export const setCurrentItem = createAction(
   '[Item] Set Current Item',

@@ -7,7 +7,9 @@ export const setCurrentPeriod = createAction(
   props<{ period: IPeriod }>()
 );
 
-export const clearCurrentPeriod = createAction('[Period] Clear Current Period]');
+export const clearCurrentPeriod = createAction(
+  '[Period] Clear Current Period]'
+);
 
 /** Periods */
 export const loadPeriods = createAction('[Period] Load');
@@ -20,19 +22,4 @@ export const loadPeriodsSuccess = createAction(
 export const loadPeriodsFailure = createAction(
   '[Period] Load Failure',
   props<{ error: string }>()
-)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+);
