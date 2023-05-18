@@ -2,7 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { catchError, flatMap, mergeMap, switchMap } from 'rxjs/operators';
+import {
+  catchError,
+} from 'rxjs/operators';
 import { ConfirmationService } from 'primeng/api';
 
 import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
@@ -11,7 +13,11 @@ import { MessageUtilService } from '../../shared/services/common/message-util.se
 import { ItemService } from '../../shared/services/item/item.service';
 import { LoginUtilService } from 'src/app/core/services/login/login-util.service';
 import { State } from 'src/app/state/app.state';
-import { getItems, getProgressSpinner } from '../../shared/services/item/state/item.reducer';
+import {
+  getError,
+  getItems,
+  getProgressSpinner,
+} from '../../shared/services/item/state/item.reducer';
 
 import * as ItemActions from '../../shared/services/item/state/item.actions';
 
@@ -22,10 +28,12 @@ import * as ItemActions from '../../shared/services/item/state/item.actions';
 @Component({
   templateUrl: './item-list.component.html',
   styleUrls: ['./item-list.component.scss'],
+
 })
 export class ItemListComponent implements OnInit, OnDestroy {
   private paramsSub$!: Subscription;
   private items$!: Observable<IItem[]>;
+  private errorMessage!: string;
 
   itemTypeName!: string;
   itemTypeValue!: number;
@@ -35,14 +43,10 @@ export class ItemListComponent implements OnInit, OnDestroy {
   selectedCredits: IItem[] = [];
   userId: string = '';
   progressSpinner$!: Observable<boolean>;
+  errorMessage$!: Observable<string>;
 
   /**
    * Constructor
-   * @param {LoginUtilService} loginUtilService
-   * @param {MessageUtilService} messageUtilService
-   * @param {GlobalErrorHandlerService} err
-   * @param {ConfirmationService} confirmationService
-   * @param {ItemService} itemService
    */
   constructor(
     private loginUtilService: LoginUtilService,
@@ -61,11 +65,20 @@ export class ItemListComponent implements OnInit, OnDestroy {
 
     this.progressSpinner$ = this.store.select(getProgressSpinner);
     this.items$ = this.store.select(getItems);
+    this.errorMessage$ = this.store.select(getError)
+
+    this.errorMessage$.subscribe({
+      next: (err: string): void => {
+        this.messageUtilService.onError(err);
+      },
+    });
+
+    this.store.dispatch(ItemActions.setProgressSpinner({ show: true }));
 
     this.progressSpinner$.subscribe({
       next: (show: boolean): void => {
         this.progressSpinner = show;
-      }
+      },
     });
 
     this.getRouteParams();
@@ -131,19 +144,15 @@ export class ItemListComponent implements OnInit, OnDestroy {
    * @returns {any}
    */
   getItems(): any {
-    //this.progressSpinner = true;
-    return this.items$.subscribe({
-      next: (items: IItem[]): void => {
-        this.itemList = items;
-        this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
-        // console.log(`Item-List getItems: ${JSON.stringify(this.itemList)}`);
-      },
-      error: catchError((err) => {
-        this.messageUtilService.onError(`Get Items Failed`);
-        return this.err.handleError(err);
-      }),
-      complete: () => {}
-    });
+    return this.items$
+      //.pipe(debounceTime(5000))
+      .subscribe({
+        next: (items: IItem[]): void => {
+          this.itemList = items;
+          this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
+          // console.log(`Item-List getItems: ${JSON.stringify(this.itemList)}`);
+        }
+      });
   }
 
   //#endregion Reads
