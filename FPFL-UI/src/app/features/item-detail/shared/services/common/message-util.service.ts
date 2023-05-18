@@ -7,7 +7,7 @@ import { MessageService } from 'primeng/api';
  */
 @Injectable()
 export class MessageUtilService {
-  private defaultMilliseconds = 2000;
+  private defaultMilliseconds = 10000;
 
   /**
    * Base Constructor
