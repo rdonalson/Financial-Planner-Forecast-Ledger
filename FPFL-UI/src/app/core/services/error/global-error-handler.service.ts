@@ -21,7 +21,7 @@ export class GlobalErrorHandlerService implements ErrorHandler {
       // the response body may contain clues as to what went wrong,
       errormessage = `server returned code: ${err.status}, error message is: ${err.message}`;
     }
-    console.log(`GlobalErrorHandlerService: ${errormessage}`);
+    console.error(`GlobalErrorHandlerService: ${errormessage}`);
     return throwError(() => new Error(errormessage));
   }
 }
