@@ -24,15 +24,12 @@ import { ItemService } from '../../shared/services/item/item.service';
 import { LoginUtilService } from 'src/app/core/services/login/login-util.service';
 import { ItemDetailCommonService } from '../../shared/services/common/item-detail-common.service';
 import { IUtilArray } from '../../shared/models/util-array';
-import {
-  getCurrentPeriod,
-  getError,
-  getPeriods,
-} from '../../shared/services/period/state/period.reducer';
+import { getPeriods } from '../../shared/services/period/state/period.reducer';
 import { State } from 'src/app/state/app.state';
 import * as PeriodActions from '../../shared/services/period/state/period.actions';
 import * as UtilArrayActions from '../../shared/services/common/state/util-array.actions';
-import { getCurrentItem } from '../../shared/services/item/state/item.reducer';
+import * as ItemActions from '../../shared/services/item/state/item.actions';
+import { getCurrentItem, getProgressSpinner } from '../../shared/services/item/state/item.reducer';
 import { getUtilArrays } from '../../shared/services/common/state/util-array.reducer';
 
 /**
@@ -64,6 +61,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
   periodSwitch: number | undefined;
   dateRangeToggle!: boolean;
   utilArray$!: Observable<IUtilArray | null>;
+  progressSpinner$!: Observable<boolean>;
 
   /**
    * Constructor
@@ -89,11 +87,19 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    * Initialize the Item Interface, gets the Period list and initizes the FormBuilder
    */
   ngOnInit(): void {
+    this.progressSpinner$ = this.store.select(getProgressSpinner);
+
     this.periods$ = this.store.select(getPeriods);
     this.utilArray$ = this.store.select(getUtilArrays);
     this.store.dispatch(PeriodActions.loadPeriods());
     this.store.dispatch(UtilArrayActions.loadUtilArray());
     this.currentItem$ = this.store.select(getCurrentItem);
+
+    this.progressSpinner$.subscribe({
+      next: (show: boolean): void => {
+        this.progressSpinner = show;
+      }
+    });
 
     this.getUtilArrayItems();
     this.getPeriods();
@@ -394,6 +400,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     return this.periods$?.subscribe({
       next: (periods: IPeriod[]): void => {
         this.periods = periods;
+        this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
         //console.log(`Item-Edit getPriods: ${JSON.stringify(this.periods)}`);
       },
       error: catchError((err: any) => this.err.handleError(err)),
@@ -487,6 +494,8 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    * If no then do nothing.
    */
   deleteItem(): void {
+    this.store.dispatch(ItemActions.setProgressSpinner({ show: true }));
+
     if (this.item.id === 0) {
       // Don't delete, it was never saved.
       this.messageUtilService.onComplete('New Item entries discarded');
@@ -496,7 +505,9 @@ export class ItemEditComponent implements OnInit, OnDestroy {
         header: 'Delete Confirmation',
         icon: 'pi pi-info-circle',
         accept: () => {
-          this.progressSpinner = true;
+          this.store.dispatch(ItemActions.setProgressSpinner({ show: true }));
+
+          //this.progressSpinner = true;
           this.itemService.deleteItem(this.item.id).subscribe({
             // next: () => { },
             error: catchError((err: any) => {
@@ -504,7 +515,9 @@ export class ItemEditComponent implements OnInit, OnDestroy {
               return this.err.handleError(err);
             }),
             complete: () => {
-              this.progressSpinner = true;
+              //this.progressSpinner = true;
+              this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
+
               this.messageUtilService.onCompleteNav(
                 'Item Deleted',
                 this.defaultPath,
