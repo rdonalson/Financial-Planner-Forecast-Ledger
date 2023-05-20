@@ -1,22 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { mergeMap, map, catchError, of } from 'rxjs';
+import { mergeMap, map, catchError, of, concatMap } from 'rxjs';
 
 import * as ItemActions from '../../../../shared/services/item/state/item.actions';
 import { ItemService } from '../item.service';
-import { Store } from '@ngrx/store';
-import { State } from 'src/app/state/app.state';
 
 @Injectable()
 export class ItemEffects {
   constructor(
     private actions$: Actions,
-    private itemService: ItemService,
-    private store: Store<State>
+    private itemService: ItemService
     ) {}
 
+  /** Get Items */
   loadItems$ = createEffect(() => {
-    this.store.dispatch(ItemActions.setProgressSpinner({ show: true }));
     return this.actions$.pipe(
       ofType(ItemActions.loadItems),
       mergeMap((action) =>
@@ -26,6 +23,21 @@ export class ItemEffects {
             map((items) => ItemActions.loadItemsSuccess({ items })),
             catchError((error) => of(ItemActions.loadItemsFailure({ error })))
           )
+      )
+    );
+  });
+
+  /** Update Items */
+  updateProduct$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(ItemActions.updateItem),
+      concatMap((action) =>
+        this.itemService.updateItem(action.item).pipe(
+          map((item) => ItemActions.updateItemSuccess({ item })),
+          catchError((error) =>
+            of(ItemActions.updateItemFailure({ error }))
+          )
+        )
       )
     );
   });

@@ -2,12 +2,15 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, delay, map, tap } from 'rxjs/operators';
 
 import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
 import { IItem } from '../../models/item';
 
 import * as auth from '../../../../../../assets/data/auth-config.json';
+import { Store } from '@ngrx/store';
+import { State } from 'src/app/state/app.state';
+import * as ItemActions from '../item/state/item.actions';
 
 /**
  * Item Service
@@ -22,7 +25,8 @@ export class ItemService {
    */
   constructor(
     private http: HttpClient,
-    private err: GlobalErrorHandlerService
+    private err: GlobalErrorHandlerService,
+    private store: Store<State>
   ) { }
 
   //#region Reads
@@ -34,10 +38,14 @@ export class ItemService {
    * @returns {Observable<IItem[]>} returns the records
    */
   getItems(userId: string, itemType: number): Observable<IItem[]> {
+    //this.store.dispatch(ItemActions.setProgressSpinner({ show: true }));
     const url = `${this.url}/${userId}/list/${itemType}`;
     return this.http.get<IItem[]>(url)
       .pipe(
-        //tap((data: IItem[]) => console.log('Service getItems: ' + JSON.stringify(data))),
+        tap((data: IItem[]) => {
+          //console.log('Service getItems: ' + JSON.stringify(data));
+          //this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
+        }),
         catchError((err: any) => this.err.handleError(err))
       );
   }

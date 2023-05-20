@@ -12,6 +12,7 @@ export interface State extends AppState.State {
 export interface ItemState {
   progressSpinner: boolean
   currentItem: IItem | null;
+  currentItemId?: number | null;
   items: IItem[];
   error: string;
 }
@@ -19,6 +20,7 @@ export interface ItemState {
 const initialState: ItemState = {
   progressSpinner: false,
   currentItem: null,
+  currentItemId: null,
   items: [],
   error: '',
 };
@@ -113,7 +115,25 @@ export const itemReducer = createReducer<ItemState>(
     return {
       ...state,
       items: [],
-      error: action.error,
+      error: `Item Load Error: ${action.error}`
+    };
+  }),
+  /** Item Update */
+  on(ItemActions.updateItemSuccess, (state, action): ItemState => {
+    const updatedItems = state.items.map((item) =>
+      action.item?.id === item.id ? action.item : item
+    );
+    return {
+      ...state,
+      items: updatedItems,
+      currentItemId: action.item?.id,
+      error: '',
+    };
+  }),
+  on(ItemActions.updateItemFailure, (state, action): ItemState => {
+    return {
+      ...state,
+      error: `Item Update Error: ${action.error}`
     };
   })
 );

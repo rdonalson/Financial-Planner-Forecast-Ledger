@@ -31,3 +31,18 @@ export const loadItemsFailure = createAction(
   props<{ error: string }>()
 )
 
+/** Item Update */
+export const updateItem = createAction(
+  '[Item] Update Item',
+  props<{ item: IItem }>()
+);
+
+export const updateItemSuccess = createAction(
+  '[Item] Update Item Success',
+  props<{ item: IItem | null }>()
+);
+
+export const updateItemFailure = createAction(
+  '[Item] Update Item Fail',
+  props<{ error: string }>()
+);
