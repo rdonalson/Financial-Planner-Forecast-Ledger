@@ -38,13 +38,14 @@ export class ItemService {
    * @returns {Observable<IItem[]>} returns the records
    */
   getItems(userId: string, itemType: number): Observable<IItem[]> {
-    //this.store.dispatch(ItemActions.setProgressSpinner({ show: true }));
+    this.store.dispatch(ItemActions.setProgressSpinner({ show: true }));
     const url = `${this.url}/${userId}/list/${itemType}`;
     return this.http.get<IItem[]>(url)
       .pipe(
+        //delay(5000),
         tap((data: IItem[]) => {
           //console.log('Service getItems: ' + JSON.stringify(data));
-          //this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
+          this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
         }),
         catchError((err: any) => this.err.handleError(err))
       );

@@ -33,7 +33,6 @@ import * as ItemActions from '../../shared/services/item/state/item.actions';
 export class ItemListComponent implements OnInit, OnDestroy {
   private paramsSub$!: Subscription;
   private items$!: Observable<IItem[]>;
-  private errorMessage!: string;
 
   itemTypeName!: string;
   itemTypeValue!: number;
@@ -72,8 +71,6 @@ export class ItemListComponent implements OnInit, OnDestroy {
         this.messageUtilService.onError(err);
       },
     });
-
-    this.store.dispatch(ItemActions.setProgressSpinner({ show: true }));
 
     this.progressSpinner$.subscribe({
       next: (show: boolean): void => {
@@ -149,7 +146,6 @@ export class ItemListComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (items: IItem[]): void => {
           this.itemList = items;
-          this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
           // console.log(`Item-List getItems: ${JSON.stringify(this.itemList)}`);
         }
       });

@@ -400,7 +400,6 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     return this.periods$?.subscribe({
       next: (periods: IPeriod[]): void => {
         this.periods = periods;
-        this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
         //console.log(`Item-Edit getPriods: ${JSON.stringify(this.periods)}`);
       },
       error: catchError((err: any) => this.err.handleError(err)),
@@ -494,7 +493,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    * If no then do nothing.
    */
   deleteItem(): void {
-    this.store.dispatch(ItemActions.setProgressSpinner({ show: true }));
+    //this.store.dispatch(ItemActions.setProgressSpinner({ show: true }));
 
     if (this.item.id === 0) {
       // Don't delete, it was never saved.
@@ -505,7 +504,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
         header: 'Delete Confirmation',
         icon: 'pi pi-info-circle',
         accept: () => {
-          this.store.dispatch(ItemActions.setProgressSpinner({ show: true }));
+          //this.store.dispatch(ItemActions.setProgressSpinner({ show: true }));
 
           //this.progressSpinner = true;
           this.itemService.deleteItem(this.item.id).subscribe({
@@ -516,7 +515,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
             }),
             complete: () => {
               //this.progressSpinner = true;
-              this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
+              //this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
 
               this.messageUtilService.onCompleteNav(
                 'Item Deleted',
