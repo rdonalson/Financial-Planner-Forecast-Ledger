@@ -39,9 +39,10 @@ import { getUtilArrays } from '../../shared/services/common/state/util-array.red
   styleUrls: ['./item-edit.component.scss'],
 })
 export class ItemEditComponent implements OnInit, OnDestroy {
+  @ViewChildren(FormControlName, { read: ElementRef })
+
   private userId: string = '';
   private sub$!: Subscription;
-  private periods$!: Observable<IPeriod[]>;
   private currentItem$!: Observable<IItem | null>;
 
   item!: IItem;
@@ -50,16 +51,14 @@ export class ItemEditComponent implements OnInit, OnDestroy {
   recordId!: number;
   pageTitle!: string;
   defaultPath: string = '../../';
-  progressSpinner: boolean = false;
   messages: { [key: string]: { [key: string]: string } };
-  @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements: ElementRef[] = [];
-  periods!: IPeriod[];
   utilArray!: IUtilArray;
   itemForm!: FormGroup;
   periodSwitch: number | undefined;
   dateRangeToggle!: boolean;
   utilArray$!: Observable<IUtilArray | null>;
+  periods$!: Observable<IPeriod[]>;
   progressSpinner$!: Observable<boolean>;
 
   /**
@@ -94,14 +93,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     this.store.dispatch(UtilArrayActions.loadUtilArray());
     this.currentItem$ = this.store.select(getCurrentItem);
 
-    this.progressSpinner$.subscribe({
-      next: (show: boolean): void => {
-        this.progressSpinner = show;
-      }
-    });
-
     this.getUtilArrayItems();
-    this.getPeriods();
     this.initializeRecord();
     this.itemForm = this.itemDetailCommonService.generateForm(this.fb);
     this.getRouteParams();
@@ -392,21 +384,6 @@ export class ItemEditComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Gets the complete list of Periods
-   * @returns {any} result
-   */
-  getPeriods(): any {
-    return this.periods$?.subscribe({
-      next: (periods: IPeriod[]): void => {
-        this.periods = periods;
-        //console.log(`Item-Edit getPriods: ${JSON.stringify(this.periods)}`);
-      },
-      error: catchError((err: any) => this.err.handleError(err)),
-      complete: () => {},
-    });
-  }
-
-  /**
    * Get a specific Item
    * @param {number} id The id of the Item
    * @returns {any} result
@@ -415,20 +392,20 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     if (id === 0) {
       return undefined;
     }
-    this.progressSpinner = true;
+    //this.progressSpinner = true;
     return this.currentItem$.subscribe({
       next: (item: IItem | null): void => {
         if (item) {
           this.onItemRetrieved(item);
-          this.progressSpinner = false;
+          //this.progressSpinner = false;
         } else {
           this.initializeRecord;
-          this.progressSpinner = false;
+          //this.progressSpinner = false;
         }
       },
       error: catchError((err: any) => this.err.handleError(err)),
       complete: () => {
-        this.progressSpinner = false;
+        //this.progressSpinner = false;
       },
     });
   }
@@ -446,7 +423,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
       });
       return null;
     }
-    this.progressSpinner = true;
+    //this.progressSpinner = true;
     this.item = this.patchFormValuesBackToObject(this.item, this.itemForm);
     if (this.item.id === 0) {
       this.itemService.createItem(this.item).subscribe({
@@ -456,7 +433,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
           return this.err.handleError(err);
         }),
         complete: () => {
-          this.progressSpinner = false;
+          //this.progressSpinner = false;
           this.messageUtilService.onCompleteNav(
             'Item Created',
             this.defaultPath,
@@ -472,7 +449,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
           return this.err.handleError(err);
         }),
         complete: () => {
-          this.progressSpinner = false;
+          //this.progressSpinner = false;
           this.messageUtilService.onCompleteNav(
             'Item Updated',
             this.defaultPath,

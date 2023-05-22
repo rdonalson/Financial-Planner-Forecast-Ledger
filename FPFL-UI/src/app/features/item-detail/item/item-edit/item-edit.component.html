@@ -7,7 +7,7 @@
       <!-- Progress Spinner -->
       <div class="edit-spinner-box">
         <p-progressSpinner
-          *ngIf="progressSpinner"
+          *ngIf="progressSpinner$ | async"
           strokeWidth="6"
           [style]="{ width: '2rem', height: '2rem' }"
           fill="#efefef"
@@ -83,7 +83,7 @@
             <label for="periodId" class="col-12 mb-2 md:col-2 md:mb-0"
               >Period</label
             >
-            <div
+            <div *ngIf="periods$ | async as periods"
               class="col-5 md:col-4 p-calendar-dropdown-format-helper"
               tooltipPosition="left"
               pTooltip="{{ messages['Period.required'] }}"
