@@ -28,7 +28,6 @@ import { getPeriods } from '../../shared/services/period/state/period.reducer';
 import { State } from 'src/app/state/app.state';
 import * as PeriodActions from '../../shared/services/period/state/period.actions';
 import * as UtilArrayActions from '../../shared/services/common/state/util-array.actions';
-import * as ItemActions from '../../shared/services/item/state/item.actions';
 import { getCurrentItem, getProgressSpinner } from '../../shared/services/item/state/item.reducer';
 import { getUtilArrays } from '../../shared/services/common/state/util-array.reducer';
 

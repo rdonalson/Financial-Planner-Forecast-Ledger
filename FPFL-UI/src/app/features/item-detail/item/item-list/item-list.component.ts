@@ -2,9 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import {
-  catchError,
-} from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { ConfirmationService } from 'primeng/api';
 
 import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
@@ -28,17 +26,15 @@ import * as ItemActions from '../../shared/services/item/state/item.actions';
 @Component({
   templateUrl: './item-list.component.html',
   styleUrls: ['./item-list.component.scss'],
-
 })
 export class ItemListComponent implements OnInit, OnDestroy {
   private paramsSub$!: Subscription;
-  private items$!: Observable<IItem[]>;
+  items$!: Observable<IItem[]>;
 
   itemTypeName!: string;
   itemTypeValue!: number;
   pageTitle!: string;
-  progressSpinner: boolean = false;
-  itemList: IItem[] = [];
+  //progressSpinner: boolean = false;
   selectedCredits: IItem[] = [];
   userId: string = '';
   progressSpinner$!: Observable<boolean>;
@@ -64,7 +60,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
 
     this.progressSpinner$ = this.store.select(getProgressSpinner);
     this.items$ = this.store.select(getItems);
-    this.errorMessage$ = this.store.select(getError)
+    this.errorMessage$ = this.store.select(getError);
 
     this.errorMessage$.subscribe({
       next: (err: string): void => {
@@ -72,11 +68,11 @@ export class ItemListComponent implements OnInit, OnDestroy {
       },
     });
 
-    this.progressSpinner$.subscribe({
-      next: (show: boolean): void => {
-        this.progressSpinner = show;
-      },
-    });
+    // this.progressSpinner$.subscribe({
+    //   next: (show: boolean): void => {
+    //     this.progressSpinner = show;
+    //   },
+    // });
 
     this.getRouteParams();
   }
@@ -111,7 +107,6 @@ export class ItemListComponent implements OnInit, OnDestroy {
       this.store.dispatch(
         ItemActions.loadItems(this.userId, this.itemTypeValue)
       );
-      this.getItems();
     });
   }
 
@@ -134,24 +129,6 @@ export class ItemListComponent implements OnInit, OnDestroy {
   //#endregion Utilities
 
   //#region Data Functions
-  //#region Reads
-  /**
-   * Get the User's List of Credits
-   * @param {string} userId User's OID
-   * @returns {any}
-   */
-  getItems(): any {
-    return this.items$
-      //.pipe(debounceTime(5000))
-      .subscribe({
-        next: (items: IItem[]): void => {
-          this.itemList = items;
-          // console.log(`Item-List getItems: ${JSON.stringify(this.itemList)}`);
-        }
-      });
-  }
-
-  //#endregion Reads
   //#region Writes
   /**
    * Delete a specific Credit
@@ -168,7 +145,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
         header: 'Delete Confirmation',
         icon: 'pi pi-info-circle',
         accept: () => {
-          this.progressSpinner = true;
+          //this.progressSpinner = true;
           this.itemService.deleteItem(id).subscribe({
             next: () => this.messageUtilService.onComplete(`Credit Deleted`),
             error: catchError((err: any) => {
@@ -176,7 +153,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
               return this.err.handleError(err);
             }),
             complete: () => {
-              this.progressSpinner = false;
+              //this.progressSpinner = false;
               location.reload();
             },
           });
