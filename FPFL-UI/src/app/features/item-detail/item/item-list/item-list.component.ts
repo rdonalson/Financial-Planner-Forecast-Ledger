@@ -68,12 +68,6 @@ export class ItemListComponent implements OnInit, OnDestroy {
       },
     });
 
-    // this.progressSpinner$.subscribe({
-    //   next: (show: boolean): void => {
-    //     this.progressSpinner = show;
-    //   },
-    // });
-
     this.getRouteParams();
   }
 
