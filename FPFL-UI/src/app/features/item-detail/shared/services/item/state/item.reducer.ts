@@ -115,7 +115,8 @@ export const itemReducer = createReducer<ItemState>(
     return {
       ...state,
       items: [],
-      error: `Item Load Error: ${action.error}`
+      error: `Item Load Error`
+      //error: `Item Load Error: ${action.error}`
     };
   }),
   /** Item Update */
@@ -133,7 +134,8 @@ export const itemReducer = createReducer<ItemState>(
   on(ItemActions.updateItemFailure, (state, action): ItemState => {
     return {
       ...state,
-      error: `Item Update Error: ${action.error}`
+      error: `Item Update Error`
+      //error: `Item Update Error: ${action.error}`
     };
   })
 );

@@ -26,10 +26,13 @@ import { ItemDetailCommonService } from '../../shared/services/common/item-detai
 import { IUtilArray } from '../../shared/models/util-array';
 import { getPeriods } from '../../shared/services/period/state/period.reducer';
 import { State } from 'src/app/state/app.state';
+import {
+  getCurrentItem,
+  getProgressSpinner,
+} from '../../shared/services/item/state/item.reducer';
+import { getUtilArrays } from '../../shared/services/common/state/util-array.reducer';
 import * as PeriodActions from '../../shared/services/period/state/period.actions';
 import * as UtilArrayActions from '../../shared/services/common/state/util-array.actions';
-import { getCurrentItem, getProgressSpinner } from '../../shared/services/item/state/item.reducer';
-import { getUtilArrays } from '../../shared/services/common/state/util-array.reducer';
 
 /**
  * Reactive CRUD Form for individual items; credit (1) or debit (2)
@@ -40,7 +43,6 @@ import { getUtilArrays } from '../../shared/services/common/state/util-array.red
 })
 export class ItemEditComponent implements OnInit, OnDestroy {
   @ViewChildren(FormControlName, { read: ElementRef })
-
   private userId: string = '';
   private sub$!: Subscription;
   private currentItem$!: Observable<IItem | null>;
@@ -111,6 +113,10 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Sets the Item Type from the input route params
+   * @param type
+   */
   private getItemTypeValue(type: string): void {
     switch (type) {
       case 'credit':

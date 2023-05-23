@@ -34,7 +34,6 @@ export class ItemListComponent implements OnInit, OnDestroy {
   itemTypeName!: string;
   itemTypeValue!: number;
   pageTitle!: string;
-  //progressSpinner: boolean = false;
   selectedCredits: IItem[] = [];
   userId: string = '';
   progressSpinner$!: Observable<boolean>;

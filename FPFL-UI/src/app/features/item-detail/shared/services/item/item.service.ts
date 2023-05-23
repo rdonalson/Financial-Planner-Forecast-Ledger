@@ -42,27 +42,15 @@ export class ItemService {
     const url = `${this.url}/${userId}/list/${itemType}`;
     return this.http.get<IItem[]>(url)
       .pipe(
-        //delay(5000),
+        delay(5000),
         tap((data: IItem[]) => {
           //console.log('Service getItems: ' + JSON.stringify(data));
           this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
         }),
-        catchError((err: any) => this.err.handleError(err))
-      );
-  }
-
-  /**
-   * Get a specific Item
-   *
-   * @param {number} id The id of the Item
-   * @returns {Observable<IItem>} return the record
-   */
-  getItem(id: number): Observable<IItem> {
-    const url = `${this.url}/${id}`;
-    return this.http.get<IItem>(url)
-      .pipe(
-        // tap((data: IItem) => console.log('Service getItem: ' + JSON.stringify(data))),
-        catchError((err: any) => this.err.handleError(err))
+        catchError((err: any) => {
+          this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
+          return this.err.handleError(err);
+        }),
       );
   }
   //#endregion Reads
