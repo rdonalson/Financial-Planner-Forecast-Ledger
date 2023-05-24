@@ -1,16 +1,20 @@
-import { createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
+import {
+  createFeatureSelector,
+  createReducer,
+  createSelector,
+  on,
+} from '@ngrx/store';
 
 import * as AppState from '../../../../../../state/app.state';
 import * as ItemActions from '../state/item.actions';
 import { IItem } from '../../../models/item';
-
 
 export interface State extends AppState.State {
   itemstate: ItemState;
 }
 
 export interface ItemState {
-  progressSpinner: boolean
+  progressSpinner: boolean;
   currentItem: IItem | null;
   currentItemId?: number | null;
   items: IItem[];
@@ -52,7 +56,7 @@ export const itemReducer = createReducer<ItemState>(
   on(ItemActions.setProgressSpinner, (state, action): ItemState => {
     return {
       ...state,
-      progressSpinner: action.show
+      progressSpinner: action.show,
     };
   }),
   on(ItemActions.setCurrentItem, (state, action): ItemState => {
@@ -64,7 +68,7 @@ export const itemReducer = createReducer<ItemState>(
   on(ItemActions.clearCurrentItem, (state): ItemState => {
     return {
       ...state,
-      currentItem: null
+      currentItem: null,
     };
   }),
   on(ItemActions.initializeCurrentItem, (state): ItemState => {
@@ -101,7 +105,7 @@ export const itemReducer = createReducer<ItemState>(
         semiAnnual2Day: undefined,
         annualMoy: undefined,
         annualDom: undefined,
-      }
+      },
     };
   }),
   on(ItemActions.loadItemsSuccess, (state, action): ItemState => {
@@ -115,8 +119,24 @@ export const itemReducer = createReducer<ItemState>(
     return {
       ...state,
       items: [],
-      error: `Item Load Error`
+      error: `Item Load Error`,
       //error: `Item Load Error: ${action.error}`
+    };
+  }),
+  /** Item Create */
+  on(ItemActions.createItemSuccess, (state, action): ItemState => {
+    return {
+      ...state,
+      items: [...state.items, action.item],
+      currentItemId: action.item?.id,
+      error: '',
+    };
+  }),
+  on(ItemActions.createItemFailure, (state, action): ItemState => {
+    return {
+      ...state,
+      error: `Item Create Error`,
+      //error: `Item Update Error: ${action.error}`
     };
   }),
   /** Item Update */
@@ -134,10 +154,8 @@ export const itemReducer = createReducer<ItemState>(
   on(ItemActions.updateItemFailure, (state, action): ItemState => {
     return {
       ...state,
-      error: `Item Update Error`
+      error: `Item Update Error`,
       //error: `Item Update Error: ${action.error}`
     };
   })
 );
-
-

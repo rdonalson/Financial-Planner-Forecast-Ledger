@@ -33,6 +33,7 @@ import {
 import { getUtilArrays } from '../../shared/services/common/state/util-array.reducer';
 import * as PeriodActions from '../../shared/services/period/state/period.actions';
 import * as UtilArrayActions from '../../shared/services/common/state/util-array.actions';
+import * as ItemActions from '../../shared/services/item/state/item.actions';
 
 /**
  * Reactive CRUD Form for individual items; credit (1) or debit (2)
@@ -430,40 +431,20 @@ export class ItemEditComponent implements OnInit, OnDestroy {
       return null;
     }
     //this.progressSpinner = true;
+    let message: string = '';
     this.item = this.patchFormValuesBackToObject(this.item, this.itemForm);
     if (this.item.id === 0) {
-      this.itemService.createItem(this.item).subscribe({
-        // next: () => { },
-        error: catchError((err: any) => {
-          this.messageUtilService.onError(`Item Creation Failed`);
-          return this.err.handleError(err);
-        }),
-        complete: () => {
-          //this.progressSpinner = false;
-          this.messageUtilService.onCompleteNav(
-            'Item Created',
-            this.defaultPath,
-            this.route
-          );
-        },
-      });
+      this.store.dispatch(ItemActions.createItem({ item: this.item }));
+      message = 'Item Created';
     } else {
-      this.itemService.updateItem(this.item).subscribe({
-        // next: () => { },
-        error: catchError((err: any) => {
-          this.messageUtilService.onError(`Item Update Failed`);
-          return this.err.handleError(err);
-        }),
-        complete: () => {
-          //this.progressSpinner = false;
-          this.messageUtilService.onCompleteNav(
-            'Item Updated',
-            this.defaultPath,
-            this.route
-          );
-        },
-      });
+      this.store.dispatch(ItemActions.updateItem({ item: this.item }));
+      message = 'Item Updated';
     }
+    this.messageUtilService.onCompleteNav(
+      message,
+      this.defaultPath,
+      this.route
+    );
   }
 
   /**

@@ -24,8 +24,21 @@ export class ItemEffects {
     );
   });
 
+  /** Create Item */
+  createItem$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(ItemActions.createItem),
+      concatMap((action) =>
+        this.itemService.createItem(action.item).pipe(
+          map((item) => ItemActions.createItemSuccess({ item })),
+          catchError((error) => of(ItemActions.createItemFailure({ error })))
+        )
+      )
+    );
+  });
+
   /** Update Item */
-  updateProduct$ = createEffect(() => {
+  updateItem$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(ItemActions.updateItem),
       concatMap((action) =>
