@@ -430,7 +430,6 @@ export class ItemEditComponent implements OnInit, OnDestroy {
       });
       return null;
     }
-    //this.progressSpinner = true;
     let message: string = '';
     this.item = this.patchFormValuesBackToObject(this.item, this.itemForm);
     if (this.item.id === 0) {
