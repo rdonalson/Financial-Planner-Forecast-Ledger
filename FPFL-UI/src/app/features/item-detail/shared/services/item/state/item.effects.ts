@@ -49,4 +49,17 @@ export class ItemEffects {
       )
     );
   });
+
+  /** Delete Item */
+  deleteItem$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(ItemActions.deleteItem),
+      concatMap((action) =>
+        this.itemService.deleteItem(action.item.id).pipe(
+          map((item) => ItemActions.deleteItemSuccess({ item })),
+          catchError((error) => of(ItemActions.deleteItemFailure({ error })))
+        )
+      )
+    );
+  });
 }

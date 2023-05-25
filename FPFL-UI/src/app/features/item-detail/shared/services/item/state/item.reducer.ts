@@ -157,5 +157,23 @@ export const itemReducer = createReducer<ItemState>(
       error: `Item Update Error`,
       //error: `Item Update Error: ${action.error}`
     };
+  }),
+  /** Item delete */
+  on(ItemActions.deleteItemSuccess, (state, action): ItemState => {
+    return {
+      ...state,
+      items: state.items.filter(
+        (item) => item.id !== action.item?.id
+      ),
+      currentItemId: null,
+      error: '',
+    };
+  }),
+  on(ItemActions.deleteItemFailure, (state, action): ItemState => {
+    return {
+      ...state,
+      error: `Item delete Error`,
+      //error: `Item delete Error: ${action.error}`
+    };
   })
 );
