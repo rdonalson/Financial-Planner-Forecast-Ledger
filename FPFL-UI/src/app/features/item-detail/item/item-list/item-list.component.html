@@ -76,7 +76,7 @@
 </nav>
 <div class="card">
   <div *ngIf="!(progressSpinner$ | async)"class="card-body" #cardBody>
-    <div *ngIf="items$ | async as itemList">
+    <div *ngIf="itemList">
       <div *ngIf="itemList.length === 0" class="p-grid p-fluid">
         Add some {{ itemTypeName }}
       </div>
@@ -139,7 +139,7 @@
                   pRipple
                   icon="pi pi-trash"
                   class="p-button-rounded p-button-warning left-spacer"
-                  (click)="deleteItem(item.id)"
+                  (click)="deleteItem(item)"
                 ></button>
               </td>
             </tr>

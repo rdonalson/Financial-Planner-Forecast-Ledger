@@ -17,9 +17,7 @@ import * as ItemActions from '../item/state/item.actions';
  */
 @Injectable()
 export class ItemService {
-  private headers = new HttpHeaders({ 'content-type': 'application/json' });
   private url = auth.resources.api.resourceUri + '/items';
-
   /**
    * Base Constructor
    * @param {HttpClient} http
@@ -41,7 +39,8 @@ export class ItemService {
   getItems(userId: string, itemType: number): Observable<IItem[]> {
     this.store.dispatch(ItemActions.setProgressSpinner({ show: true }));
     const url = `${this.url}/${userId}/list/${itemType}`;
-    return this.http.get<IItem[]>(url, { headers: this.headers }).pipe(
+    
+    return this.http.get<IItem[]>(url).pipe(
       //delay(5000),
       tap((data: IItem[]) => {
         //console.log(`Service getItems: ${JSON.stringify(data)}`);
@@ -63,8 +62,9 @@ export class ItemService {
    */
   createItem(item: IItem): Observable<IItem> {
     this.store.dispatch(ItemActions.setProgressSpinner({ show: true }));
-    return this.http.post<IItem>(this.url, item, { headers: this.headers }).pipe(
-      tap((data: IItem) => {
+    const headers = new HttpHeaders({ 'content-type': 'application/json' });
+    return this.http.post<IItem>(this.url, item, { headers }).pipe(
+      tap((item: IItem) => {
         this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
         //console.log(`Service createItem: ${JSON.stringify(item)}`);
       }),
@@ -82,8 +82,9 @@ export class ItemService {
    */
   updateItem(item: IItem): Observable<IItem> {
     this.store.dispatch(ItemActions.setProgressSpinner({ show: true }));
+    const headers = new HttpHeaders({ 'content-type': 'application/json' });
     const url = `${this.url}/${item.id}`;
-    return this.http.put<IItem>(url, item, { headers: this.headers }).pipe(
+    return this.http.put<IItem>(url, item, { headers }).pipe(
       //delay(5000),
       tap((item) => {
         this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
@@ -104,12 +105,19 @@ export class ItemService {
    * @returns {Observable<IItem>} return the record
    */
   deleteItem(id: number): Observable<null> {
+    this.store.dispatch(ItemActions.setProgressSpinner({ show: true }));
+    const headers = new HttpHeaders({ 'content-type': 'application/json' });
     const url = `${this.url}/${id}`;
-    return this.http.delete<IItem>(url, { headers: this.headers }).pipe(
-      tap((data: any) => {
-        console.log(`Service deleteItem: ${JSON.stringify(data)}`);
+    return this.http.delete<IItem>(url, { headers }).pipe(
+      tap((item: any) => {
+        this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
+        //console.log(`Service deleteItem: ${JSON.stringify(item)}`);
       }),
-      catchError((err: any) => this.err.handleError(err))
+      catchError((err: any) => {
+        this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
+        return this.err.handleError(err);
+      }),
+
     );
   }
   //#endregion Writes

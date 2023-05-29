@@ -162,9 +162,7 @@ export const itemReducer = createReducer<ItemState>(
   on(ItemActions.deleteItemSuccess, (state, action): ItemState => {
     return {
       ...state,
-      items: state.items.filter(
-        (item) => item.id !== action.item?.id
-      ),
+      items: state.items.filter((item) => item.id !== action.item?.id),
       currentItemId: null,
       error: '',
     };

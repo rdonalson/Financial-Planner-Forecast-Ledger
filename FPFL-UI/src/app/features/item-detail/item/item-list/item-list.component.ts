@@ -1,14 +1,17 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { catchError } from 'rxjs/operators';
 import { ConfirmationService } from 'primeng/api';
 
 import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
 import { IItem } from '../../shared/models/item';
 import { MessageUtilService } from '../../shared/services/common/message-util.service';
-import { ItemService } from '../../shared/services/item/item.service';
 import { LoginUtilService } from 'src/app/core/services/login/login-util.service';
 import { State } from 'src/app/state/app.state';
 import {
@@ -26,6 +29,7 @@ import * as ItemActions from '../../shared/services/item/state/item.actions';
 @Component({
   templateUrl: './item-list.component.html',
   styleUrls: ['./item-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ItemListComponent implements OnInit, OnDestroy {
   private paramsSub$!: Subscription;
@@ -34,10 +38,12 @@ export class ItemListComponent implements OnInit, OnDestroy {
   itemTypeName!: string;
   itemTypeValue!: number;
   pageTitle!: string;
+  itemList!: IItem[];
   selectedCredits: IItem[] = [];
   userId: string = '';
   progressSpinner$!: Observable<boolean>;
   errorMessage$!: Observable<string>;
+  updatedItems$: any;
 
   /**
    * Constructor
@@ -47,9 +53,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
     private messageUtilService: MessageUtilService,
     private route: ActivatedRoute,
     private router: Router,
-    private err: GlobalErrorHandlerService,
     private confirmationService: ConfirmationService,
-    private itemService: ItemService,
     private store: Store<State>
   ) {}
 
@@ -64,6 +68,12 @@ export class ItemListComponent implements OnInit, OnDestroy {
     this.errorMessage$.subscribe({
       next: (err: string): void => {
         this.messageUtilService.onError(err);
+      },
+    });
+
+    this.items$.subscribe({
+      next: (items: IItem[]) => {
+        this.itemList = items;
       },
     });
 
@@ -126,33 +136,20 @@ export class ItemListComponent implements OnInit, OnDestroy {
   /**
    * Delete a specific Credit
    * Prompt User before committing
-   * @param {number} id The id of the Credit
+   * @param {IItem} item the item to be deleted
    */
-  deleteItem(id: number): void {
-    if (id === 0) {
-      // Don't delete, it was never saved.
-      this.messageUtilService.onComplete('Credit not Found');
-    } else {
-      this.confirmationService.confirm({
-        message: 'Do you want to delete this record?',
-        header: 'Delete Confirmation',
-        icon: 'pi pi-info-circle',
-        accept: () => {
-          //this.progressSpinner = true;
-          this.itemService.deleteItem(id).subscribe({
-            next: () => this.messageUtilService.onComplete(`Credit Deleted`),
-            error: catchError((err: any) => {
-              this.messageUtilService.onError(`Credit Delete Failed`);
-              return this.err.handleError(err);
-            }),
-            complete: () => {
-              //this.progressSpinner = false;
-              location.reload();
-            },
-          });
-        },
-      });
-    }
+  deleteItem(item: IItem): void {
+    this.confirmationService.confirm({
+      message: 'Do you want to delete this record?',
+      header: 'Delete Confirmation',
+      icon: 'pi pi-info-circle',
+      accept: () => {
+        const result = this.store.dispatch(
+          ItemActions.deleteItem({ item: item })
+        );
+        this.messageUtilService.onComplete('Item Deleted');
+      },
+    });
   }
   //#endregion Writes
   //#endregion Data Functions

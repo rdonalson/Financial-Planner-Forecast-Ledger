@@ -56,7 +56,7 @@ export class ItemEffects {
       ofType(ItemActions.deleteItem),
       concatMap((action) =>
         this.itemService.deleteItem(action.item.id).pipe(
-          map((item) => ItemActions.deleteItemSuccess({ item })),
+          map(() => ItemActions.deleteItemSuccess({ item: action.item })),
           catchError((error) => of(ItemActions.deleteItemFailure({ error })))
         )
       )

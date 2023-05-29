@@ -41,6 +41,7 @@ import * as ItemActions from '../../shared/services/item/state/item.actions';
 @Component({
   templateUrl: './item-edit.component.html',
   styleUrls: ['./item-edit.component.scss'],
+  
 })
 export class ItemEditComponent implements OnInit, OnDestroy {
   @ViewChildren(FormControlName, { read: ElementRef })
@@ -455,8 +456,6 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    * If no then do nothing.
    */
   deleteItem(): void {
-    //this.store.dispatch(ItemActions.setProgressSpinner({ show: true }));
-
     if (this.item.id === 0) {
       // Don't delete, it was never saved.
       this.messageUtilService.onComplete('New Item entries discarded');
@@ -466,26 +465,12 @@ export class ItemEditComponent implements OnInit, OnDestroy {
         header: 'Delete Confirmation',
         icon: 'pi pi-info-circle',
         accept: () => {
-          //this.store.dispatch(ItemActions.setProgressSpinner({ show: true }));
-
-          //this.progressSpinner = true;
-          this.itemService.deleteItem(this.item.id).subscribe({
-            // next: () => { },
-            error: catchError((err: any) => {
-              this.messageUtilService.onError(`Item Delete Failed`);
-              return this.err.handleError(err);
-            }),
-            complete: () => {
-              //this.progressSpinner = true;
-              //this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
-
-              this.messageUtilService.onCompleteNav(
-                'Item Deleted',
-                this.defaultPath,
-                this.route
-              );
-            },
-          });
+          this.store.dispatch(ItemActions.deleteItem({ item: this.item }));
+          this.messageUtilService.onCompleteNav(
+            'Item Deleted',
+            this.defaultPath,
+            this.route
+          );
         },
       });
     }
