@@ -1,9 +1,20 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { MsalService, MsalBroadcastService, MSAL_GUARD_CONFIG, MsalGuardConfiguration } from '@azure/msal-angular';
-import { EventMessage, EventType, InteractionType, PopupRequest, RedirectRequest } from '@azure/msal-browser';
-import { Subject } from 'rxjs';
+import {
+  MsalService,
+  MsalBroadcastService,
+  MSAL_GUARD_CONFIG,
+  MsalGuardConfiguration,
+} from '@azure/msal-angular';
+import {
+  EventMessage,
+  EventType,
+  InteractionType,
+  PopupRequest,
+  RedirectRequest,
+} from '@azure/msal-browser';
+import { Subject, Subscription } from 'rxjs';
 import { catchError, filter, takeUntil } from 'rxjs/operators';
 
 import { MenuItem } from 'primeng/api';
@@ -22,13 +33,15 @@ import { MenuService } from 'src/app/core/services/menu/menu.service';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   menuItems: MenuItem[] = [];
   claims!: IClaims;
   title = 'Financial Planner';
   isIframe: boolean = false;
+  subMenuItems$!: Subscription;
+
   public get loggedIn(): boolean {
     return this.loginUtilService.loggedin;
   }
@@ -52,15 +65,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private loginUtilService: LoginUtilService,
     private menuService: MenuService,
     private err: GlobalErrorHandlerService
-
-  ) { }
+  ) {}
 
   //#region Events
   /**
    * Initialize the Page
    */
   ngOnInit(): void {
-    this.getMenuItems();
     this.isIframe = window !== window.parent && !window.opener;
     this.checkAccount();
     this.claims = this.loginUtilService.getClaims();
@@ -72,14 +83,25 @@ export class HeaderComponent implements OnInit, OnDestroy {
      */
     this.msalBroadcastService.msalSubject$
       .pipe(
-        filter((msg: EventMessage) => msg.eventType === EventType.LOGIN_SUCCESS || msg.eventType === EventType.ACQUIRE_TOKEN_SUCCESS),
+        filter(
+          (msg: EventMessage) =>
+            msg.eventType === EventType.LOGIN_SUCCESS ||
+            msg.eventType === EventType.ACQUIRE_TOKEN_SUCCESS
+        ),
         takeUntil(this.destroying$)
       )
       .subscribe({
         next: (result: any) => this.getClaims(result),
-        error: catchError((err: any) => this.err.handleError(err))
+        error: catchError((err: any) => this.err.handleError(err)),
       });
 
+    /** Handles navigation items for Nav Tiered Menu */
+    this.subMenuItems$ = this.menuService.getMenuItems().subscribe({
+      next: (items: MenuItem[]): void => {
+        this.menuItems = items;
+      },
+      error: catchError((err: any) => this.err.handleError(err)),
+    });
   }
 
   /**
@@ -88,27 +110,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroying$.next(undefined);
     this.destroying$.complete();
+    this.subMenuItems$.unsubscribe();
   }
   //#endregion Events
 
   //#region Utilities
-  /**
-   * Gets the Menu Items from the MenuItem Service
-   * to initialize the Menubar Menues
-   * @returns {any}
-   */
-  getMenuItems(): any {
-    return this.menuService.getMenuItems()
-      .subscribe({
-        next: (data: MenuItem[]): void => {
-          this.menuItems = data;
-          // console.log(JSON.stringify(this.menuItems));
-        },
-        error: catchError((err: any) => this.err.handleError(err)),
-        complete: () => { }
-      });
-  }
-
   /**
    * Once login is complete get the Claims data and save it to localStorage
    * @param {any} result
@@ -138,15 +144,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
   login(): void {
     if (this.msalGuardConfig.interactionType === InteractionType.Popup) {
       if (this.msalGuardConfig.authRequest) {
-        this.authService.loginPopup({ ...this.msalGuardConfig.authRequest } as PopupRequest)
+        this.authService
+          .loginPopup({ ...this.msalGuardConfig.authRequest } as PopupRequest)
           .subscribe(() => this.checkAccount());
       } else {
-        this.authService.loginPopup()
-          .subscribe(() => this.checkAccount());
+        this.authService.loginPopup().subscribe(() => this.checkAccount());
       }
     } else {
       if (this.msalGuardConfig.authRequest) {
-        this.authService.loginRedirect({ ...this.msalGuardConfig.authRequest } as RedirectRequest);
+        this.authService.loginRedirect({
+          ...this.msalGuardConfig.authRequest,
+        } as RedirectRequest);
       } else {
         this.authService.loginRedirect();
       }

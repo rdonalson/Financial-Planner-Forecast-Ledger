@@ -8,6 +8,7 @@ import {
 import * as AppState from '../../../../../../state/app.state';
 import * as ItemActions from '../state/item.actions';
 import { IItem } from '../../../models/item';
+import { IItemType } from '../../../models/item-type';
 
 export interface State extends AppState.State {
   itemstate: ItemState;
@@ -15,6 +16,7 @@ export interface State extends AppState.State {
 
 export interface ItemState {
   progressSpinner: boolean;
+  currentItemType: IItemType | null;
   currentItem: IItem | null;
   currentItemId?: number | null;
   items: IItem[];
@@ -23,6 +25,7 @@ export interface ItemState {
 
 const initialState: ItemState = {
   progressSpinner: false,
+  currentItemType: null,
   currentItem: null,
   currentItemId: null,
   items: [],
@@ -34,6 +37,11 @@ const getItemFeatureState = createFeatureSelector<ItemState>('items');
 export const getProgressSpinner = createSelector(
   getItemFeatureState,
   (state) => state.progressSpinner
+);
+
+export const getCurrentItemType = createSelector(
+  getItemFeatureState,
+  (state) => state.currentItemType
 );
 
 export const getCurrentItem = createSelector(
@@ -59,6 +67,12 @@ export const itemReducer = createReducer<ItemState>(
       progressSpinner: action.show,
     };
   }),
+  on(ItemActions.setCurrentItemType, (state, action): ItemState => {
+    return {
+      ...state,
+      currentItemType: action.itemType,
+    };
+  }),
   on(ItemActions.setCurrentItem, (state, action): ItemState => {
     return {
       ...state,
@@ -69,43 +83,6 @@ export const itemReducer = createReducer<ItemState>(
     return {
       ...state,
       currentItem: null,
-    };
-  }),
-  on(ItemActions.initializeCurrentItem, (state): ItemState => {
-    return {
-      ...state,
-      currentItem: {
-        id: 0,
-        userId: '',
-        name: '',
-        amount: 0,
-        fkItemType: 0,
-        itemType: '',
-        fkPeriod: 0,
-        period: '',
-        dateRangeReq: false,
-        beginDate: undefined,
-        endDate: undefined,
-        weeklyDow: undefined,
-        everOtherWeekDow: undefined,
-        biMonthlyDay1: undefined,
-        biMonthlyDay2: undefined,
-        monthlyDom: undefined,
-        quarterly1Month: undefined,
-        quarterly1Day: undefined,
-        quarterly2Month: undefined,
-        quarterly2Day: undefined,
-        quarterly3Month: undefined,
-        quarterly3Day: undefined,
-        quarterly4Month: undefined,
-        quarterly4Day: undefined,
-        semiAnnual1Month: undefined,
-        semiAnnual1Day: undefined,
-        semiAnnual2Month: undefined,
-        semiAnnual2Day: undefined,
-        annualMoy: undefined,
-        annualDom: undefined,
-      },
     };
   }),
   on(ItemActions.loadItemsSuccess, (state, action): ItemState => {
@@ -175,3 +152,46 @@ export const itemReducer = createReducer<ItemState>(
     };
   })
 );
+
+
+
+/** Archive
+  on(ItemActions.initializeCurrentItem, (state): ItemState => {
+    return {
+      ...state,
+      currentItem: {
+        id: 0,
+        userId: '',
+        name: '',
+        amount: 0,
+        fkItemType: 0,
+        itemType: '',
+        fkPeriod: 0,
+        period: '',
+        dateRangeReq: false,
+        beginDate: undefined,
+        endDate: undefined,
+        weeklyDow: undefined,
+        everOtherWeekDow: undefined,
+        biMonthlyDay1: undefined,
+        biMonthlyDay2: undefined,
+        monthlyDom: undefined,
+        quarterly1Month: undefined,
+        quarterly1Day: undefined,
+        quarterly2Month: undefined,
+        quarterly2Day: undefined,
+        quarterly3Month: undefined,
+        quarterly3Day: undefined,
+        quarterly4Month: undefined,
+        quarterly4Day: undefined,
+        semiAnnual1Month: undefined,
+        semiAnnual1Day: undefined,
+        semiAnnual2Month: undefined,
+        semiAnnual2Day: undefined,
+        annualMoy: undefined,
+        annualDom: undefined,
+      },
+    };
+  }),
+
+ */

@@ -1,27 +1,28 @@
 import { ErrorHandler, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { SharedModule } from 'primeng/api';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { StoreModule } from '@ngrx/store';
+import { SharedModule } from 'primeng/api';
+
 import { GlobalErrorHandlerService } from './services/error/global-error-handler.service';
 import { AdminModule } from './admin/admin.module';
+import { itemReducer } from '../features/item-detail/shared/services/item/state/item.reducer';
 
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
+    StoreModule.forFeature('items', itemReducer),
     SharedModule,
     AdminModule,
     HttpClientModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
   ],
   exports: [],
-  providers: [
-    { provide: ErrorHandler, useClass: GlobalErrorHandlerService }
-  ]
+  providers: [{ provide: ErrorHandler, useClass: GlobalErrorHandlerService }],
 })
-export class CoreModule { }
+export class CoreModule {}
 
 /** Archive */
 // import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';

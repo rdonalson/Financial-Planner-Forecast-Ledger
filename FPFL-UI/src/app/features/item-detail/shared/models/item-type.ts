@@ -1,4 +1,4 @@
-export interface IPeriod {
+export interface IItemType {
   id: number;
   name: string;
 }
