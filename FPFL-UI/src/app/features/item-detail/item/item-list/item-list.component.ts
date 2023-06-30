@@ -35,10 +35,8 @@ import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-er
 })
 export class ItemListComponent implements OnInit, OnDestroy {
   pageTitle!: string;
-  selectItemType: IItemType = { id: 0, name: '' };
   itemType: IItemType = { id: 0, name: '' };
-  itemList!: IItem[];
-  selectedCredits: IItem[] = [];
+  itemList: IItem[] = [];
   userId: string = '';
 
   private paramsSub$!: Subscription;
@@ -75,20 +73,22 @@ export class ItemListComponent implements OnInit, OnDestroy {
       },
     });
 
-    this.items$.subscribe({
-      next: (items: IItem[]) => {
-        this.itemList = items;
-      },
-    });
-
     this.currentItemType$.subscribe({
       next: (itemType: IItemType | null): void => {
         if (itemType) {
-          this.selectItemType = itemType;
+          this.itemType = itemType;
         }
       },
       error: catchError((err: any) => this.err.handleError(err)),
     });
+
+    this.items$.subscribe({
+      next: (items: IItem[]) => {
+        this.itemList = items;
+      },
+      error: catchError((err: any) => this.err.handleError(err)),
+    });
+
     this.getRouteParams();
   }
 
@@ -117,18 +117,34 @@ export class ItemListComponent implements OnInit, OnDestroy {
    */
   private getRouteParams(): void {
     this.paramsSub$ = this.route.params.subscribe((params: any) => {
-      if (
-        this.itemList.length === 0 ||
-        (this.itemList.length > 0 &&
-          this.selectItemType.id !== this.itemType.id)
-      ) {
-        this.itemType = this.selectItemType;
-        this.pageTitle = `Manage ${this.itemType.name}`;
-        this.store.dispatch(
-          ItemActions.loadItems(this.userId, this.itemType.id)
-        );
+      // if reload of form reset item type
+      if (this.itemType.id === 0) {
+       this.itemType = this.getItemTypeValue(params.itemType);
       }
+      // normal operations
+      this.store.dispatch(ItemActions.loadItems(this.userId, this.itemType.id));
+      this.pageTitle = `Manage ${this.itemType.name}`;
     });
+  }
+
+  /**
+   * Sets the Item Type from the input route params
+   * @param {string} type
+   * @returns {IItemType}
+   */
+  private getItemTypeValue(type: string): IItemType {
+    let itemType: IItemType = { id: 0, name: '' };
+    switch (type) {
+      case 'credit':
+        itemType.id = 1;
+        itemType.name = 'Credit';
+        break;
+      case 'debit':
+        itemType.name = 'Debit';
+        itemType.id = 2;
+        break;
+    }
+    return itemType;
   }
   //#endregion Utilities
 

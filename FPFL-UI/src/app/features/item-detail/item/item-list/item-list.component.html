@@ -75,7 +75,7 @@
   </div>
 </nav>
 <div class="card">
-  <div *ngIf="!(progressSpinner$ | async)"class="card-body" #cardBody>
+  <div *ngIf="!(progressSpinner$ | async)" class="card-body" #cardBody>
     <div *ngIf="itemList">
       <div *ngIf="itemList.length === 0" class="p-grid p-fluid">
         Add some {{ itemType.name }}
@@ -124,7 +124,7 @@
           <ng-template pTemplate="body" let-item>
             <tr>
               <td>{{ item.name }}</td>
-              <td>{{ item.amount | currency: "USD" }}</td>
+              <td>{{ item.amount | currency : "USD" }}</td>
               <td>{{ item.period }}</td>
               <td>
                 <button

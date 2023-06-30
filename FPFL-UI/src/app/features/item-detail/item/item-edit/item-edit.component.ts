@@ -41,7 +41,7 @@ import * as ItemActions from '../../shared/services/item/state/item.actions';
 @Component({
   templateUrl: './item-edit.component.html',
   styleUrls: ['./item-edit.component.scss'],
-  
+
 })
 export class ItemEditComponent implements OnInit, OnDestroy {
   @ViewChildren(FormControlName, { read: ElementRef })
@@ -78,7 +78,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     private itemDetailCommonService: ItemDetailCommonService,
     private utilArrayService: UtilArrayService,
     private err: GlobalErrorHandlerService,
-    private itemService: ItemService,
+    //private itemService: ItemService,
     private store: Store<State>
   ) {
     this.messages = this.itemDetailCommonService.Messages;
