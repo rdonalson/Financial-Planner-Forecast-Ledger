@@ -78,7 +78,7 @@
   <div *ngIf="!(progressSpinner$ | async)"class="card-body" #cardBody>
     <div *ngIf="itemList">
       <div *ngIf="itemList.length === 0" class="p-grid p-fluid">
-        Add some {{ itemTypeName }}
+        Add some {{ itemType.name }}
       </div>
       <div *ngIf="itemList.length > 0" class="p-grid p-fluid">
         <!-- Credits Display Table -->
@@ -115,7 +115,7 @@
                 Amount <p-sortIcon field="amount"></p-sortIcon>
               </th>
               <th pSortableColumn="period">
-                Category <p-sortIcon field="period"></p-sortIcon>
+                Period <p-sortIcon field="period"></p-sortIcon>
               </th>
               <th></th>
             </tr>

@@ -6,21 +6,23 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, catchError } from 'rxjs';
 import { ConfirmationService } from 'primeng/api';
 
-import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
 import { IItem } from '../../shared/models/item';
 import { MessageUtilService } from '../../shared/services/common/message-util.service';
 import { LoginUtilService } from 'src/app/core/services/login/login-util.service';
 import { State } from 'src/app/state/app.state';
 import {
+  getCurrentItemType,
   getError,
   getItems,
   getProgressSpinner,
 } from '../../shared/services/item/state/item.reducer';
 
 import * as ItemActions from '../../shared/services/item/state/item.actions';
+import { IItemType } from '../../shared/models/item-type';
+import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
 
 /**
  * Form that will display the list two types of items; Credit (1) or Debit (2)
@@ -32,18 +34,18 @@ import * as ItemActions from '../../shared/services/item/state/item.actions';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ItemListComponent implements OnInit, OnDestroy {
-  private paramsSub$!: Subscription;
-  items$!: Observable<IItem[]>;
-
-  itemTypeName!: string;
-  itemTypeValue!: number;
   pageTitle!: string;
+  selectItemType: IItemType = { id: 0, name: '' };
+  itemType: IItemType = { id: 0, name: '' };
   itemList!: IItem[];
   selectedCredits: IItem[] = [];
   userId: string = '';
+
+  private paramsSub$!: Subscription;
+  items$!: Observable<IItem[]>;
   progressSpinner$!: Observable<boolean>;
   errorMessage$!: Observable<string>;
-  updatedItems$: any;
+  currentItemType$!: Observable<IItemType | null>;
 
   /**
    * Constructor
@@ -51,6 +53,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
   constructor(
     private loginUtilService: LoginUtilService,
     private messageUtilService: MessageUtilService,
+    private err: GlobalErrorHandlerService,
     private route: ActivatedRoute,
     private router: Router,
     private confirmationService: ConfirmationService,
@@ -62,6 +65,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
     this.userId = this.loginUtilService.getUserOid();
 
     this.progressSpinner$ = this.store.select(getProgressSpinner);
+    this.currentItemType$ = this.store.select(getCurrentItemType);
     this.items$ = this.store.select(getItems);
     this.errorMessage$ = this.store.select(getError);
 
@@ -77,6 +81,14 @@ export class ItemListComponent implements OnInit, OnDestroy {
       },
     });
 
+    this.currentItemType$.subscribe({
+      next: (itemType: IItemType | null): void => {
+        if (itemType) {
+          this.selectItemType = itemType;
+        }
+      },
+      error: catchError((err: any) => this.err.handleError(err)),
+    });
     this.getRouteParams();
   }
 
@@ -105,29 +117,18 @@ export class ItemListComponent implements OnInit, OnDestroy {
    */
   private getRouteParams(): void {
     this.paramsSub$ = this.route.params.subscribe((params: any) => {
-      this.getItemTypeValue(params.itemType);
-      this.pageTitle = `Manage ${this.itemTypeName}`;
-      this.store.dispatch(
-        ItemActions.loadItems(this.userId, this.itemTypeValue)
-      );
+      if (
+        this.itemList.length === 0 ||
+        (this.itemList.length > 0 &&
+          this.selectItemType.id !== this.itemType.id)
+      ) {
+        this.itemType = this.selectItemType;
+        this.pageTitle = `Manage ${this.itemType.name}`;
+        this.store.dispatch(
+          ItemActions.loadItems(this.userId, this.itemType.id)
+        );
+      }
     });
-  }
-
-  /**
-   * Get the type of items to presented
-   * @param {string} type The value; credit or debit
-   */
-  private getItemTypeValue(type: string): void {
-    switch (type) {
-      case 'credit':
-        this.itemTypeName = 'Credits';
-        this.itemTypeValue = 1;
-        break;
-      case 'debit':
-        this.itemTypeName = 'Debits';
-        this.itemTypeValue = 2;
-        break;
-    }
   }
   //#endregion Utilities
 
