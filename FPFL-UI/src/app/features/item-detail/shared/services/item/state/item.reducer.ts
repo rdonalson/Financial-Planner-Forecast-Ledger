@@ -141,6 +141,7 @@ export const itemReducer = createReducer<ItemState>(
       ...state,
       items: state.items.filter((item) => item.id !== action.item?.id),
       currentItemId: null,
+      currentItem: null,
       error: '',
     };
   }),

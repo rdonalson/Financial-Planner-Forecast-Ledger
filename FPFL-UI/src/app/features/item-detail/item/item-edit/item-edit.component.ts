@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   OnDestroy,
@@ -12,7 +12,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-
 import { ConfirmationService } from 'primeng/api';
 
 import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
@@ -20,7 +19,6 @@ import { IItem } from '../../shared/models/item';
 import { IPeriod } from '../../shared/models/period';
 import { UtilArrayService } from '../../shared/services/common/util-array.service';
 import { MessageUtilService } from '../../shared/services/common/message-util.service';
-import { ItemService } from '../../shared/services/item/item.service';
 import { LoginUtilService } from 'src/app/core/services/login/login-util.service';
 import { ItemDetailCommonService } from '../../shared/services/common/item-detail-common.service';
 import { IUtilArray } from '../../shared/models/util-array';
@@ -28,30 +26,28 @@ import { getPeriods } from '../../shared/services/period/state/period.reducer';
 import { State } from 'src/app/state/app.state';
 import {
   getCurrentItem,
+  getCurrentItemType,
   getProgressSpinner,
 } from '../../shared/services/item/state/item.reducer';
 import { getUtilArrays } from '../../shared/services/common/state/util-array.reducer';
 import * as PeriodActions from '../../shared/services/period/state/period.actions';
 import * as UtilArrayActions from '../../shared/services/common/state/util-array.actions';
 import * as ItemActions from '../../shared/services/item/state/item.actions';
+import { IItemType } from '../../shared/models/item-type';
 
 /**
- * Reactive CRUD Form for individual items; credit (1) or debit (2)
+ * Reactive CRUD Form for individual items; credit (itemTypeId: 1) or debit (itemTypeId: 2)
  */
 @Component({
   templateUrl: './item-edit.component.html',
   styleUrls: ['./item-edit.component.scss'],
-
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ItemEditComponent implements OnInit, OnDestroy {
   @ViewChildren(FormControlName, { read: ElementRef })
   private userId: string = '';
-  private sub$!: Subscription;
-  private currentItem$!: Observable<IItem | null>;
-
+  itemType: IItemType = { id: 0, name: '' };
   item!: IItem;
-  itemTypeName!: string;
-  itemTypeValue!: number;
   recordId!: number;
   pageTitle!: string;
   defaultPath: string = '../../';
@@ -61,6 +57,10 @@ export class ItemEditComponent implements OnInit, OnDestroy {
   itemForm!: FormGroup;
   periodSwitch: number | undefined;
   dateRangeToggle!: boolean;
+
+  private sub$!: Subscription;
+  private currentItem$!: Observable<IItem | null>;
+  private currentItemType$!: Observable<IItemType | null>;
   utilArray$!: Observable<IUtilArray | null>;
   periods$!: Observable<IPeriod[]>;
   progressSpinner$!: Observable<boolean>;
@@ -78,7 +78,6 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     private itemDetailCommonService: ItemDetailCommonService,
     private utilArrayService: UtilArrayService,
     private err: GlobalErrorHandlerService,
-    //private itemService: ItemService,
     private store: Store<State>
   ) {
     this.messages = this.itemDetailCommonService.Messages;
@@ -90,6 +89,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     this.progressSpinner$ = this.store.select(getProgressSpinner);
+    this.currentItemType$ = this.store.select(getCurrentItemType);
 
     this.periods$ = this.store.select(getPeriods);
     this.utilArray$ = this.store.select(getUtilArrays);
@@ -97,39 +97,19 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     this.store.dispatch(UtilArrayActions.loadUtilArray());
     this.currentItem$ = this.store.select(getCurrentItem);
 
+    this.currentItemType$.subscribe({
+      next: (itemType: IItemType | null): void => {
+        if (itemType) {
+          this.itemType = itemType;
+        }
+      },
+      error: catchError((err: any) => this.err.handleError(err)),
+    });
+
     this.getUtilArrayItems();
     this.initializeRecord();
     this.itemForm = this.itemDetailCommonService.generateForm(this.fb);
     this.getRouteParams();
-  }
-
-  /**
-   * Get Primary Key from Route Paramters
-   */
-  private getRouteParams(): void {
-    this.sub$ = this.route.params.subscribe((params: any) => {
-      this.recordId = +params.id;
-      this.getItemTypeValue(params.itemType);
-      this.setTitleText();
-      this.getItem(this.recordId);
-    });
-  }
-
-  /**
-   * Sets the Item Type from the input route params
-   * @param type
-   */
-  private getItemTypeValue(type: string): void {
-    switch (type) {
-      case 'credit':
-        this.itemTypeName = 'Credit';
-        this.itemTypeValue = 1;
-        break;
-      case 'debit':
-        this.itemTypeName = 'Debit';
-        this.itemTypeValue = 2;
-        break;
-    }
   }
 
   /**
@@ -161,6 +141,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    * Stop edit or create and move back parent item list
    */
   cancel(): void {
+    this.store.dispatch(ItemActions.clearCurrentItem());
     this.router.navigate([this.defaultPath.toString()], {
       relativeTo: this.route,
     });
@@ -184,15 +165,39 @@ export class ItemEditComponent implements OnInit, OnDestroy {
 
   //#region Utilities
   /**
+   * Get Primary Key from Route Paramters
+   */
+  private getRouteParams(): void {
+    this.sub$ = this.route.params.subscribe((params: any) => {
+      this.recordId = +params.id;
+      // if reload of form reset item type
+      if (this.itemType.id === 0) {
+        this.itemType = this.itemDetailCommonService.getItemType(
+          params.itemType
+        );
+        this.store.dispatch(
+          ItemActions.setCurrentItemType({
+            itemType: this.itemType,
+          })
+        );
+      }
+      //this.getItemTypeValue(params.itemType);
+      this.setTitleText();
+      this.getItem(this.recordId);
+    });
+  }
+
+  /**
    * Sets the page title value
    */
   private setTitleText(): void {
     if (this.recordId === 0) {
-      this.pageTitle = `New ${this.itemTypeName}`;
+      this.pageTitle = `New ${this.itemType.name}`;
     } else {
-      this.pageTitle = `Edit ${this.itemTypeName}`;
+      this.pageTitle = `Edit ${this.itemType.name}`;
     }
   }
+
   /**
    * Called on Form Init; gets users OID from Claims object in localstorage
    * Also initializes a new IItem class
@@ -206,7 +211,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
       userId: this.userId,
       name: '',
       amount: 0,
-      fkItemType: this.itemTypeValue,
+      fkItemType: this.itemType.id,
       itemType: undefined,
       fkPeriod: 0,
       period: undefined,
@@ -311,10 +316,8 @@ export class ItemEditComponent implements OnInit, OnDestroy {
   /**
    * Updates the "item" fields with the values from the "itemForm" fields
    * before being sent back to the APIs by "saveItem" for updating the
-   * database item record
    * @param {IItem} oldItem
    * @param {FormGroup} itemForm
-   * @returns {IItem}
    */
   private patchFormValuesBackToObject(
     oldItem: IItem,
@@ -325,7 +328,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     newItem.name = itemForm.value.Name;
     newItem.amount = itemForm.value.Amount;
     newItem.fkPeriod = itemForm.value.Period;
-    newItem.fkItemType = this.itemTypeValue;
+    newItem.fkItemType = this.itemType.id;
     newItem.itemType = undefined;
     newItem.period = undefined;
     // Date Range Switch
@@ -373,6 +376,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
   //#endregion Utilities
 
   //#region Data Functions
+
   //#region Reads
   /**
    * Returns the list of Utility Array Items,
@@ -400,24 +404,19 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     if (id === 0) {
       return undefined;
     }
-    //this.progressSpinner = true;
     return this.currentItem$.subscribe({
       next: (item: IItem | null): void => {
         if (item) {
           this.onItemRetrieved(item);
-          //this.progressSpinner = false;
         } else {
           this.initializeRecord;
-          //this.progressSpinner = false;
         }
       },
       error: catchError((err: any) => this.err.handleError(err)),
-      complete: () => {
-        //this.progressSpinner = false;
-      },
     });
   }
   //#endregion Reads
+
   //#region Writes
   /**
    * Upserts the database item record by either calling the
@@ -476,5 +475,6 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     }
   }
   //#endregion Writes
+
   //#endregion Data Functions
 }

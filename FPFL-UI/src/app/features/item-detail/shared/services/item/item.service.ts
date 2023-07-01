@@ -20,6 +20,7 @@ export class ItemService {
   private url = auth.resources.api.resourceUri + '/items';
   private items!: IItem[];
   private itemTypeId!: number;
+  private headers = new HttpHeaders({ 'content-type': 'application/json' });
 
   /**
    * Base Constructor
@@ -42,7 +43,7 @@ export class ItemService {
   getItems(userId: string, itemType: number): Observable<IItem[]> {
     this.store.dispatch(ItemActions.setProgressSpinner({ show: true }));
     const url = `${this.url}/${userId}/list/${itemType}`;
-    
+
     if (this.items && this.items.length > 0 && this.itemTypeId === itemType) {
       this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
       return of(this.items);
@@ -53,7 +54,7 @@ export class ItemService {
       tap((items: IItem[]) => {
         this.items = items;
         this.itemTypeId = itemType
-        console.log(`Service getItems: ${JSON.stringify(this.items)}`);
+        //console.log(`Service getItems: ${JSON.stringify(this.items)}`);
         this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
       }),
       catchError((err: any) => {
@@ -72,11 +73,11 @@ export class ItemService {
    */
   createItem(item: IItem): Observable<IItem> {
     this.store.dispatch(ItemActions.setProgressSpinner({ show: true }));
-    const headers = new HttpHeaders({ 'content-type': 'application/json' });
-    return this.http.post<IItem>(this.url, item, { headers }).pipe(
-      tap((item: IItem) => {
+    return this.http.post<IItem>(this.url, item, { headers: this.headers }).pipe(
+      tap(() => {
         this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
-        //console.log(`Service createItem: ${JSON.stringify(item)}`);
+        // TODO: get period name for item
+        this.items = [...this.items, item]
       }),
       catchError((err: any) => {
         this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
@@ -92,16 +93,16 @@ export class ItemService {
    */
   updateItem(item: IItem): Observable<IItem> {
     this.store.dispatch(ItemActions.setProgressSpinner({ show: true }));
-    const headers = new HttpHeaders({ 'content-type': 'application/json' });
     const url = `${this.url}/${item.id}`;
-    return this.http.put<IItem>(url, item, { headers }).pipe(
+    return this.http.put<IItem>(url, item, { headers: this.headers }).pipe(
       //delay(5000),
-      tap((item) => {
+      tap(() => {
         this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
-        //console.log(`Service updateItem: ${JSON.stringify(item)}`);
+        // TODO: get period name for item
+        this.items = this.items.map((itm) =>
+          item?.id === itm.id ? item : itm
+        );
       }),
-      // Return the Item on an update
-      map(() => item),
       catchError((err: any) => {
         this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
         return this.err.handleError(err);
@@ -116,9 +117,8 @@ export class ItemService {
    */
   deleteItem(id: number): Observable<null> {
     this.store.dispatch(ItemActions.setProgressSpinner({ show: true }));
-    const headers = new HttpHeaders({ 'content-type': 'application/json' });
     const url = `${this.url}/${id}`;
-    return this.http.delete<IItem>(url, { headers }).pipe(
+    return this.http.delete<IItem>(url, { headers: this.headers }).pipe(
       tap((item: any) => {
         this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
         //console.log(`Service deleteItem: ${JSON.stringify(item)}`);

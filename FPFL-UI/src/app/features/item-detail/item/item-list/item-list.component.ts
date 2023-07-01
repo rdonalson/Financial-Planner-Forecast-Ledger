@@ -124,6 +124,11 @@ export class ItemListComponent implements OnInit, OnDestroy {
         this.itemType = this.itemDetailCommonService.getItemType(
           params.itemType
         );
+        this.store.dispatch(
+          ItemActions.setCurrentItemType({
+            itemType: this.itemType,
+          })
+        );
       }
       // normal operations
       this.store.dispatch(ItemActions.loadItems(this.userId, this.itemType.id));
