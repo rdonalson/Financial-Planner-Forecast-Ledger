@@ -26,7 +26,6 @@ import { MessageUtilService } from './shared/services/common/message-util.servic
 import { PeriodService } from './shared/services/period/period.service';
 import { InitialAmountService } from './shared/services/initial-amount/initial-amount.service';
 import { UtilArrayService } from './shared/services/common/util-array.service';
-import { ItemDetailCommonService } from './shared/services/common/item-detail-common.service';
 import { ItemDetailHomeComponent } from './item-detail-home.component';
 import { ItemListComponent } from './item/item-list/item-list.component';
 import { ItemEditComponent } from './item/item-edit/item-edit.component';
@@ -43,7 +42,7 @@ import { UtilArrayEffects } from './shared/services/common/state/util-array.effe
     ItemDetailHomeComponent,
     InitialAmountComponent,
     ItemListComponent,
-    ItemEditComponent
+    ItemEditComponent,
   ],
   imports: [
     CommonModule,
@@ -67,7 +66,7 @@ import { UtilArrayEffects } from './shared/services/common/state/util-array.effe
     TableModule,
     TooltipModule,
     ToolbarModule,
-    ItemDetailRoutingModule
+    ItemDetailRoutingModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
@@ -78,7 +77,6 @@ import { UtilArrayEffects } from './shared/services/common/state/util-array.effe
     InitialAmountService,
     ItemService,
     UtilArrayService,
-    ItemDetailCommonService
-  ]
+  ],
 })
-export class ItemDetailModule { }
+export class ItemDetailModule {}

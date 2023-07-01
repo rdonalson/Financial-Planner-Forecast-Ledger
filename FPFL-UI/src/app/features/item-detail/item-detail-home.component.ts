@@ -6,6 +6,7 @@ import { IItemType } from './shared/models/item-type';
 import { Store } from '@ngrx/store';
 import { State } from 'src/app/state/app.state';
 import * as ItemActions from './shared/services/item/state/item.actions';
+import { ItemDetailCommonService } from './shared/services/common/item-detail-common.service';
 
 @Component({
   templateUrl: './item-detail-home.component.html',
@@ -13,31 +14,34 @@ import * as ItemActions from './shared/services/item/state/item.actions';
 })
 export class ItemDetailHomeComponent {
   pageTitle: string = 'Item Detail';
-  itemType: IItemType = { id: 0, name: '' };
 
-  constructor(private router: Router, private store: Store<State>) {}
+  constructor(
+    private router: Router,
+    private itemDetailCommonService: ItemDetailCommonService,
+    private store: Store<State>
+  ) {}
 
   initialAmount(): void {
-    this.itemType.id = 3;
-    this.itemType.name = 'Initial Amount';
     this.store.dispatch(
-      ItemActions.setCurrentItemType({ itemType: this.itemType })
+      ItemActions.setCurrentItemType({
+        itemType: this.itemDetailCommonService.getItemType('ia'),
+      })
     );
     void this.router.navigate(['feature/item-detail/initial-amount']);
   }
   credits(): void {
-    this.itemType.id = 1;
-    this.itemType.name = 'Credit';
     this.store.dispatch(
-      ItemActions.setCurrentItemType({ itemType: this.itemType })
+      ItemActions.setCurrentItemType({
+        itemType: this.itemDetailCommonService.getItemType('credit'),
+      })
     );
     void this.router.navigate(['feature/item-detail/item/credit']);
   }
   debits(): void {
-    this.itemType.id = 2;
-    this.itemType.name = 'Debit';
     this.store.dispatch(
-      ItemActions.setCurrentItemType({ itemType: this.itemType })
+      ItemActions.setCurrentItemType({
+        itemType: this.itemDetailCommonService.getItemType('debit'),
+      })
     );
     void this.router.navigate(['feature/item-detail/item/debit']);
   }

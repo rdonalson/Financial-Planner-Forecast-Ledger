@@ -11,6 +11,7 @@ import { Store } from '@ngrx/store';
 import { State } from 'src/app/state/app.state';
 import * as ItemActions from '../../../features/item-detail/shared/services/item/state/item.actions';
 import { Router } from '@angular/router';
+import { ItemDetailCommonService } from 'src/app/features/item-detail/shared/services/common/item-detail-common.service';
 
 /**
  * Supplies menu items to menu items from a json file to Menues in the Home page
@@ -27,7 +28,11 @@ export class MenuService {
    * @param {HttpClient} http
    * @param {GlobalErrorHandlerService} err
    */
-  constructor(private router: Router, private store: Store<State>) {
+  constructor(
+    private router: Router,
+    private itemDetailCommonService: ItemDetailCommonService,
+    private store: Store<State>
+  ) {
     this.initializeMenuItems();
   }
 
@@ -52,8 +57,11 @@ export class MenuService {
             label: 'Initial Amount',
             icon: 'pi pi-link',
             command: () => {
-              const itemType: IItemType = { id: 3, name: 'InitialAmount' };
-              this.store.dispatch(ItemActions.setCurrentItemType({ itemType }));
+              this.store.dispatch(
+                ItemActions.setCurrentItemType({
+                  itemType: this.itemDetailCommonService.getItemType('ia')
+                })
+              );
               void this.router.navigate(['feature/item-detail/initial-amount']);
             },
           },
@@ -61,8 +69,11 @@ export class MenuService {
             label: 'Credits',
             icon: 'pi pi-link',
             command: () => {
-              const itemType: IItemType = { id: 1, name: 'Credit' };
-              this.store.dispatch(ItemActions.setCurrentItemType({ itemType }));
+              this.store.dispatch(
+                ItemActions.setCurrentItemType({
+                  itemType: this.itemDetailCommonService.getItemType('credit')
+                })
+              );
               void this.router.navigate(['feature/item-detail/item/credit']);
             },
           },
@@ -70,8 +81,11 @@ export class MenuService {
             label: 'Debits',
             icon: 'pi pi-link',
             command: () => {
-              const itemType: IItemType = { id: 2, name: 'Debit' };
-              this.store.dispatch(ItemActions.setCurrentItemType({ itemType }));
+              this.store.dispatch(
+                ItemActions.setCurrentItemType({
+                  itemType: this.itemDetailCommonService.getItemType('debit')
+                })
+              );
               void this.router.navigate(['feature/item-detail/item/debit']);
             },
           },

@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { IItemType } from '../../models/item-type';
 
 /**
  * This service handles the Form & Validation operations for the
  * Credit & Debits Items forms and components
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ItemDetailCommonService {
   private messages: { [key: string]: { [key: string]: string } };
 
@@ -61,6 +64,30 @@ export class ItemDetailCommonService {
   }
 
   //#region Common Functions
+  /**
+   * Sets the Item Type from the input route params
+   * @param {string} type
+   * @returns {IItemType}
+   */
+  getItemType(type: string): IItemType {
+    let itemType: IItemType = { id: 0, name: '' };
+    switch (type.toLowerCase()) {
+      case 'credit':
+        itemType.id = 1;
+        itemType.name = 'Credit';
+        break;
+      case 'debit':
+        itemType.name = 'Debit';
+        itemType.id = 2;
+        break;
+      case 'ia':
+        itemType.name = 'Initial Amount';
+        itemType.id = 3;
+        break;
+    }
+    return itemType;
+  }
+
   /**
    * Initialized the CRUD Form
    * @param {FormBuilder} fb Form Builder input from CRUD forms

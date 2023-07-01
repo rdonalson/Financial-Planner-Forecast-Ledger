@@ -23,6 +23,7 @@ import {
 import * as ItemActions from '../../shared/services/item/state/item.actions';
 import { IItemType } from '../../shared/models/item-type';
 import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
+import { ItemDetailCommonService } from '../../shared/services/common/item-detail-common.service';
 
 /**
  * Form that will display the list two types of items; Credit (1) or Debit (2)
@@ -51,6 +52,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
   constructor(
     private loginUtilService: LoginUtilService,
     private messageUtilService: MessageUtilService,
+    private itemDetailCommonService: ItemDetailCommonService,
     private err: GlobalErrorHandlerService,
     private route: ActivatedRoute,
     private router: Router,
@@ -119,32 +121,14 @@ export class ItemListComponent implements OnInit, OnDestroy {
     this.paramsSub$ = this.route.params.subscribe((params: any) => {
       // if reload of form reset item type
       if (this.itemType.id === 0) {
-       this.itemType = this.getItemTypeValue(params.itemType);
+        this.itemType = this.itemDetailCommonService.getItemType(
+          params.itemType
+        );
       }
       // normal operations
       this.store.dispatch(ItemActions.loadItems(this.userId, this.itemType.id));
       this.pageTitle = `Manage ${this.itemType.name}`;
     });
-  }
-
-  /**
-   * Sets the Item Type from the input route params
-   * @param {string} type
-   * @returns {IItemType}
-   */
-  private getItemTypeValue(type: string): IItemType {
-    let itemType: IItemType = { id: 0, name: '' };
-    switch (type) {
-      case 'credit':
-        itemType.id = 1;
-        itemType.name = 'Credit';
-        break;
-      case 'debit':
-        itemType.name = 'Debit';
-        itemType.id = 2;
-        break;
-    }
-    return itemType;
   }
   //#endregion Utilities
 
