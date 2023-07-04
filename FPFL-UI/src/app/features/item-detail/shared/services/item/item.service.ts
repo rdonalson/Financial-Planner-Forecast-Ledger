@@ -44,11 +44,6 @@ export class ItemService {
     this.store.dispatch(ItemActions.setProgressSpinner({ show: true }));
     const url = `${this.url}/${userId}/list/${itemType}`;
 
-    if (this.items && this.items.length > 0 && this.itemTypeId === itemType) {
-      this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
-      return of(this.items);
-    }
-
     return this.http.get<IItem[]>(url).pipe(
       //delay(5000),
       tap((items: IItem[]) => {
