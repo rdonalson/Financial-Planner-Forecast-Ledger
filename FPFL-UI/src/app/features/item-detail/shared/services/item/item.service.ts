@@ -66,13 +66,11 @@ export class ItemService {
    * @param {IItem} item The new record to be added
    * @returns {Observable<IItem>} return the record
    */
-  createItem(item: IItem): Observable<IItem> {
+  createItem(item: IItem): Observable<any> {
     this.store.dispatch(ItemActions.setProgressSpinner({ show: true }));
     return this.http.post<IItem>(this.url, item, { headers: this.headers }).pipe(
       tap(() => {
         this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
-        // TODO: get period name for item
-        this.items = [...this.items, item]
       }),
       catchError((err: any) => {
         this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
@@ -86,17 +84,13 @@ export class ItemService {
    * @param {IItem} item The new record to be updated
    * @returns {Observable<IItem>} return the record
    */
-  updateItem(item: IItem): Observable<IItem> {
+  updateItem(item: IItem): Observable<any> {
     this.store.dispatch(ItemActions.setProgressSpinner({ show: true }));
     const url = `${this.url}/${item.id}`;
     return this.http.put<IItem>(url, item, { headers: this.headers }).pipe(
       //delay(5000),
       tap(() => {
         this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
-        // TODO: get period name for item
-        this.items = this.items.map((itm) =>
-          item?.id === itm.id ? item : itm
-        );
       }),
       catchError((err: any) => {
         this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
@@ -110,11 +104,11 @@ export class ItemService {
    * @param {number} id The id of the Item
    * @returns {Observable<IItem>} return the record
    */
-  deleteItem(id: number): Observable<null> {
+  deleteItem(id: number): Observable<any> {
     this.store.dispatch(ItemActions.setProgressSpinner({ show: true }));
     const url = `${this.url}/${id}`;
     return this.http.delete<IItem>(url, { headers: this.headers }).pipe(
-      tap((item: any) => {
+      tap(() => {
         this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
         //console.log(`Service deleteItem: ${JSON.stringify(item)}`);
       }),
