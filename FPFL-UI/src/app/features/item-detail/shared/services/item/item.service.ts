@@ -2,8 +2,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
-import { catchError, delay, map, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 
 import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
 import { IItem } from '../../models/item';
@@ -18,8 +18,6 @@ import * as ItemActions from '../item/state/item.actions';
 @Injectable()
 export class ItemService {
   private url = auth.resources.api.resourceUri + '/items';
-  private items!: IItem[];
-  private itemTypeId!: number;
   private headers = new HttpHeaders({ 'content-type': 'application/json' });
 
   /**
@@ -47,8 +45,6 @@ export class ItemService {
     return this.http.get<IItem[]>(url).pipe(
       //delay(5000),
       tap((items: IItem[]) => {
-        this.items = items;
-        this.itemTypeId = itemType
         //console.log(`Service getItems: ${JSON.stringify(this.items)}`);
         this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
       }),
@@ -88,7 +84,6 @@ export class ItemService {
     this.store.dispatch(ItemActions.setProgressSpinner({ show: true }));
     const url = `${this.url}/${item.id}`;
     return this.http.put<IItem>(url, item, { headers: this.headers }).pipe(
-      //delay(5000),
       tap(() => {
         this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
       }),
@@ -110,7 +105,6 @@ export class ItemService {
     return this.http.delete<IItem>(url, { headers: this.headers }).pipe(
       tap(() => {
         this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
-        //console.log(`Service deleteItem: ${JSON.stringify(item)}`);
       }),
       catchError((err: any) => {
         this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
