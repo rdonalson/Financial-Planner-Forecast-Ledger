@@ -45,7 +45,7 @@ export class ItemService {
     return this.http.get<IItem[]>(url).pipe(
       //delay(5000),
       tap((items: IItem[]) => {
-        //console.log(`Service getItems: ${JSON.stringify(this.items)}`);
+        console.log(`Service getItems: ${JSON.stringify(items)}`);
         this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
       }),
       catchError((err: any) => {
