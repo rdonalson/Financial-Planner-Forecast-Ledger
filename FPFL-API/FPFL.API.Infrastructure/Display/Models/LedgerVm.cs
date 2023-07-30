@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace FPFL.API.Infrastructure.ItemDetail.Models
 {
-    public class LedgerVM
+	public class LedgerVM
 	{
-        public LedgerVM()
-        {
+		public LedgerVM()
+		{
 			Items = new List<ItemVM>();
 		}
 		public int RollupKey { get; set; }
@@ -17,5 +17,5 @@ namespace FPFL.API.Infrastructure.ItemDetail.Models
 		public double Net { get; set; }
 		public double RunningTotal { get; set; }
 		public List<ItemVM> Items { get; set; }
-    }
+	}
 }
