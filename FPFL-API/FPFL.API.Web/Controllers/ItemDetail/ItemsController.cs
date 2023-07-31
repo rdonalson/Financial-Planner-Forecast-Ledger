@@ -1,7 +1,9 @@
 ﻿using FPFL.API.Data.Context;
 using FPFL.API.Data.Domain;
+using FPFL.API.Data.DTO;
 using FPFL.API.Infrastructure.ItemDetail.Interface;
 using FPFL.API.Infrastructure.ItemDetail.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
@@ -12,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace FPFL.API.Web.Controllers.ItemDetail
 {
-	//[Authorize]
+	[Authorize]
 	[Route("api/[controller]")]
 	[ApiController]
 	public class ItemsController : ControllerBase
@@ -37,9 +39,9 @@ namespace FPFL.API.Web.Controllers.ItemDetail
 		/// <param name="itemType">int: itemType, Credit or Debit</param>
 		/// <returns>Task<ActionResult<List<VwItem>>>: Asynchronous List of Items for the Authorized User</returns>
 		[HttpGet("{userId}/list/{itemType}")]
-		public async Task<ActionResult<List<Item>>> GetItems(Guid userId, int itemType)
+		public async Task<ActionResult<List<ItemDTO>>> GetItems(Guid userId, int itemType)
 		{
-			//HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
+			HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
 			return await _repoItems.GetItems(userId, itemType);
 		}
 

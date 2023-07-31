@@ -1,5 +1,6 @@
 ﻿using FPFL.API.Data.Context;
 using FPFL.API.Data.Domain;
+using FPFL.API.Data.DTO;
 using FPFL.API.Infrastructure.ItemDetail.Interface;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -32,20 +33,61 @@ namespace FPFL.API.Infrastructure.ItemDetail.Repository
 		/// <param name="userId">Guid: Authorized User OID</param>
 		/// <param name="itemType">int: itemType, Credit or Debit</param>
 		/// <returns>Task<List<VwItem>>: Asynchronous List of Items for the Authorized User</returns>
-		public async Task<List<Item>> GetItems(Guid userId, int itemType)
+		public async Task<List<ItemDTO>> GetItems(Guid userId, int itemType)
 		{
 			try
 			{
-				//var list = await _context.Items.Where(i => i.UserId == userId && i.FkItemType == itemType)
-				//				.Include(it => it.ItemType)
-				//				.Include(p => p.Period)
-				//				.ToListAsync();
+				var list = await _context.Items.Where(i => i.UserId == userId && i.FkItemType == itemType)
+								.Include(it => it.ItemType)
+								.Include(p => p.Period)
+								.Select(i => new ItemDTO
+								{
+									Id = i.Id,
+									UserId = i.UserId,
+									Name = i.Name,
+									Amount = i.Amount,
+									FkItemType = i.FkItemType,
+									FkPeriod = i.FkPeriod,
+									BeginDate = i.BeginDate,
+									EndDate = i.EndDate,
+									WeeklyDow = i.WeeklyDow,
+									EverOtherWeekDow = i.EverOtherWeekDow,
+									BiMonthlyDay1 = i.BiMonthlyDay1,
+									BiMonthlyDay2 = i.BiMonthlyDay2,
+									MonthlyDom = i.MonthlyDom,
+									Quarterly1Month = i.Quarterly1Month,
+									Quarterly1Day = i.Quarterly1Day,
+									Quarterly2Month = i.Quarterly2Month,
+									Quarterly2Day = i.Quarterly2Day,
+									Quarterly3Month = i.Quarterly3Month,
+									Quarterly3Day = i.Quarterly3Day,
+									Quarterly4Month = i.Quarterly4Month,
+									Quarterly4Day = i.Quarterly4Day,
+									SemiAnnual1Month = i.SemiAnnual1Month,
+									SemiAnnual1Day = i.SemiAnnual1Day,
+									SemiAnnual2Month = i.SemiAnnual2Month,
+									SemiAnnual2Day = i.SemiAnnual2Day,
+									AnnualMoy = i.AnnualMoy,
+									AnnualDom = i.AnnualDom,
+									DateRangeReq = i.DateRangeReq,
+									ItemType = new ItemTypeDTO
+									{
+										Id = i.ItemType.Id,
+										Name = i.ItemType.Name
+									},
+									Period = new PeriodDTO
+									{
+										Id = i.Period.Id,
+										Name = i.Period.Name
+									},
+								})
+								.ToListAsync();
 
-				//return list;
+				return list;
 				//return await _context.Items.ToListAsync()
-				return await _context.Items.Where(
-						i => i.UserId == userId && i.FkItemType == itemType
-					).ToListAsync();
+				//return await _context.Items.Where(
+				//		i => i.UserId == userId && i.FkItemType == itemType
+				//	).ToListAsync();
 			}
 			catch (Exception ex)
 			{

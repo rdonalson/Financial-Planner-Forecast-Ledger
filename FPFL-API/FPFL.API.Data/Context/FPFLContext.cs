@@ -21,7 +21,6 @@ namespace FPFL.API.Data.Context
 			if (!optionsBuilder.IsConfigured)
 			{
 				optionsBuilder.UseLazyLoadingProxies();
-				//base.OnConfiguring(optionsBuilder);
 				optionsBuilder.UseSqlServer(Conn);
 			}
 		}
