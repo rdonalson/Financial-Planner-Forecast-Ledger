@@ -32,6 +32,6 @@ export interface IItem {
   annualDom?: number;
 
   itemType?: IItemType;
-  period?: IPeriod;
+  period?: IPeriod | null;
 
 }

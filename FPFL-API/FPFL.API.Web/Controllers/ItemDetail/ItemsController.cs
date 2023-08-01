@@ -3,7 +3,6 @@ using FPFL.API.Data.Domain;
 using FPFL.API.Data.DTO;
 using FPFL.API.Infrastructure.ItemDetail.Interface;
 using FPFL.API.Infrastructure.ItemDetail.Repository;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
@@ -14,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace FPFL.API.Web.Controllers.ItemDetail
 {
-	[Authorize]
+	//[Authorize]
 	[Route("api/[controller]")]
 	[ApiController]
 	public class ItemsController : ControllerBase
@@ -130,5 +129,27 @@ namespace FPFL.API.Web.Controllers.ItemDetail
 			}
 			return item;
 		}
+
+
+		/// <summary>
+		///     Update Existing Item
+		///     PUT: api/Items/{id}
+		///     Item Model in the payload
+		/// </summary>
+		/// <param name="id">int: Item Id</param>
+		/// <param name="item">Credit: The Edited Item Model</param>
+		/// <returns>Task<IActionResult>: Action State</returns>
+		[HttpPut("{id}")]
+		public async Task<IActionResult> PutItem(int id, Item item)
+		{
+			HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
+			if (id != item.Id)
+			{
+				return BadRequest();
+			}
+			bool result = await _repoItems.PutItem(id, item);
+			return result ? (IActionResult)Accepted() : NotFound();
+		}
+
 
  */

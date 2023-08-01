@@ -4,7 +4,7 @@ import { IPeriod } from '../../../models/period';
 /** Period */
 export const setCurrentPeriod = createAction(
   '[Product] Set Current Period',
-  props<{ period: IPeriod }>()
+  props<{ period: IPeriod | null }>()
 );
 
 export const clearCurrentPeriod = createAction(

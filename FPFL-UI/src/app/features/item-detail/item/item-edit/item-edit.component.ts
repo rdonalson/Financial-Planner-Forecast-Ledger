@@ -47,6 +47,8 @@ export class ItemEditComponent implements OnInit, OnDestroy {
   @ViewChildren(FormControlName, { read: ElementRef })
   private userId: string = '';
   itemType: IItemType = { id: 0, name: '' };
+  periods: IPeriod[] = [];
+  currentPeriod!: IPeriod | null;
   item!: IItem;
   recordId!: number;
   pageTitle!: string;
@@ -106,6 +108,15 @@ export class ItemEditComponent implements OnInit, OnDestroy {
       error: catchError((err: any) => this.err.handleError(err)),
     });
 
+    this.periods$.subscribe({
+      next: (periods: IPeriod[] | null): void => {
+        if (periods) {
+          this.periods = periods;
+        }
+      },
+      error: catchError((err: any) => this.err.handleError(err)),
+    });
+
     this.getUtilArrayItems();
     this.initializeRecord();
     this.itemForm = this.itemDetailCommonService.generateForm(this.fb);
@@ -117,7 +128,9 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    * @param {any} e The selected value from the Period Drowdown Selector in UI
    */
   getPeriod(e: any): void {
-    this.periodSwitch = e.value;
+    this.periodSwitch = +e.value;
+    this.currentPeriod = this.findPeriodById(this.periodSwitch);
+    this.store.dispatch(PeriodActions.setCurrentPeriod({ period: this.currentPeriod }));
     this.itemDetailCommonService.setPeriodFields(
       this.itemForm,
       this.periodSwitch
@@ -164,6 +177,16 @@ export class ItemEditComponent implements OnInit, OnDestroy {
   //#endregion Events
 
   //#region Utilities
+  private findPeriodById(targetId?: number): IPeriod | null {
+    for (const period of this.periods) {
+      if (period.id === targetId) {
+        return period;
+      }
+    }
+    return null;
+  }
+
+
   /**
    * Get Primary Key from Route Paramters
    */
@@ -251,6 +274,9 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     }
     this.item = item;
     this.periodSwitch = this.item.fkPeriod;
+    this.currentPeriod = this.findPeriodById(this.item.fkPeriod);
+    this.store.dispatch(PeriodActions.setCurrentPeriod({ period: this.currentPeriod }));
+
     this.dateRangeToggle = this.item.dateRangeReq;
     // Update the data on the form
     this.itemForm.patchValue({
@@ -305,7 +331,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
       SemiAnnual2Day: this.item.semiAnnual2Day,
       // Annual
       AnnualMoy: this.item.annualMoy,
-      AnnualDom: this.item.annualDom,
+      AnnualDom: this.item.annualDom
     });
     this.itemDetailCommonService.setPeriodFields(
       this.itemForm,
@@ -371,6 +397,9 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     // Annual
     newItem.annualMoy = itemForm.value.AnnualMoy;
     newItem.annualDom = itemForm.value.AnnualDom;
+    // Definition Classes
+    newItem.period = this.currentPeriod,
+    newItem.itemType = this.itemType
     return newItem;
   }
   //#endregion Utilities

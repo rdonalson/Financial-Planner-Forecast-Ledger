@@ -84,7 +84,7 @@ export class ItemService {
     this.store.dispatch(ItemActions.setProgressSpinner({ show: true }));
     const url = `${this.url}/${item.id}`;
     return this.http.put<IItem>(url, item, { headers: this.headers }).pipe(
-      tap(() => {
+      tap((result) => {
         this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
       }),
       catchError((err: any) => {

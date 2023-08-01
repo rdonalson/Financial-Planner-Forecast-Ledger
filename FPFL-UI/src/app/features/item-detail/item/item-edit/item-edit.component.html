@@ -84,7 +84,7 @@
               >Period</label
             >
             <div
-              *ngIf="periods$ | async as periods"
+              *ngIf="periods"
               class="col-5 md:col-4 p-calendar-dropdown-format-helper"
               tooltipPosition="left"
               pTooltip="{{ messages['Period.required'] }}"

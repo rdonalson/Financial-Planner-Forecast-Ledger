@@ -96,8 +96,6 @@ namespace FPFL.API.Infrastructure.ItemDetail.Repository
 			}
 		}
 
-
-
 		/// <summary>
 		///     Update Existing Item
 		/// </summary>
