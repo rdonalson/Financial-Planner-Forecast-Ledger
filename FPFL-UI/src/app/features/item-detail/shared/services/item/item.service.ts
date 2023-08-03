@@ -65,7 +65,7 @@ export class ItemService {
   createItem(item: IItem): Observable<any> {
     this.store.dispatch(ItemActions.setProgressSpinner({ show: true }));
     return this.http.post<IItem>(this.url, item, { headers: this.headers }).pipe(
-      tap(() => {
+      tap((result) => {
         this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
       }),
       catchError((err: any) => {

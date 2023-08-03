@@ -186,7 +186,6 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     return null;
   }
 
-
   /**
    * Get Primary Key from Route Paramters
    */
@@ -235,9 +234,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
       name: '',
       amount: 0,
       fkItemType: this.itemType.id,
-      itemType: undefined,
       fkPeriod: 0,
-      period: undefined,
       dateRangeReq: false,
       beginDate: undefined,
       endDate: undefined,
@@ -260,6 +257,9 @@ export class ItemEditComponent implements OnInit, OnDestroy {
       semiAnnual2Day: undefined,
       annualMoy: undefined,
       annualDom: undefined,
+
+      itemType: this.itemType,
+      period: undefined
     };
   }
 
@@ -468,6 +468,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
       this.store.dispatch(ItemActions.updateItem({ item: this.item }));
       message = 'Item Updated';
     }
+    this.store.dispatch(PeriodActions.clearCurrentPeriod());
     this.messageUtilService.onCompleteNav(
       message,
       this.defaultPath,
@@ -499,6 +500,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
             this.defaultPath,
             this.route
           );
+          this.store.dispatch(PeriodActions.clearCurrentPeriod());
         },
       });
     }

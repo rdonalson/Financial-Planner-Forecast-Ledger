@@ -30,7 +30,7 @@ export class ItemEffects {
       ofType(ItemActions.createItem),
       concatMap((action) =>
         this.itemService.createItem(action.item).pipe(
-          map((item) => ItemActions.createItemSuccess({ item })),
+          map((item) => ItemActions.createItemSuccess({ item: action.item })),
           catchError((error) => of(ItemActions.createItemFailure({ error })))
         )
       )

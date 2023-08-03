@@ -13,7 +13,7 @@ namespace FPFL.API.Infrastructure.ItemDetail.Interface
 	{
 		Task<List<ItemDTO>> GetItems(Guid userId, int itemType);
 		Task<bool> PutItem(int id, Item item);
-		Task<bool> PostItem(Item item);
+		Task<int?> PostItem(Item item);
 		Task<bool> DeleteItem(int id);
 	}
 }

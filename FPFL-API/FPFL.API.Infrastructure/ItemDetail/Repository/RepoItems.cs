@@ -106,8 +106,9 @@ namespace FPFL.API.Infrastructure.ItemDetail.Repository
 		{
 			try
 			{
+				item.ItemType = null; item.Period = null;
 				_context.Entry(item).State = EntityState.Modified;
-				await _context.SaveChangesAsync();
+				var result = await _context.SaveChangesAsync();
 				return true;
 			}
 			catch (DbUpdateConcurrencyException ex)
@@ -132,18 +133,20 @@ namespace FPFL.API.Infrastructure.ItemDetail.Repository
 		/// </summary>
 		/// <param name="item">Item: The input Item Model</param>
 		/// <returns>Task<bool>: Was the Item created? T/F</returns>
-		public async Task<bool> PostItem(Item item)
+		public async Task<int?> PostItem(Item item)
 		{
 			try
 			{
+				item.ItemType = null; item.Period = null;
 				_context.Items.Add(item);
 				await _context.SaveChangesAsync();
-				return true;
+				var x = _context.Entry<Item>(item);
+				return x.Entity.Id;
 			}
 			catch (Exception ex)
 			{
 				_log.Error(ex.ToString());
-				return false;
+				return null;
 			}
 		}
 

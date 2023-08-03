@@ -72,11 +72,11 @@ namespace FPFL.API.Web.Controllers.ItemDetail
 		/// <param name="item">Item: The input Item Model</param>
 		/// <returns>Task<ActionResult<Item>>: Return the new Item & Action State</returns>
 		[HttpPost]
-		public async Task<ActionResult<Item>> PostItem(Item item)
+		public async Task<ActionResult<int?>> PostItem(Item item)
 		{
 			HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
-			bool result = await _repoItems.PostItem(item);
-			return result ? Created("Created", item) : (ActionResult<Item>)BadRequest();
+			int? result = await _repoItems.PostItem(item);
+			return result; //? Created("Created", item.Id) : (ActionResult<Item>)BadRequest();
 		}
 
 		/// <summary>
