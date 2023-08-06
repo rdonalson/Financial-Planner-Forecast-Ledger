@@ -3,6 +3,7 @@ using FPFL.API.Data.Domain;
 using FPFL.API.Data.DTO;
 using FPFL.API.Infrastructure.ItemDetail.Interface;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -129,24 +130,27 @@ namespace FPFL.API.Infrastructure.ItemDetail.Repository
 		}
 
 		/// <summary>
-		///     Add new Item
+		///		Add new Item and return item with new key value (id)
 		/// </summary>
-		/// <param name="item">Item: The input Item Model</param>
-		/// <returns>Task<bool>: Was the Item created? T/F</returns>
-		public async Task<int?> PostItem(Item item)
+		/// <param name="item">Item: class</param>
+		/// <returns>
+		///		Task<(bool success, Item newItem>: Was the Item created ? 
+		///		True return new record, otherwise return null and bad request
+		/// </returns>
+		public async Task<(bool success, Item newItem)> PostItem(Item item)
 		{
 			try
 			{
 				item.ItemType = null; item.Period = null;
 				_context.Items.Add(item);
 				await _context.SaveChangesAsync();
-				var x = _context.Entry<Item>(item);
-				return x.Entity.Id;
+				EntityEntry<Item> result = _context.Entry(item);
+				return (true, result.Entity);
 			}
 			catch (Exception ex)
 			{
 				_log.Error(ex.ToString());
-				return null;
+				return (false, null);
 			}
 		}
 

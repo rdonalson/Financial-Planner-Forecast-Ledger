@@ -19,6 +19,12 @@ export const setCurrentItem = createAction(
   props<{ item: IItem }>()
 );
 
+/** New Item Key */
+export const returnNewItemKey = createAction(
+  '[Item] Return New Item Key',
+  props<{ id: number }>()
+);
+
 export const clearCurrentItem = createAction('[Item] Clear Current Item]');
 export const initializeCurrentItem = createAction('[Item] Init Current Item');
 

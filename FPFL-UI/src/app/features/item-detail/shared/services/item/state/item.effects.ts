@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { mergeMap, map, catchError, of, concatMap } from 'rxjs';
+import { mergeMap, map, catchError, of, concatMap, tap } from 'rxjs';
 
 import * as ItemActions from '../../../../shared/services/item/state/item.actions';
 import { ItemService } from '../item.service';
+import { IItem } from '../../../models/item';
 
 @Injectable()
 export class ItemEffects {
+  private item!: any;
   constructor(private actions$: Actions, private itemService: ItemService) {}
 
   /** Get Items */
@@ -30,7 +32,7 @@ export class ItemEffects {
       ofType(ItemActions.createItem),
       concatMap((action) =>
         this.itemService.createItem(action.item).pipe(
-          map((item) => ItemActions.createItemSuccess({ item: action.item })),
+          map((result) => ItemActions.createItemSuccess({ item: result })),
           catchError((error) => of(ItemActions.createItemFailure({ error })))
         )
       )
@@ -43,7 +45,7 @@ export class ItemEffects {
       ofType(ItemActions.updateItem),
       concatMap((action) =>
         this.itemService.updateItem(action.item).pipe(
-          map((item) => ItemActions.updateItemSuccess({ item: action.item })),
+          map(() => ItemActions.updateItemSuccess({ item: action.item })),
           catchError((error) => of(ItemActions.updateItemFailure({ error })))
         )
       )

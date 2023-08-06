@@ -3,6 +3,7 @@ using FPFL.API.Data.Domain;
 using FPFL.API.Data.DTO;
 using FPFL.API.Infrastructure.ItemDetail.Interface;
 using FPFL.API.Infrastructure.ItemDetail.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace FPFL.API.Web.Controllers.ItemDetail
 {
-	//[Authorize]
+	[Authorize]
 	[Route("api/[controller]")]
 	[ApiController]
 	public class ItemsController : ControllerBase
@@ -31,12 +32,12 @@ namespace FPFL.API.Web.Controllers.ItemDetail
 		}
 
 		/// <summary>
-		///     Return List of Items, Credits or Debits, for given User using the View vwItems
+		///     Return List of Items, Credits or Debits
 		///     GET: api/Items/{userId}/list/{itemType}
 		/// </summary>
 		/// <param name="userId">Guid: Authorized User OID</param>
 		/// <param name="itemType">int: itemType, Credit or Debit</param>
-		/// <returns>Task<ActionResult<List<VwItem>>>: Asynchronous List of Items for the Authorized User</returns>
+		/// <returns>Task<ActionResult<List<ItemDTO>>>: Asynchronous List of Items for the Authorized User</returns>
 		[HttpGet("{userId}/list/{itemType}")]
 		public async Task<ActionResult<List<ItemDTO>>> GetItems(Guid userId, int itemType)
 		{
@@ -72,11 +73,11 @@ namespace FPFL.API.Web.Controllers.ItemDetail
 		/// <param name="item">Item: The input Item Model</param>
 		/// <returns>Task<ActionResult<Item>>: Return the new Item & Action State</returns>
 		[HttpPost]
-		public async Task<ActionResult<int?>> PostItem(Item item)
+		public async Task<ActionResult<Item>> PostItem(Item item)
 		{
 			HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
-			int? result = await _repoItems.PostItem(item);
-			return result; //? Created("Created", item.Id) : (ActionResult<Item>)BadRequest();
+			(bool success, Item newItem) = await _repoItems.PostItem(item);
+			return success ? Created("Created", newItem) : (ActionResult<Item>)BadRequest();
 		}
 
 		/// <summary>
