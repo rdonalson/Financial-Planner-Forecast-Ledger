@@ -1,6 +1,6 @@
 ﻿namespace FPFL.API.Infrastructure.ItemDetail.Models
 {
-    public class ItemVM
+	public class ItemVM
 	{
 		public int? RollupKey { get; set; }
 		public int? Year { get; set; }

@@ -1,14 +1,29 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable, Subscription, catchError } from 'rxjs';
 import { ConfirmationService } from 'primeng/api';
 
-import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
 import { IItem } from '../../shared/models/item';
 import { MessageUtilService } from '../../shared/services/common/message-util.service';
-import { ItemService } from '../../shared/services/item/item.service';
 import { LoginUtilService } from 'src/app/core/services/login/login-util.service';
+import { State } from 'src/app/state/app.state';
+import {
+  getCurrentItemType,
+  getError,
+  getItems,
+  getProgressSpinner,
+} from '../../shared/services/item/state/item.reducer';
+
+import * as ItemActions from '../../shared/services/item/state/item.actions';
+import { IItemType } from '../../shared/models/item-type';
+import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
+import { ItemDetailCommonService } from '../../shared/services/common/item-detail-common.service';
 
 /**
  * Form that will display the list two types of items; Credit (1) or Debit (2)
@@ -16,45 +31,83 @@ import { LoginUtilService } from 'src/app/core/services/login/login-util.service
  */
 @Component({
   templateUrl: './item-list.component.html',
-  styleUrls: ['./item-list.component.scss']
+  styleUrls: ['./item-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ItemListComponent implements OnInit, OnDestroy {
-  itemTypeName!: string;
-  itemTypeValue!: number;
   pageTitle!: string;
-  progressSpinner: boolean = false;
-  private sub!: Subscription;
+  itemType: IItemType = { id: 0, name: '' };
   itemList: IItem[] = [];
-  selectedCredits: IItem[] = [];
   userId: string = '';
+
+  private paramsSub$!: Subscription;
+  items$!: Observable<IItem[]>;
+  progressSpinner$!: Observable<boolean>;
+  errorMessage$!: Observable<string>;
+  currentItemType$!: Observable<IItemType | null>;
 
   /**
    * Constructor
-   * @param {LoginUtilService} loginUtilService
-   * @param {MessageUtilService} messageUtilService
-   * @param {GlobalErrorHandlerService} err
-   * @param {ConfirmationService} confirmationService
-   * @param {ItemService} itemService
    */
   constructor(
     private loginUtilService: LoginUtilService,
     private messageUtilService: MessageUtilService,
-    private route: ActivatedRoute,
+    private itemDetailCommonService: ItemDetailCommonService,
     private err: GlobalErrorHandlerService,
+    private route: ActivatedRoute,
+    private router: Router,
     private confirmationService: ConfirmationService,
-    private itemService: ItemService
-  ) { }
+    private store: Store<State>
+  ) {}
 
   //#region Events
   ngOnInit(): void {
     this.userId = this.loginUtilService.getUserOid();
+
+    this.progressSpinner$ = this.store.select(getProgressSpinner);
+    this.currentItemType$ = this.store.select(getCurrentItemType);
+    this.items$ = this.store.select(getItems);
+    this.errorMessage$ = this.store.select(getError);
+
+    this.errorMessage$.subscribe({
+      next: (err: string): void => {
+        this.messageUtilService.onError(err);
+      },
+    });
+
+    this.currentItemType$.subscribe({
+      next: (itemType: IItemType | null): void => {
+        if (itemType) {
+          this.itemType = itemType;
+        }
+      },
+      error: catchError((err: any) => this.err.handleError(err)),
+    });
+
+    this.items$.subscribe({
+      next: (items: IItem[]) => {
+        this.itemList = items;
+      },
+      error: catchError((err: any) => this.err.handleError(err)),
+    });
+
     this.getRouteParams();
   }
+
+  /**
+   * Capture the current record and navigate to Item-Edit
+   * @param item
+   */
+  openEdit(item: IItem): void {
+    this.store.dispatch(ItemActions.setCurrentItem({ item }));
+    this.router.navigate(['./edit', item.id], { relativeTo: this.route });
+  }
+
   /**
    * Removes the "sub" observable for Prameter retrieval
    */
   ngOnDestroy(): void {
-    this.sub.unsubscribe();
+    this.paramsSub$.unsubscribe();
   }
   //#endregion Events
 
@@ -65,88 +118,44 @@ export class ItemListComponent implements OnInit, OnDestroy {
    * Get the item list
    */
   private getRouteParams(): void {
-    this.sub = this.route.params
-      .subscribe((params: any) => {
-        this.getItemTypeValue(params.itemType);
-        this.pageTitle = `Manage ${this.itemTypeName}`
-        this.getItems(this.userId, this.itemTypeValue);
-      });
-  }
-
-  /**
-   * Get the type of items to presented
-   * @param {string} type The value; credit or debit
-   */
-  private getItemTypeValue(type: string): void {
-    switch (type) {
-      case 'credit':
-        this.itemTypeName = 'Credits';
-        this.itemTypeValue = 1;
-        break;
-      case 'debit':
-        this.itemTypeName = 'Debits';
-        this.itemTypeValue = 2;
-        break;
-      default:
-        break;
-    }
+    this.paramsSub$ = this.route.params.subscribe((params: any) => {
+      // if reload of form reset item type
+      if (this.itemType.id === 0) {
+        this.itemType = this.itemDetailCommonService.getItemType(
+          params.itemType
+        );
+        this.store.dispatch(
+          ItemActions.setCurrentItemType({
+            itemType: this.itemType,
+          })
+        );
+      }
+      // normal operations
+      this.store.dispatch(ItemActions.loadItems(this.userId, this.itemType.id));
+      this.pageTitle = `Manage ${this.itemType.name}`;
+    });
   }
   //#endregion Utilities
 
   //#region Data Functions
-  //#region Reads
-  /**
-   * Get the User's List of Credits
-   * @param {string} userId User's OID
-   * @returns {any}
-   */
-  getItems(userId: string, itemType: number): any {
-    this.progressSpinner = true;
-    return this.itemService.getItems(userId, itemType)
-      .subscribe({
-        next: (data: IItem[]): void => {
-          this.itemList = data;
-          // console.log(JSON.stringify(this.creditList));
-        },
-        error: catchError((err: any) => this.err.handleError(err)),
-        complete: () => {
-          this.progressSpinner = false;
-        }
-      });
-  }
-  //#endregion Reads
   //#region Writes
   /**
    * Delete a specific Credit
    * Prompt User before committing
-   * @param {number} id The id of the Credit
+   * @param {IItem} item the item to be deleted
    */
-  deleteItem(id: number): void {
-    if (id === 0) {
-      // Don't delete, it was never saved.
-      this.messageUtilService.onComplete('Credit not Found');
-    } else {
-      this.confirmationService.confirm({
-        message: 'Do you want to delete this record?',
-        header: 'Delete Confirmation',
-        icon: 'pi pi-info-circle',
-        accept: () => {
-          this.progressSpinner = true;
-          this.itemService.deleteItem(id)
-            .subscribe({
-              next: () => this.messageUtilService.onComplete(`Credit Deleted`),
-              error: catchError((err: any) => {
-                this.messageUtilService.onError(`Credit Delete Failed`);
-                return this.err.handleError(err);
-              }),
-              complete: () => {
-                this.progressSpinner = false;
-                location.reload();
-              }
-            });
-        }
-      });
-    }
+  deleteItem(item: IItem): void {
+    this.confirmationService.confirm({
+      message: 'Do you want to delete this record?',
+      header: 'Delete Confirmation',
+      icon: 'pi pi-info-circle',
+      accept: () => {
+        const result = this.store.dispatch(
+          ItemActions.deleteItem({ item: item })
+        );
+        this.messageUtilService.onComplete('Item Deleted');
+      },
+    });
   }
   //#endregion Writes
   //#endregion Data Functions

@@ -1,19 +1,21 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { IItemType } from '../../models/item-type';
 
 /**
  * This service handles the Form & Validation operations for the
  * Credit & Debits Items forms and components
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ItemDetailCommonService {
-
-  private messages: { [key: string]: { [key: string]: string; }; };
+  private messages: { [key: string]: { [key: string]: string } };
 
   /**
    * Messages used in the field tooltips
    */
-  public get Messages(): { [key: string]: { [key: string]: string; }; } {
+  public get Messages(): { [key: string]: { [key: string]: string } } {
     return this.messages;
   }
 
@@ -29,25 +31,63 @@ export class ItemDetailCommonService {
       Amount: { required: 'Required:  Enter an Amount' },
       Period: { required: 'Required:  Select a Period' },
       // Date Range
-      DateRangeReq: { optional: 'Optional:  Only select if this Period is going to be for a limited period of time' },
+      DateRangeReq: {
+        optional:
+          'Optional:  Only select if this Period is going to be for a limited period of time',
+      },
       BeginDate: { required: 'Required:  Select a Start Date' },
       EndDate: { required: 'Required:  Select an End Date' },
       // Weekly & Every Other Week (Every Two Weeks)
       WeeklyDow: { required: 'Required:  Select a Day of the Week.' },
       // One time Occurrence & Every Other Week (Every Two Weeks)
       InitDateOTO: { required: 'Required:  Select the Date of occurrence' },
-      InitDateEOW: { required: 'Required:  Select a Date on or before the Day you want this Period to Start' },
+      InitDateEOW: {
+        required:
+          'Required:  Select a Date on or before the Day you want this Period to Start',
+      },
       // Monthly & Bi-Monthly
       MonthlyDay: { required: 'Required:  Select the day of occurrence' },
-      BiMonthlyDay1: { required: 'Required:  Select the First Day of occurrence' },
-      BiMonthlyDay2: { required: 'Required:  Select the Second Day of occurrence' },
+      BiMonthlyDay1: {
+        required: 'Required:  Select the First Day of occurrence',
+      },
+      BiMonthlyDay2: {
+        required: 'Required:  Select the Second Day of occurrence',
+      },
       // Annual, Semi-Annual & Quarterly
-      MonthOfOccurrence: { required: 'Required:  Select the Month of occurrence' },
-      DayInMonthOfOccurrence: { required: 'Required:  Select the Day within that Month' }
+      MonthOfOccurrence: {
+        required: 'Required:  Select the Month of occurrence',
+      },
+      DayInMonthOfOccurrence: {
+        required: 'Required:  Select the Day within that Month',
+      },
     };
   }
 
   //#region Common Functions
+  /**
+   * Sets the Item Type from the input route params
+   * @param {string} type
+   * @returns {IItemType}
+   */
+  getItemType(type: string): IItemType {
+    let itemType: IItemType = { id: 0, name: '' };
+    switch (type.toLowerCase()) {
+      case 'credit':
+        itemType.id = 1;
+        itemType.name = 'Credit';
+        break;
+      case 'debit':
+        itemType.name = 'Debit';
+        itemType.id = 2;
+        break;
+      case 'ia':
+        itemType.name = 'Initial Amount';
+        itemType.id = 3;
+        break;
+    }
+    return itemType;
+  }
+
   /**
    * Initialized the CRUD Form
    * @param {FormBuilder} fb Form Builder input from CRUD forms
@@ -142,7 +182,10 @@ export class ItemDetailCommonService {
    * @param {FormGroup} form The Form Group from the CRUD Form
    * @param {number} period The user's period selection
    */
-  private updateEveryTwoWeeksAndOneTimeValidation(form: FormGroup, period?: number): void {
+  private updateEveryTwoWeeksAndOneTimeValidation(
+    form: FormGroup,
+    period?: number
+  ): void {
     if (period === 4 || period === 1) {
       form.controls['InitializationDate'].setValidators([Validators.required]);
     } else {
@@ -324,7 +367,11 @@ export class ItemDetailCommonService {
    * @param {boolean} toggle? True / False value from the Date Range Checkbox
    * @param {number} period The user's period selection
    */
-  updateDateRangeValidation(form: FormGroup, toggle?: boolean, period?: number): void {
+  updateDateRangeValidation(
+    form: FormGroup,
+    toggle?: boolean,
+    period?: number
+  ): void {
     if (toggle) {
       if (period !== 4 && period !== 1) {
         form.controls['BeginDate'].setValidators([Validators.required]);

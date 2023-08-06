@@ -1,5 +1,4 @@
 export interface IPeriod {
-  pkPeriod: number;
+  id: number;
   name: string;
-
 }

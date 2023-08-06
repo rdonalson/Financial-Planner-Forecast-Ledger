@@ -2,11 +2,11 @@
 
 namespace FPFL.API.Data.Migrations
 {
-    public partial class add_ItemType_dataitems : Migration
-    {
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.Sql(@"
+	public partial class add_ItemType_dataitems : Migration
+	{
+		protected override void Up(MigrationBuilder migrationBuilder)
+		{
+			migrationBuilder.Sql(@"
                 DELETE FROM [ItemDetail].[ItemTypes]
                 GO
                 INSERT [ItemDetail].[ItemTypes] ([Id], [Name]) VALUES (1, N'Credit')
@@ -16,14 +16,14 @@ namespace FPFL.API.Data.Migrations
                 INSERT [ItemDetail].[ItemTypes] ([Id], [Name]) VALUES (3, N'InitialAmount')
                 GO
             ");
-        }
+		}
 
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.Sql(@"
+		protected override void Down(MigrationBuilder migrationBuilder)
+		{
+			migrationBuilder.Sql(@"
                 DELETE FROM [ItemDetail].[ItemTypes]
                 GO
             ");
-        }
-    }
+		}
+	}
 }

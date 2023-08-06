@@ -1,12 +1,13 @@
+import { IItemType } from "./item-type";
+import { IPeriod } from "./period";
+
 export interface IItem {
   id: number;
   userId: string;
   name: string;
   amount: number;
   fkItemType: number;
-  itemType?: string;
   fkPeriod?: number;
-  period?: string;
   dateRangeReq: boolean;
   beginDate?: Date;
   endDate?: Date;
@@ -29,4 +30,8 @@ export interface IItem {
   semiAnnual2Day?: number;
   annualMoy?: number;
   annualDom?: number;
+
+  itemType?: IItemType;
+  period?: IPeriod | null;
+
 }

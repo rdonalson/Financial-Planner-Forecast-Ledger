@@ -5,11 +5,10 @@ import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
 
-//import * as auth from '../../../../../shared/auth-config.json';
 import { ILedgerParams } from '../../models/ledger-params';
 import { ILedgerVM } from '../../view-models/ledger-vm';
 
-const auth = require('../../../../../../assets/data/auth-config.json')
+import * as auth from '../../../../../../assets/data/auth-config.json';
 
 /**
  * Display Service
