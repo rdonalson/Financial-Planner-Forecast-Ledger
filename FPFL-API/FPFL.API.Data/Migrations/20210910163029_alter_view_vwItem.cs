@@ -2,11 +2,11 @@
 
 namespace FPFL.API.Data.Migrations
 {
-    public partial class alter_view_vwItem : Migration
-    {
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.Sql(@"
+	public partial class alter_view_vwItem : Migration
+	{
+		protected override void Up(MigrationBuilder migrationBuilder)
+		{
+			migrationBuilder.Sql(@"
                 ALTER VIEW [ItemDetail].[vwItems]
                 AS
                     SELECT c.[Id], 
@@ -44,11 +44,11 @@ namespace FPFL.API.Data.Migrations
                     LEFT OUTER JOIN [ItemDetail].[Periods] AS p WITH(NOLOCK) ON c.[FkPeriod] = p.[Id]
                 GO
             ");
-        }
+		}
 
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.Sql(@"
+		protected override void Down(MigrationBuilder migrationBuilder)
+		{
+			migrationBuilder.Sql(@"
                 ALTER VIEW [ItemDetail].[vwItems]
                 AS
                     SELECT c.[Id], 
@@ -86,6 +86,6 @@ namespace FPFL.API.Data.Migrations
                     INNER JOIN [ItemDetail].[Periods] AS p WITH(NOLOCK) ON c.[FkPeriod] = p.[Id]
                 GO
             ");
-        }
-    }
+		}
+	}
 }

@@ -1,4 +1,4 @@
-import { IKeyValue } from "./key-value";
+import { IKeyValue } from './key-value';
 
 export interface IUtilArray {
   DaysInTheMonth: IKeyValue[];

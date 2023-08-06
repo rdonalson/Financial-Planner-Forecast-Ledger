@@ -2,11 +2,11 @@
 
 namespace FPFL.API.Data.Migrations
 {
-    public partial class add_Period_dataitems : Migration
-    {
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.Sql(@"
+	public partial class add_Period_dataitems : Migration
+	{
+		protected override void Up(MigrationBuilder migrationBuilder)
+		{
+			migrationBuilder.Sql(@"
                 DELETE FROM [ItemDetail].[Periods]
                 GO
                 INSERT [ItemDetail].[Periods] ([Id], [Name]) VALUES (1, N'One Time Occurrence')
@@ -28,14 +28,14 @@ namespace FPFL.API.Data.Migrations
                 INSERT [ItemDetail].[Periods] ([Id], [Name]) VALUES (9, N'Annually')
                 GO
             ");
-        }
+		}
 
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.Sql(@"
+		protected override void Down(MigrationBuilder migrationBuilder)
+		{
+			migrationBuilder.Sql(@"
                 DELETE FROM [ItemDetail].[Periods]
                 GO
             ");
-        }
-    }
+		}
+	}
 }

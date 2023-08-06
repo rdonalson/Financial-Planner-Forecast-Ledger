@@ -1,6 +1,8 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
 
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
@@ -24,22 +26,31 @@ import { MessageUtilService } from './shared/services/common/message-util.servic
 import { PeriodService } from './shared/services/period/period.service';
 import { InitialAmountService } from './shared/services/initial-amount/initial-amount.service';
 import { UtilArrayService } from './shared/services/common/util-array.service';
-import { ItemDetailCommonService } from './shared/services/common/item-detail-common.service';
 import { ItemDetailHomeComponent } from './item-detail-home.component';
 import { ItemListComponent } from './item/item-list/item-list.component';
 import { ItemEditComponent } from './item/item-edit/item-edit.component';
 import { ItemService } from './shared/services/item/item.service';
+import { PeriodEffects } from './shared/services/period/state/period.effects';
+import { periodReducer } from './shared/services/period/state/period.reducer';
+import { itemReducer } from './shared/services/item/state/item.reducer';
+import { ItemEffects } from './shared/services/item/state/item.effects';
+import { utilArrayReducer } from './shared/services/common/state/util-array.reducer';
+import { UtilArrayEffects } from './shared/services/common/state/util-array.effects';
 
 @NgModule({
   declarations: [
     ItemDetailHomeComponent,
     InitialAmountComponent,
     ItemListComponent,
-    ItemEditComponent
+    ItemEditComponent,
   ],
   imports: [
     CommonModule,
     FormsModule,
+    StoreModule.forFeature('periods', periodReducer),
+    StoreModule.forFeature('items', itemReducer),
+    StoreModule.forFeature('utilArray', utilArrayReducer),
+    EffectsModule.forFeature([PeriodEffects, ItemEffects, UtilArrayEffects]),
     ReactiveFormsModule,
     ProgressSpinnerModule,
     ConfirmDialogModule,
@@ -55,7 +66,7 @@ import { ItemService } from './shared/services/item/item.service';
     TableModule,
     TooltipModule,
     ToolbarModule,
-    ItemDetailRoutingModule
+    ItemDetailRoutingModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
@@ -66,7 +77,6 @@ import { ItemService } from './shared/services/item/item.service';
     InitialAmountService,
     ItemService,
     UtilArrayService,
-    ItemDetailCommonService
-  ]
+  ],
 })
-export class ItemDetailModule { }
+export class ItemDetailModule {}

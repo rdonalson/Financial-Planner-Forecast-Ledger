@@ -7,7 +7,7 @@
       <!-- Progress Spinner -->
       <div class="edit-spinner-box">
         <p-progressSpinner
-          *ngIf="progressSpinner"
+          *ngIf="progressSpinner$ | async"
           strokeWidth="6"
           [style]="{ width: '2rem', height: '2rem' }"
           fill="#efefef"
@@ -43,7 +43,7 @@
             <div
               class="col-12 md:col-10"
               tooltipPosition="left"
-              pTooltip="{{ messages['Name.required']}}"
+              pTooltip="{{ messages['Name.required'] }}"
             >
               <input
                 pInputText
@@ -64,7 +64,7 @@
             <div
               class="col-12 md:col-10"
               tooltipPosition="left"
-              pTooltip="{{ messages['Amount.required']}}"
+              pTooltip="{{ messages['Amount.required'] }}"
             >
               <p-inputNumber
                 id="amountId"
@@ -84,9 +84,10 @@
               >Period</label
             >
             <div
+              *ngIf="periods"
               class="col-5 md:col-4 p-calendar-dropdown-format-helper"
               tooltipPosition="left"
-              pTooltip="{{ messages['Period.required']}}"
+              pTooltip="{{ messages['Period.required'] }}"
             >
               <p-dropdown
                 id="periodId"
@@ -109,13 +110,16 @@
               <label for="weeklyDowId" class="col-12 mb-2 md:col-2 md:mb-0"
                 >Day of Week</label
               >
-              <div class="col-6 md:col-5 formgroup-inline">
+              <div
+                *ngIf="utilArray$ | async as utilArray"
+                class="col-6 md:col-5 formgroup-inline"
+              >
                 <div
                   id="weeklyDowId"
                   *ngFor="let day of utilArray.WeekDays"
                   class="p-field-radiobutton"
                   tooltipPosition="left"
-                  pTooltip="{{ messages['WeeklyDow.required']}}"
+                  pTooltip="{{ messages['WeeklyDow.required'] }}"
                 >
                   <p-radioButton
                     [inputId]="day.key"
@@ -158,12 +162,15 @@
           <div *ngIf="periodSwitch === 4">
             <div class="field grid">
               <label class="col-12 mb-2 md:col-2 md:mb-0">Day of Week</label>
-              <div class="col-6 md:col-5 formgroup-inline">
+              <div
+                *ngIf="utilArray$ | async as utilArray"
+                class="col-6 md:col-5 formgroup-inline"
+              >
                 <div
                   *ngFor="let day of utilArray.WeekDays"
                   class="p-field-radiobutton"
                   tooltipPosition="left"
-                  pTooltip="{{ messages['WeeklyDow.required']}}"
+                  pTooltip="{{ messages['WeeklyDow.required'] }}"
                 >
                   <p-radioButton
                     [inputId]="day.key"
@@ -181,14 +188,14 @@
           <!-- Bi-Monthly -->
           <div *ngIf="periodSwitch === 5">
             <!-- 1st Day of Month -->
-            <div class="field grid">
+            <div *ngIf="utilArray$ | async as utilArray" class="field grid">
               <label for="monthlyDay1Id" class="col-12 mb-2 md:col-2 md:mb-0"
                 >1st Day of Month</label
               >
               <div
                 class="col-5 md:col-4 p-calendar-dropdown-format-helper"
                 tooltipPosition="left"
-                pTooltip="{{ messages['BiMonthlyDay1.required']}}"
+                pTooltip="{{ messages['BiMonthlyDay1.required'] }}"
               >
                 <p-dropdown
                   id="monthlyDay1Id"
@@ -202,14 +209,14 @@
               </div>
             </div>
             <!-- 2nd Day of Month -->
-            <div class="field grid">
+            <div *ngIf="utilArray$ | async as utilArray" class="field grid">
               <label for="monthlyDay2Id" class="col-12 mb-2 md:col-2 md:mb-0"
                 >2nd Day of Month</label
               >
               <div
                 class="col-5 md:col-4 p-calendar-dropdown-format-helper"
                 tooltipPosition="left"
-                pTooltip="{{ messages['BiMonthlyDay2.required']}}"
+                pTooltip="{{ messages['BiMonthlyDay2.required'] }}"
               >
                 <p-dropdown
                   id="monthlyDay2Id"
@@ -227,14 +234,14 @@
           <!-- Monthly -->
           <div *ngIf="periodSwitch === 6">
             <!-- Day of Month -->
-            <div class="field grid">
+            <div *ngIf="utilArray$ | async as utilArray" class="field grid">
               <label for="monthlyDomId" class="col-12 mb-2 md:col-2 md:mb-0"
                 >Day of the Month</label
               >
               <div
                 class="col-5 md:col-4 p-calendar-dropdown-format-helper"
                 tooltipPosition="left"
-                pTooltip="{{ messages['MonthlyDay.required']}}"
+                pTooltip="{{ messages['MonthlyDay.required'] }}"
               >
                 <p-dropdown
                   id="monthlyDomId"
@@ -252,14 +259,14 @@
           <!-- Quarterly -->
           <div *ngIf="periodSwitch === 7">
             <!-- 1st Quarter -->
-            <div class="field grid">
+            <div *ngIf="utilArray$ | async as utilArray" class="field grid">
               <label for="quarterlyMoy1Id" class="col-12 mb-2 md:col-2 md:mb-0"
                 >1st Quarter</label
               >
               <div
                 class="col-5 md:col-4 p-calendar-dropdown-format-helper"
                 tooltipPosition="left"
-                pTooltip="{{ messages['MonthOfOccurrence.required']}}"
+                pTooltip="{{ messages['MonthOfOccurrence.required'] }}"
               >
                 <p-dropdown
                   id="quarterlyMoy1Id"
@@ -274,7 +281,7 @@
               <div
                 class="col-5 md:col-4 p-calendar-dropdown-format-helper"
                 tooltipPosition="left"
-                pTooltip="{{ messages['DayInMonthOfOccurrence.required']}}"
+                pTooltip="{{ messages['DayInMonthOfOccurrence.required'] }}"
               >
                 <p-dropdown
                   formControlName="Quarterly1Day"
@@ -289,14 +296,14 @@
             </div>
 
             <!-- 2nd Quarter -->
-            <div class="field grid">
+            <div *ngIf="utilArray$ | async as utilArray" class="field grid">
               <label for="quarterlyMoy2Id" class="col-12 mb-2 md:col-2 md:mb-0"
                 >2nd Quarter</label
               >
               <div
                 class="col-5 md:col-4 p-calendar-dropdown-format-helper"
                 tooltipPosition="left"
-                pTooltip="{{ messages['MonthOfOccurrence.required']}}"
+                pTooltip="{{ messages['MonthOfOccurrence.required'] }}"
               >
                 <p-dropdown
                   id="quarterlyMoy2Id"
@@ -311,7 +318,7 @@
               <div
                 class="col-5 md:col-4 p-calendar-dropdown-format-helper"
                 tooltipPosition="left"
-                pTooltip="{{ messages['DayInMonthOfOccurrence.required']}}"
+                pTooltip="{{ messages['DayInMonthOfOccurrence.required'] }}"
               >
                 <p-dropdown
                   formControlName="Quarterly2Day"
@@ -326,14 +333,14 @@
             </div>
 
             <!-- 3rd Quarter -->
-            <div class="field grid">
+            <div *ngIf="utilArray$ | async as utilArray" class="field grid">
               <label for="quarterlyMoy3Id" class="col-12 mb-2 md:col-2 md:mb-0"
                 >3rd Quarter</label
               >
               <div
                 class="col-5 md:col-4 p-calendar-dropdown-format-helper"
                 tooltipPosition="left"
-                pTooltip="{{ messages['MonthOfOccurrence.required']}}"
+                pTooltip="{{ messages['MonthOfOccurrence.required'] }}"
               >
                 <p-dropdown
                   id="quarterlyMoy3Id"
@@ -348,7 +355,7 @@
               <div
                 class="col-5 md:col-4 p-calendar-dropdown-format-helper"
                 tooltipPosition="left"
-                pTooltip="{{ messages['DayInMonthOfOccurrence.required']}}"
+                pTooltip="{{ messages['DayInMonthOfOccurrence.required'] }}"
               >
                 <p-dropdown
                   formControlName="Quarterly3Day"
@@ -363,14 +370,14 @@
             </div>
 
             <!-- 4th Quarter -->
-            <div class="field grid">
+            <div *ngIf="utilArray$ | async as utilArray" class="field grid">
               <label for="quarterlyMoy4Id" class="col-12 mb-2 md:col-2 md:mb-0"
                 >4th Quarter</label
               >
               <div
                 class="col-5 md:col-4 p-calendar-dropdown-format-helper"
                 tooltipPosition="left"
-                pTooltip="{{ messages['MonthOfOccurrence.required']}}"
+                pTooltip="{{ messages['MonthOfOccurrence.required'] }}"
               >
                 <p-dropdown
                   id="quarterlyMoy4Id"
@@ -385,7 +392,7 @@
               <div
                 class="col-5 md:col-4 p-calendar-dropdown-format-helper"
                 tooltipPosition="left"
-                pTooltip="{{ messages['DayInMonthOfOccurrence.required']}}"
+                pTooltip="{{ messages['DayInMonthOfOccurrence.required'] }}"
               >
                 <p-dropdown
                   formControlName="Quarterly4Day"
@@ -403,14 +410,14 @@
           <!-- Semi-Annual -->
           <div *ngIf="periodSwitch === 8">
             <!-- 1st Annum -->
-            <div class="field grid">
+            <div *ngIf="utilArray$ | async as utilArray" class="field grid">
               <label for="semiAnnualMoy1Id" class="col-12 mb-2 md:col-2 md:mb-0"
                 >1st Annum</label
               >
               <div
                 class="col-5 md:col-4 p-calendar-dropdown-format-helper"
                 tooltipPosition="left"
-                pTooltip="{{ messages['MonthOfOccurrence.required']}}"
+                pTooltip="{{ messages['MonthOfOccurrence.required'] }}"
               >
                 <p-dropdown
                   id="semiAnnualMoy1Id"
@@ -425,7 +432,7 @@
               <div
                 class="col-5 md:col-4 p-calendar-dropdown-format-helper"
                 tooltipPosition="left"
-                pTooltip="{{ messages['DayInMonthOfOccurrence.required']}}"
+                pTooltip="{{ messages['DayInMonthOfOccurrence.required'] }}"
               >
                 <p-dropdown
                   formControlName="SemiAnnual1Day"
@@ -439,7 +446,7 @@
               </div>
             </div>
             <!-- 2nd Annum -->
-            <div class="field grid">
+            <div *ngIf="utilArray$ | async as utilArray" class="field grid">
               <label for="semiAnnualMoy2Id" class="col-12 mb-2 md:col-2 md:mb-0"
                 >2nd Annum</label
               >
@@ -461,7 +468,7 @@
               <div
                 class="col-5 md:col-4 p-calendar-dropdown-format-helper"
                 tooltipPosition="left"
-                pTooltip="{{ messages['DayInMonthOfOccurrence.required']}}"
+                pTooltip="{{ messages['DayInMonthOfOccurrence.required'] }}"
               >
                 <p-dropdown
                   formControlName="SemiAnnual2Day"
@@ -478,14 +485,14 @@
 
           <!-- Annual -->
           <div *ngIf="periodSwitch === 9">
-            <div class="field grid">
+            <div *ngIf="utilArray$ | async as utilArray" class="field grid">
               <label for="annualMoyId" class="col-12 mb-2 md:col-2 md:mb-0"
                 >Month & Day</label
               >
               <div
                 class="col-5 md:col-4 p-calendar-dropdown-format-helper"
                 tooltipPosition="left"
-                pTooltip="{{ messages['MonthOfOccurrence.required']}}"
+                pTooltip="{{ messages['MonthOfOccurrence.required'] }}"
               >
                 <p-dropdown
                   id="annualMoyId"
@@ -501,7 +508,7 @@
               <div
                 class="col-5 md:col-4 p-calendar-dropdown-format-helper"
                 tooltipPosition="left"
-                pTooltip="{{ messages['DayInMonthOfOccurrence.required']}}"
+                pTooltip="{{ messages['DayInMonthOfOccurrence.required'] }}"
               >
                 <p-dropdown
                   formControlName="AnnualDom"
@@ -548,7 +555,7 @@
               <div
                 class="col-5 md:col-4 p-calendar-dropdown-format-helper"
                 tooltipPosition="left"
-                pTooltip="{{ messages['BeginDate.required']}}"
+                pTooltip="{{ messages['BeginDate.required'] }}"
               >
                 <p-calendar
                   id="beginDateId"
@@ -570,7 +577,7 @@
               <div
                 class="col-5 md:col-4 p-calendar-dropdown-format-helper"
                 tooltipPosition="left"
-                pTooltip="{{ messages['EndDate.required']}}"
+                pTooltip="{{ messages['EndDate.required'] }}"
               >
                 <p-calendar
                   id="endDateId"
@@ -603,13 +610,10 @@
                 pButton
                 type="button"
                 label="Cancel"
-                class="
-                  p-button-secondary p-button-outlined
-                  vertical-button-spacer
-                "
+                class="p-button-secondary p-button-outlined vertical-button-spacer"
                 style="width: 80px"
                 title="Cancel your edits"
-                [routerLink]="[defaultPath]"
+                (click)="cancel()"
               ></button>
               <button
                 *ngIf="recordId !== 0"

@@ -2,11 +2,11 @@
 
 namespace FPFL.API.Data.Migrations
 {
-    public partial class add_procedure_spCreateLedgerReadout : Migration
-    {
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.Sql(@"
+	public partial class add_procedure_spCreateLedgerReadout : Migration
+	{
+		protected override void Up(MigrationBuilder migrationBuilder)
+		{
+			migrationBuilder.Sql(@"
 
 USE [FPFL]
 GO
@@ -1582,14 +1582,14 @@ END; /* End of Procedure */
 
                 GO
             ");
-        }
+		}
 
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
+		protected override void Down(MigrationBuilder migrationBuilder)
+		{
 			migrationBuilder.Sql(@"
                 DROP PROCEDURE [ItemDetail].[spCreateLedgerReadout]
                 GO
             ");
 		}
-    }
+	}
 }
