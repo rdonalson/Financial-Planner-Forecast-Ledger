@@ -10,18 +10,17 @@ Demo on Azure: https://fpng-ui.azurewebsites.net/home
   * Pswd: SciFiSlackerAI-2022   
     -	**Note: When prompted click “Ask Later”, don’t click “Next”
 
-## Improvements and Consolidations 
-  * Upgraded Angular 12 to 15
+## 06/15/2020 Improvements and Consolidations 
   * Better Responsive Behaviour
   * Consolidation of Debits, Credits & Initial Amount in these areas:
-     - UI: 
-       - Credit and Debit components, html, styling and services into single region, Item
-       - VwCredit, VwDebit, Credit, Debit and InitialAmount models to one models, IItem
-     - API:
-       - Credit and Debit API Controllers, Data Structures and Infrastructure to single region, Item
-     - Database:
-       - Credit, Debit and InitialAmount merged to one table with ItemType marker into new Database, "FPFL"
-       - Reconfigured the Ledger Readout procedure to use these changes
+    - UI: 
+      - Credit and Debit components, html, styling and services into single region, Item
+      - VwCredit, VwDebit, Credit, Debit and InitialAmount models to one models, IItem
+    - API:
+      - Credit and Debit API Controllers, Data Structures and Infrastructure to single region, Item
+    - Database:
+      - Credit, Debit and InitialAmount merged to one table with ItemType marker into new Database, "FPFL"
+      - Reconfigured the Ledger Readout procedure to use these changes
   * Added Database Project containing individual SQL Scripts that Drop and Create all of the database objects
   * Enabled Lazy Loading of Modules in the Features Section.
 
@@ -32,18 +31,34 @@ Demo on Azure: https://fpng-ui.azurewebsites.net/home
 
 ### 10/23/2021 Updates & Additions
   * Altered the Login Operations in the Header:
-     - Created a Singleton Login Service
-     - Handles Claims creation in the LocalStorage
-     - Stores the User's OID 
-     - Stores the LoggedIn status
+    - Created a Singleton Login Service
+    - Handles Claims creation in the LocalStorage
+    - Stores the User's OID 
+    - Stores the LoggedIn status
   * Altered the Navigation Menu Array: 
-     - Moved data to JSON file 
-     - Created a Singleton Menu Service to provide the items to the Menu Components
-     - Added new Menu on the Home Page
+    - Moved data to JSON file 
+    - Created a Singleton Menu Service to provide the items to the Menu Components
+    - Added new Menu on the Home Page
   * Altered the Utility Arrays in the Edit Item Component: 
-     - Moved datasets to JSON file, DaysInTheMonth, WeekDays & Month
-     - Created new model for datasets, an array of arrays, IUtilArray
-     - Created a Singleton Utility Array Service to provide the items to the Dropdown & Radio Groups Selectors
+    - Moved datasets to JSON file, DaysInTheMonth, WeekDays & Month
+    - Created new model for datasets, an array of arrays, IUtilArray
+    - Created a Singleton Utility Array Service to provide the items to the Dropdown & Radio Groups Selectors
   * Altered the Image Utility for the Home:
-     - Moved image addresses to JSON file
-     - Created a Singleton Image Service to provide the image addresses to the Galleria component  
+    - Moved image addresses to JSON file
+    - Created a Singleton Image Service to provide the image addresses to the Galleria component  
+
+### 10/15/2022 Updates & Additions
+  * Upgraded Angular 12 to 15     
+
+### 08/06/2023 Updates & Additions
+  * Incorporated Redux Pattern:
+    - Items, Periods & ItemType
+    - For each, you'll generally see files in services/state folders: Reducer, actions & effects
+  * GetItems:
+    - Changed from using database view vwItems
+    - Returning a complex Item/Period/ItemType structure
+  * GetItem:
+    - Deprecated, now using redux feature pass Item data to Item Edit from List
+    - No longer required to get item from db after Posting or Putting.
+  * PostItem: 
+    - Now API is returning the new Item after successful completion of Add
