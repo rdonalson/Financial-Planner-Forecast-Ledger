@@ -8,12 +8,14 @@ import { SharedModule } from 'primeng/api';
 import { GlobalErrorHandlerService } from './services/error/global-error-handler.service';
 import { AdminModule } from './admin/admin.module';
 import { itemReducer } from '../features/item-detail/shared/services/item/state/item.reducer';
+import { claimsReducer } from './services/login/state/login-util.reducer';
 
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
     StoreModule.forFeature('items', itemReducer),
+    StoreModule.forFeature('claims', claimsReducer),
     SharedModule,
     AdminModule,
     HttpClientModule,

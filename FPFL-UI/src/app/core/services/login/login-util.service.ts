@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IClaims } from '../../model/claims';
+import { Store } from '@ngrx/store';
+import { State, setClaims } from './state/login-util.reducer';
 
 /**
  * Login Application Utilities: Creates a singleton Service that provides
@@ -11,6 +13,10 @@ import { IClaims } from '../../model/claims';
 export class LoginUtilService {
   private claims!: IClaims;
   private _loggedin: boolean = false;
+
+  constructor(
+    private store: Store<State>
+  ) {}
 
   /**
    * Properties
@@ -32,6 +38,7 @@ export class LoginUtilService {
     if (this.claims === undefined || this.claims.oid === undefined) {
       this.claims = JSON.parse(JSON.stringify(token.idTokenClaims || '{}')) as IClaims;
       localStorage.setItem('claims', JSON.stringify(this.claims));
+      this.store.dispatch(setClaims({ claims: this.claims }));
     }
     return this.claims;
   }
@@ -40,10 +47,11 @@ export class LoginUtilService {
    * Returns Claims and if not there will go get it from the Local Storage
    * in Local Storage
    * @param {any} token The result from logging in
-   * @returns {IClaims}
+   * @returns {IClaims} The Claims Data
    */
   getClaims(): IClaims {
     this.claims = JSON.parse(localStorage.getItem('claims') || '{}') as IClaims;
+    this.store.dispatch(setClaims({ claims: this.claims }));
     return this.claims;
   }
 

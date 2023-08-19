@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { mergeMap, map, catchError, of, concatMap, tap } from 'rxjs';
+import { mergeMap, map, catchError, of, concatMap } from 'rxjs';
 
 import * as ItemActions from '../../../../shared/services/item/state/item.actions';
 import { ItemService } from '../item.service';
-import { IItem } from '../../../models/item';
 
 @Injectable()
 export class ItemEffects {

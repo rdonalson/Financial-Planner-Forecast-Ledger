@@ -23,7 +23,7 @@ export interface PeriodState {
 const initialState: PeriodState = {
   currentPeriod: null,
   periods: [],
-  error: '',
+  error: ''
 };
 
 const getPeriodFeatureState = createFeatureSelector<PeriodState>('periods');
