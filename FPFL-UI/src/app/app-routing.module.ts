@@ -21,8 +21,6 @@ const isIframe = window !== window.parent && !window.opener;
   imports: [
     RouterModule.forRoot(routes, {
       preloadingStrategy: SelectiveStrategyService
-      // Don't perform initial navigation in iframes
-      //initialNavigation: isIframe ? 'enabled' : 'disabled'
     })
   ],
   exports: [RouterModule]
