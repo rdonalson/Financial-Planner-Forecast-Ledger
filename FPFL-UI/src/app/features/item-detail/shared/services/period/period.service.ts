@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
-import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
+import { GlobalErrorHandlerService } from '../../../../../core/services/error/global-error-handler.service';
 import { IPeriod } from '../../models/period';
 
 import * as auth from '../../../../../../assets/data/auth-config.json';
@@ -44,7 +44,7 @@ export class PeriodService {
   }
 
   /**
-   * ** Deprected **
+   * ** Deprected by redux; values now stored in reducer **
    * Get a specific Period
    * @param {number} id The id of the Period
    * @returns {Observable<IPeriod>} return the record

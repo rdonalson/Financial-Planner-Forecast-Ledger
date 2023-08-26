@@ -52,7 +52,7 @@ namespace FPFL.API.Infrastructure.ItemDetail.Repository
 
 		/// <summary>
 		///		**Note: Deprecated once use Redux Pattern was implemented on the UI.  
-		///				Once retrieved Periods are now stored there
+		///				Once retrieved Periods are now stored in the reducer
 		///     Get a specific Period
 		/// </summary>
 		/// <param name="id">int: Id of the record item</param>
