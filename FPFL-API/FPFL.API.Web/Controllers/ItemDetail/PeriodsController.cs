@@ -1,5 +1,6 @@
 ﻿using FPFL.API.Data.Context;
 using FPFL.API.Data.Domain;
+using FPFL.API.Data.DTO;
 using FPFL.API.Infrastructure.ItemDetail.Interface;
 using FPFL.API.Infrastructure.ItemDetail.Repository;
 using Microsoft.AspNetCore.Authorization;
@@ -32,9 +33,9 @@ namespace FPFL.API.Web.Controllers.ItemDetail
 		///     Gets all of the Periods for use in UI Selectors
 		///     GET: api/Periods
 		/// </summary>
-		/// <returns>Task<ActionResult<List<Period>>></returns>
+		/// <returns>Task<ActionResult<List<PeriodDTO>>></returns>
 		[HttpGet]
-		public async Task<ActionResult<List<Period>>> GetPeriods()
+		public async Task<ActionResult<List<PeriodDTO>>> GetPeriods()
 		{
 			HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
 			return await _repoPeriod.GetPeriods();

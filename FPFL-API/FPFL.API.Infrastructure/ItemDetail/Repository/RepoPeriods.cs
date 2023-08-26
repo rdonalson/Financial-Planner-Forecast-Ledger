@@ -1,9 +1,11 @@
 ﻿using FPFL.API.Data.Context;
 using FPFL.API.Data.Domain;
+using FPFL.API.Data.DTO;
 using FPFL.API.Infrastructure.ItemDetail.Interface;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FPFL.API.Infrastructure.ItemDetail.Repository
@@ -28,12 +30,18 @@ namespace FPFL.API.Infrastructure.ItemDetail.Repository
 		/// <summary>
 		///     Return List of all Periods for use in UI Period Selectors
 		/// </summary>
-		/// <returns>Task<List<Period>>: List of Period for the Authorized User</returns>
-		public async Task<List<Period>> GetPeriods()
+		/// <returns>Task<List<PeriodDTO>>: List of Periods</returns>
+		public async Task<List<PeriodDTO>> GetPeriods()
 		{
 			try
 			{
-				return await _context.Periods.ToListAsync();
+				return await _context.Periods
+					.Select(p => new PeriodDTO
+					{
+						Id = p.Id,
+						Name = p.Name
+					})
+					.ToListAsync();
 			}
 			catch (Exception ex)
 			{
@@ -43,6 +51,8 @@ namespace FPFL.API.Infrastructure.ItemDetail.Repository
 		}
 
 		/// <summary>
+		///		**Note: Deprecated once use Redux Pattern was implemented on the UI.  
+		///				Once retrieved Periods are now stored there
 		///     Get a specific Period
 		/// </summary>
 		/// <param name="id">int: Id of the record item</param>
