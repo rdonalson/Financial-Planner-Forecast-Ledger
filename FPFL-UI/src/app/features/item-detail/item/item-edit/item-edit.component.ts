@@ -26,14 +26,15 @@ import { getPeriods } from '../../shared/services/period/state/period.reducer';
 import { State } from 'src/app/state/app.state';
 import {
   getCurrentItem,
-  getCurrentItemType,
   getProgressSpinner,
 } from '../../shared/services/item/state/item.reducer';
 import { getUtilArrays } from '../../shared/services/common/state/util-array.reducer';
 import * as PeriodActions from '../../shared/services/period/state/period.actions';
+import * as ItemTypeActions from '../../shared/services/item-type/state/item-type.actions';
 import * as UtilArrayActions from '../../shared/services/common/state/util-array.actions';
 import * as ItemActions from '../../shared/services/item/state/item.actions';
 import { IItemType } from '../../shared/models/item-type';
+import { getCurrentItemType } from '../../shared/services/item-type/state/item-type.reducer';
 
 /**
  * Reactive CRUD Form for individual items; credit (itemTypeId: 1) or debit (itemTypeId: 2)
@@ -198,7 +199,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
           params.itemType
         );
         this.store.dispatch(
-          ItemActions.setCurrentItemType({
+          ItemTypeActions.setCurrentItemType({
             itemType: this.itemType,
           })
         );

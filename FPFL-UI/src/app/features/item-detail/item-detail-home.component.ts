@@ -2,10 +2,9 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { IItemType } from './shared/models/item-type';
 import { Store } from '@ngrx/store';
 import { State } from 'src/app/state/app.state';
-import * as ItemActions from './shared/services/item/state/item.actions';
+import * as ItemTypeActions from './shared/services/item-type/state/item-type.actions';
 import { ItemDetailCommonService } from './shared/services/common/item-detail-common.service';
 
 @Component({
@@ -23,7 +22,7 @@ export class ItemDetailHomeComponent {
 
   initialAmount(): void {
     this.store.dispatch(
-      ItemActions.setCurrentItemType({
+      ItemTypeActions.setCurrentItemType({
         itemType: this.itemDetailCommonService.getItemType('ia'),
       })
     );
@@ -31,7 +30,7 @@ export class ItemDetailHomeComponent {
   }
   credits(): void {
     this.store.dispatch(
-      ItemActions.setCurrentItemType({
+      ItemTypeActions.setCurrentItemType({
         itemType: this.itemDetailCommonService.getItemType('credit'),
       })
     );
@@ -39,7 +38,7 @@ export class ItemDetailHomeComponent {
   }
   debits(): void {
     this.store.dispatch(
-      ItemActions.setCurrentItemType({
+      ItemTypeActions.setCurrentItemType({
         itemType: this.itemDetailCommonService.getItemType('debit'),
       })
     );

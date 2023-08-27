@@ -7,7 +7,6 @@ import { ItemService } from '../item.service';
 
 @Injectable()
 export class ItemEffects {
-  private item!: any;
   constructor(private actions$: Actions, private itemService: ItemService) {}
 
   /** Get Items */

@@ -1,15 +1,13 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { MenuItem } from 'primeng/api';
 
 import { GlobalErrorHandlerService } from '../error/global-error-handler.service';
-import { IItemType } from 'src/app/features/item-detail/shared/models/item-type';
 import { Store } from '@ngrx/store';
 import { State } from 'src/app/state/app.state';
-import * as ItemActions from '../../../features/item-detail/shared/services/item/state/item.actions';
+import * as ItemTypeActions from '../../../features/item-detail/shared/services/item-type/state/item-type.actions';
 import { Router } from '@angular/router';
 import { ItemDetailCommonService } from 'src/app/features/item-detail/shared/services/common/item-detail-common.service';
 
@@ -58,7 +56,7 @@ export class MenuService {
             icon: 'pi pi-link',
             command: () => {
               this.store.dispatch(
-                ItemActions.setCurrentItemType({
+                ItemTypeActions.setCurrentItemType({
                   itemType: this.itemDetailCommonService.getItemType('ia')
                 })
               );
@@ -70,7 +68,7 @@ export class MenuService {
             icon: 'pi pi-link',
             command: () => {
               this.store.dispatch(
-                ItemActions.setCurrentItemType({
+                ItemTypeActions.setCurrentItemType({
                   itemType: this.itemDetailCommonService.getItemType('credit')
                 })
               );
@@ -82,7 +80,7 @@ export class MenuService {
             icon: 'pi pi-link',
             command: () => {
               this.store.dispatch(
-                ItemActions.setCurrentItemType({
+                ItemTypeActions.setCurrentItemType({
                   itemType: this.itemDetailCommonService.getItemType('debit')
                 })
               );

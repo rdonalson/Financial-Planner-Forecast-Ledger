@@ -12,18 +12,20 @@ import { ConfirmationService } from 'primeng/api';
 import { IItem } from '../../shared/models/item';
 import { MessageUtilService } from '../../shared/services/common/message-util.service';
 import { LoginUtilService } from 'src/app/core/services/login/login-util.service';
-import { State } from 'src/app/state/app.state';
+import { GlobalErrorHandlerService } from '../../../../core/services/error/global-error-handler.service';
+import { ItemDetailCommonService } from '../../shared/services/common/item-detail-common.service';
+import { State } from '../../../../state/app.state';
 import {
-  getCurrentItemType,
   getError,
   getItems,
   getProgressSpinner,
 } from '../../shared/services/item/state/item.reducer';
 
 import * as ItemActions from '../../shared/services/item/state/item.actions';
+import * as ItemTypeActions from '../../shared/services/item-type/state/item-type.actions';
 import { IItemType } from '../../shared/models/item-type';
-import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
-import { ItemDetailCommonService } from '../../shared/services/common/item-detail-common.service';
+
+import { getCurrentItemType } from '../../shared/services/item-type/state/item-type.reducer';
 
 /**
  * Form that will display the list two types of items; Credit (1) or Debit (2)
@@ -125,7 +127,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
           params.itemType
         );
         this.store.dispatch(
-          ItemActions.setCurrentItemType({
+          ItemTypeActions.setCurrentItemType({
             itemType: this.itemType,
           })
         );
