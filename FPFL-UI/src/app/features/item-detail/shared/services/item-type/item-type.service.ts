@@ -7,7 +7,6 @@ import { GlobalErrorHandlerService } from '../../../../../core/services/error/gl
 import * as auth from '../../../../../../assets/data/auth-config.json';
 import { IItemType } from '../../models/item-type';
 
-
 @Injectable({
   providedIn: 'root',
 })
@@ -43,6 +42,27 @@ export class ItemTypeService {
       }),
       catchError((err: any) => this.err.handleError(err))
     );
+  }
+
+  /**
+   * Get the ItemType from the ItemTypes List
+   * @param {string} type
+   * @returns {IItemType | undefined}
+   */
+  getItemType(type: string): IItemType {
+    let itemType: any;
+    switch (type.toLowerCase()) {
+      case 'credit':
+        itemType = this.itemTypes.find(it => it.id === 1);
+        break;
+      case 'debit':
+        itemType = this.itemTypes.find(it => it.id === 2);
+        break;
+      case 'ia':
+        itemType = this.itemTypes.find(it => it.id === 3);
+        break;
+    }
+    return itemType;
   }
   //#endregion Reads
 }

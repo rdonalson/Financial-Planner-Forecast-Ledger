@@ -23,18 +23,19 @@ import { LoginUtilService } from 'src/app/core/services/login/login-util.service
 import { ItemDetailCommonService } from '../../shared/services/common/item-detail-common.service';
 import { IUtilArray } from '../../shared/models/util-array';
 import { getPeriods } from '../../shared/services/period/state/period.reducer';
-import { State } from 'src/app/state/app.state';
+import { State } from '../../../../state/app.state';
 import {
   getCurrentItem,
   getProgressSpinner,
 } from '../../shared/services/item/state/item.reducer';
+import { IItemType } from '../../shared/models/item-type';
+import { getCurrentItemType } from '../../shared/services/item-type/state/item-type.reducer';
+import { ItemTypeService } from '../../shared/services/item-type/item-type.service';
 import { getUtilArrays } from '../../shared/services/common/state/util-array.reducer';
 import * as PeriodActions from '../../shared/services/period/state/period.actions';
 import * as ItemTypeActions from '../../shared/services/item-type/state/item-type.actions';
 import * as UtilArrayActions from '../../shared/services/common/state/util-array.actions';
 import * as ItemActions from '../../shared/services/item/state/item.actions';
-import { IItemType } from '../../shared/models/item-type';
-import { getCurrentItemType } from '../../shared/services/item-type/state/item-type.reducer';
 
 /**
  * Reactive CRUD Form for individual items; credit (itemTypeId: 1) or debit (itemTypeId: 2)
@@ -79,6 +80,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     private router: Router,
     private messageUtilService: MessageUtilService,
     private itemDetailCommonService: ItemDetailCommonService,
+    private itemTypeService: ItemTypeService,
     private utilArrayService: UtilArrayService,
     private err: GlobalErrorHandlerService,
     private store: Store<State>
@@ -195,7 +197,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
       this.recordId = +params.id;
       // if reload of form reset item type
       if (this.itemType.id === 0) {
-        this.itemType = this.itemDetailCommonService.getItemType(
+        this.itemType = this.itemTypeService.getItemType(
           params.itemType
         );
         this.store.dispatch(

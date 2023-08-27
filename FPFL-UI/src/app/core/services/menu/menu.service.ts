@@ -1,15 +1,14 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MenuItem } from 'primeng/api';
 
-import { GlobalErrorHandlerService } from '../error/global-error-handler.service';
-import { Store } from '@ngrx/store';
-import { State } from 'src/app/state/app.state';
+import { State } from '../../../state/app.state';
+import { ItemTypeService } from '../../../features/item-detail/shared/services/item-type/item-type.service';
 import * as ItemTypeActions from '../../../features/item-detail/shared/services/item-type/state/item-type.actions';
-import { Router } from '@angular/router';
-import { ItemDetailCommonService } from 'src/app/features/item-detail/shared/services/common/item-detail-common.service';
 
 /**
  * Supplies menu items to menu items from a json file to Menues in the Home page
@@ -28,9 +27,10 @@ export class MenuService {
    */
   constructor(
     private router: Router,
-    private itemDetailCommonService: ItemDetailCommonService,
+    private itemTypeService: ItemTypeService,
     private store: Store<State>
   ) {
+    this.store.dispatch(ItemTypeActions.loadItemTypes());
     this.initializeMenuItems();
   }
 
@@ -57,7 +57,7 @@ export class MenuService {
             command: () => {
               this.store.dispatch(
                 ItemTypeActions.setCurrentItemType({
-                  itemType: this.itemDetailCommonService.getItemType('ia')
+                  itemType: this.itemTypeService.getItemType('ia')
                 })
               );
               void this.router.navigate(['feature/item-detail/initial-amount']);
@@ -69,7 +69,7 @@ export class MenuService {
             command: () => {
               this.store.dispatch(
                 ItemTypeActions.setCurrentItemType({
-                  itemType: this.itemDetailCommonService.getItemType('credit')
+                  itemType: this.itemTypeService.getItemType('credit')
                 })
               );
               void this.router.navigate(['feature/item-detail/item/credit']);
@@ -81,7 +81,7 @@ export class MenuService {
             command: () => {
               this.store.dispatch(
                 ItemTypeActions.setCurrentItemType({
-                  itemType: this.itemDetailCommonService.getItemType('debit')
+                  itemType: this.itemTypeService.getItemType('debit')
                 })
               );
               void this.router.navigate(['feature/item-detail/item/debit']);

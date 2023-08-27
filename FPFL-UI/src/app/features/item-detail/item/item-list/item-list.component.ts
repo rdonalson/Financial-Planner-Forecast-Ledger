@@ -13,7 +13,6 @@ import { IItem } from '../../shared/models/item';
 import { MessageUtilService } from '../../shared/services/common/message-util.service';
 import { LoginUtilService } from 'src/app/core/services/login/login-util.service';
 import { GlobalErrorHandlerService } from '../../../../core/services/error/global-error-handler.service';
-import { ItemDetailCommonService } from '../../shared/services/common/item-detail-common.service';
 import { State } from '../../../../state/app.state';
 import {
   getError,
@@ -26,6 +25,7 @@ import * as ItemTypeActions from '../../shared/services/item-type/state/item-typ
 import { IItemType } from '../../shared/models/item-type';
 
 import { getCurrentItemType } from '../../shared/services/item-type/state/item-type.reducer';
+import { ItemTypeService } from '../../shared/services/item-type/item-type.service';
 
 /**
  * Form that will display the list two types of items; Credit (1) or Debit (2)
@@ -54,7 +54,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
   constructor(
     private loginUtilService: LoginUtilService,
     private messageUtilService: MessageUtilService,
-    private itemDetailCommonService: ItemDetailCommonService,
+    private itemTypeService: ItemTypeService,
     private err: GlobalErrorHandlerService,
     private route: ActivatedRoute,
     private router: Router,
@@ -123,7 +123,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
     this.paramsSub$ = this.route.params.subscribe((params: any) => {
       // if reload of form reset item type
       if (this.itemType.id === 0) {
-        this.itemType = this.itemDetailCommonService.getItemType(
+        this.itemType = this.itemTypeService.getItemType(
           params.itemType
         );
         this.store.dispatch(

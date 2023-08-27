@@ -6,7 +6,7 @@ import { ItemTypeService } from '../item-type.service';
 import * as ItemTypeActions from '../state/item-type.actions';
 
 @Injectable()
-export class PeriodEffects {
+export class ItemTypeEffects {
   constructor(
     private actions$: Actions,
     private itemTypeService: ItemTypeService
