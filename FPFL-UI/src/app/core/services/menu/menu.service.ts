@@ -31,6 +31,7 @@ export class MenuService {
     private store: Store<State>
   ) {
     this.store.dispatch(ItemTypeActions.loadItemTypes());
+    this.store.dispatch(ItemTypeActions.clearCurrentItemType());
     this.initializeMenuItems();
   }
 
@@ -57,7 +58,7 @@ export class MenuService {
             command: () => {
               this.store.dispatch(
                 ItemTypeActions.setCurrentItemType({
-                  itemType: this.itemTypeService.getItemType('ia')
+                  itemType: this.itemTypeService.initItemType('ia')
                 })
               );
               void this.router.navigate(['feature/item-detail/initial-amount']);
@@ -69,7 +70,7 @@ export class MenuService {
             command: () => {
               this.store.dispatch(
                 ItemTypeActions.setCurrentItemType({
-                  itemType: this.itemTypeService.getItemType('credit')
+                  itemType: this.itemTypeService.initItemType('credit')
                 })
               );
               void this.router.navigate(['feature/item-detail/item/credit']);
@@ -81,7 +82,7 @@ export class MenuService {
             command: () => {
               this.store.dispatch(
                 ItemTypeActions.setCurrentItemType({
-                  itemType: this.itemTypeService.getItemType('debit')
+                  itemType: this.itemTypeService.initItemType('debit')
                 })
               );
               void this.router.navigate(['feature/item-detail/item/debit']);

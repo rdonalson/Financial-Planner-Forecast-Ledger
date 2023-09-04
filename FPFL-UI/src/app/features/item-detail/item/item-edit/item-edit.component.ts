@@ -36,6 +36,7 @@ import * as PeriodActions from '../../shared/services/period/state/period.action
 import * as ItemTypeActions from '../../shared/services/item-type/state/item-type.actions';
 import * as UtilArrayActions from '../../shared/services/common/state/util-array.actions';
 import * as ItemActions from '../../shared/services/item/state/item.actions';
+import { getUserOid } from 'src/app/core/services/login/state/login-util.reducer';
 
 /**
  * Reactive CRUD Form for individual items; credit (itemTypeId: 1) or debit (itemTypeId: 2)
@@ -47,7 +48,8 @@ import * as ItemActions from '../../shared/services/item/state/item.actions';
 })
 export class ItemEditComponent implements OnInit, OnDestroy {
   @ViewChildren(FormControlName, { read: ElementRef })
-  private userId: string = '';
+  private userId!: string;
+
   itemType: IItemType = { id: 0, name: '' };
   periods: IPeriod[] = [];
   currentPeriod!: IPeriod | null;
@@ -62,12 +64,13 @@ export class ItemEditComponent implements OnInit, OnDestroy {
   periodSwitch: number | undefined;
   dateRangeToggle!: boolean;
 
-  private sub$!: Subscription;
+  //private sub$!: Subscription;
   private currentItem$!: Observable<IItem | null>;
   private currentItemType$!: Observable<IItemType | null>;
   utilArray$!: Observable<IUtilArray | null>;
   periods$!: Observable<IPeriod[]>;
   progressSpinner$!: Observable<boolean>;
+  private userId$!: Observable<string>;
 
   /**
    * Constructor
@@ -93,6 +96,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    * Initialize the Item Interface, gets the Period list and initizes the FormBuilder
    */
   ngOnInit(): void {
+    this.userId$ = this.store.select(getUserOid);
     this.progressSpinner$ = this.store.select(getProgressSpinner);
     this.currentItemType$ = this.store.select(getCurrentItemType);
 
@@ -102,10 +106,25 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     this.store.dispatch(UtilArrayActions.loadUtilArray());
     this.currentItem$ = this.store.select(getCurrentItem);
 
+    this.userId$.subscribe({
+      next: (userId: string | null): void => {
+        if (userId) {
+          this.userId = userId;
+        }
+      },
+      error: catchError((err: any) => this.err.handleError(err)),
+    });
+
     this.currentItemType$.subscribe({
       next: (itemType: IItemType | null): void => {
-        if (itemType) {
+        if (itemType) {   // Normal operations
           this.itemType = itemType;
+        } else {          // When the user refreshes, then reinitialize ItemType
+          this.store.dispatch(
+            ItemTypeActions.setCurrentItemType({
+              itemType: this.itemType
+            })
+          );
         }
       },
       error: catchError((err: any) => this.err.handleError(err)),
@@ -123,7 +142,23 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     this.getUtilArrayItems();
     this.initializeRecord();
     this.itemForm = this.itemDetailCommonService.generateForm(this.fb);
-    this.getRouteParams();
+
+    // JSON.parse(sessionStorage.getItem("currentItem") ?? '') as IItem;
+    this.currentItem$.subscribe({
+      next: (item: IItem | null): void => {
+        if (item) {
+          this.onItemRetrieved(item);
+        } else {
+          this.initializeRecord;
+        }
+        //this.recordId = item?.id ?? 0;
+        this.setTitleText();
+      },
+      error: catchError((err: any) => this.err.handleError(err)),
+    });
+
+
+    //this.getRouteParams();
   }
 
   /**
@@ -175,7 +210,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
    * Removes the "sub" observable for Prameter retrieval
    */
   ngOnDestroy(): void {
-    this.sub$.unsubscribe();
+    //this.sub$.unsubscribe();
   }
   //#endregion Events
 
@@ -187,29 +222,6 @@ export class ItemEditComponent implements OnInit, OnDestroy {
       }
     }
     return null;
-  }
-
-  /**
-   * Get Primary Key from Route Paramters
-   */
-  private getRouteParams(): void {
-    this.sub$ = this.route.params.subscribe((params: any) => {
-      this.recordId = +params.id;
-      // if reload of form reset item type
-      if (this.itemType.id === 0) {
-        this.itemType = this.itemTypeService.getItemType(
-          params.itemType
-        );
-        this.store.dispatch(
-          ItemTypeActions.setCurrentItemType({
-            itemType: this.itemType,
-          })
-        );
-      }
-      //this.getItemTypeValue(params.itemType);
-      this.setTitleText();
-      this.getItem(this.recordId);
-    });
   }
 
   /**
@@ -230,7 +242,6 @@ export class ItemEditComponent implements OnInit, OnDestroy {
   private initializeRecord(): void {
     this.recordId = 0;
     this.setTitleText();
-    this.userId = this.claimsUtilService.getUserOid();
     this.item = {
       id: this.recordId,
       userId: this.userId,
@@ -275,7 +286,8 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     if (this.itemForm) {
       this.itemForm.reset();
     }
-    this.item = item;
+    this.item = {...item} as IItem;
+    this.recordId = this.item.id;
     this.periodSwitch = this.item.fkPeriod;
     this.currentPeriod = this.findPeriodById(this.item.fkPeriod);
     this.store.dispatch(PeriodActions.setCurrentPeriod({ period: this.currentPeriod }));

@@ -17,10 +17,12 @@ export interface State extends AppState.State {
 
 export interface LoginState {
   claims: IClaims | {};
+  oid: string | '';
   error: string;
 }
 const initialState: LoginState = {
   claims: {},
+  oid: '',
   error: '',
 };
 
@@ -37,9 +39,16 @@ export const getError = createSelector(
   (state) => state.error
 );
 
+/** User ID */
+export const getUserOid = createSelector(
+  getClaimsFeatureState,
+  (state) => state.oid
+);
+
+
 /** Claims Actions */
 export const setClaims = createAction(
-  '[Product] Set Current Period',
+  '[Claims] Set Claims',
   props<{ claims: IClaims | null }>()
 );
 
@@ -49,6 +58,7 @@ export const claimsReducer = createReducer<LoginState>(
     return {
       ...state,
       claims: action.claims || {},
+      oid: action.claims?.oid || ''
     };
   }),
 );

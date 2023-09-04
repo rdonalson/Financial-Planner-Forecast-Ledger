@@ -30,7 +30,7 @@ const getItemTypeFeatureState = createFeatureSelector<ItemTypeState>('itemTypes'
 
 export const getCurrentItemType = createSelector(
   getItemTypeFeatureState,
-  (state) => state.currentItemType
+  (state) => state.currentItemType ?? JSON.parse(sessionStorage.getItem("currentItemType") ?? '') as IItemType
 );
 
 export const getItemTypes = createSelector(
@@ -46,6 +46,7 @@ export const getError = createSelector(
 export const itemTypeReducer = createReducer<ItemTypeState>(
   initialState,
   on(ItemTypeActions.setCurrentItemType, (state, action): ItemTypeState => {
+    sessionStorage.setItem("currentItemType", JSON.stringify(action.itemType));
     return {
       ...state,
       currentItemType: action.itemType,

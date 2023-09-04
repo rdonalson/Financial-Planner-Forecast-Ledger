@@ -170,7 +170,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     localStorage.removeItem('claims');
     this.authService.logout();
     this.loggedIn = false;
-    this.loggedIn = false;
+    //this.loggedIn = false;
   }
   //#endregion Authentication
 }

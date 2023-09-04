@@ -15,7 +15,6 @@ export interface State extends AppState.State {
 
 export interface ItemState {
   progressSpinner: boolean;
-  //currentItemType: IItemType | null;
   currentItem: IItem | null;
   currentItemId?: number | null;
   items: IItem[];
@@ -24,7 +23,6 @@ export interface ItemState {
 
 const initialState: ItemState = {
   progressSpinner: false,
-  //currentItemType: null,
   currentItem: null,
   currentItemId: null,
   items: [],
@@ -38,14 +36,9 @@ export const getProgressSpinner = createSelector(
   (state) => state.progressSpinner
 );
 
-// export const getCurrentItemType = createSelector(
-//   getItemFeatureState,
-//   (state) => state.currentItemType
-// );
-
 export const getCurrentItem = createSelector(
   getItemFeatureState,
-  (state) => state.currentItem
+  (state) => state.currentItem ?? JSON.parse(sessionStorage.getItem("currentItem") ?? '') as IItem
 );
 
 export const getItems = createSelector(
@@ -66,13 +59,8 @@ export const itemReducer = createReducer<ItemState>(
       progressSpinner: action.show,
     };
   }),
-  // on(ItemActions.setCurrentItemType, (state, action): ItemState => {
-  //   return {
-  //     ...state,
-  //     currentItemType: action.itemType,
-  //   };
-  // }),
   on(ItemActions.setCurrentItem, (state, action): ItemState => {
+    sessionStorage.setItem("currentItem", JSON.stringify(action.item));
     return {
       ...state,
       currentItem: action.item,

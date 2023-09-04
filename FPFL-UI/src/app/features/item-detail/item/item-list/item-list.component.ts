@@ -1,12 +1,11 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  OnDestroy,
   OnInit,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription, catchError } from 'rxjs';
+import { Observable, catchError } from 'rxjs';
 import { ConfirmationService } from 'primeng/api';
 
 import { IItem } from '../../shared/models/item';
@@ -36,13 +35,13 @@ import { ItemTypeService } from '../../shared/services/item-type/item-type.servi
   styleUrls: ['./item-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ItemListComponent implements OnInit, OnDestroy {
+export class ItemListComponent implements OnInit {
   pageTitle!: string;
   itemType: IItemType = { id: 0, name: '' };
   itemList: IItem[] = [];
   userId: string = '';
 
-  private paramsSub$!: Subscription;
+  //private paramsSub$!: Subscription;
   items$!: Observable<IItem[]>;
   progressSpinner$!: Observable<boolean>;
   errorMessage$!: Observable<string>;
@@ -79,9 +78,17 @@ export class ItemListComponent implements OnInit, OnDestroy {
 
     this.currentItemType$.subscribe({
       next: (itemType: IItemType | null): void => {
-        if (itemType) {
+        if (itemType) {   // Normal operations
           this.itemType = itemType;
+        } else {          // When the user refreshes, then reinitialize ItemType
+          this.store.dispatch(
+            ItemTypeActions.setCurrentItemType({
+              itemType: this.itemType
+            })
+          );
         }
+        this.store.dispatch(ItemActions.loadItems(this.userId, this.itemType.id));
+        this.pageTitle = `Manage ${this.itemType.name}`;
       },
       error: catchError((err: any) => this.err.handleError(err)),
     });
@@ -92,8 +99,6 @@ export class ItemListComponent implements OnInit, OnDestroy {
       },
       error: catchError((err: any) => this.err.handleError(err)),
     });
-
-    this.getRouteParams();
   }
 
   /**
@@ -105,39 +110,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
     this.router.navigate(['./edit', item.id], { relativeTo: this.route });
   }
 
-  /**
-   * Removes the "sub" observable for Prameter retrieval
-   */
-  ngOnDestroy(): void {
-    this.paramsSub$.unsubscribe();
-  }
   //#endregion Events
-
-  //#region Utilities
-  /**
-   * Collect the Route Parameter
-   * Set variables
-   * Get the item list
-   */
-  private getRouteParams(): void {
-    this.paramsSub$ = this.route.params.subscribe((params: any) => {
-      // if reload of form reset item type
-      if (this.itemType.id === 0) {
-        this.itemType = this.itemTypeService.getItemType(
-          params.itemType
-        );
-        this.store.dispatch(
-          ItemTypeActions.setCurrentItemType({
-            itemType: this.itemType,
-          })
-        );
-      }
-      // normal operations
-      this.store.dispatch(ItemActions.loadItems(this.userId, this.itemType.id));
-      this.pageTitle = `Manage ${this.itemType.name}`;
-    });
-  }
-  //#endregion Utilities
 
   //#region Data Functions
   //#region Writes

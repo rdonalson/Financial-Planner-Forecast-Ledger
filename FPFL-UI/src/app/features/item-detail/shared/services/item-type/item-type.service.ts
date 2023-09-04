@@ -28,41 +28,37 @@ export class ItemTypeService {
    * @returns {Observable<IItemType[]>} returns the records
    */
   getItemTypes(): Observable<IItemType[]> {
-    if (this.itemTypes && this.itemTypes.length > 0) {
-      return of(this.itemTypes);
-    }
     return this.http.get<IItemType[]>(this.url).pipe(
-      tap((itemTypes: IItemType[]) =>
-        console.log(
-          'ItemTypes Service - getItemTypes: ' + JSON.stringify(itemTypes)
-        )
-      ),
       tap((itemTypes: IItemType[]) => {
         this.itemTypes = itemTypes;
+        // console.log(`ItemTypes Service - getItemTypes: ${JSON.stringify(this.itemTypes)}`)
       }),
       catchError((err: any) => this.err.handleError(err))
     );
   }
+  //#endregion Reads
 
+  //#region Utilities
   /**
    * Get the ItemType from the ItemTypes List
+   * Store value in Session and initialize the "currentItemType"
    * @param {string} type
-   * @returns {IItemType | undefined}
+   * @returns {IItemType}
    */
-  getItemType(type: string): IItemType {
+  initItemType(type: string): IItemType {
     let itemType: any;
     switch (type.toLowerCase()) {
       case 'credit':
-        itemType = this.itemTypes.find(it => it.id === 1);
+        itemType = this.itemTypes.find((it) => it.id === 1);
         break;
       case 'debit':
-        itemType = this.itemTypes.find(it => it.id === 2);
+        itemType = this.itemTypes.find((it) => it.id === 2);
         break;
       case 'ia':
-        itemType = this.itemTypes.find(it => it.id === 3);
+        itemType = this.itemTypes.find((it) => it.id === 3);
         break;
     }
-    return itemType;
+    return { ...itemType } as IItemType;
   }
-  //#endregion Reads
+  //#endregion Utilities
 }

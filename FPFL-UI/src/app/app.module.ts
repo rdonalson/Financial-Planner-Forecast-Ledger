@@ -11,6 +11,7 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment.prod';
+import { itemTypeReducer } from './features/item-detail/shared/services/item-type/state/item-type.reducer';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { environment } from 'src/environments/environment.prod';
     BrowserModule,
     BrowserAnimationsModule,
     StoreModule.forRoot({}),
+    StoreModule.forFeature('itemTypes', itemTypeReducer),
     StoreDevtoolsModule.instrument({
       name: 'FPFL UI App Devtools',
       maxAge: 25,
