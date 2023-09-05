@@ -102,6 +102,14 @@ export class ItemListComponent implements OnInit {
   }
 
   /**
+   * Initialize new item
+   */
+  openNew(): void {
+    this.store.dispatch(ItemActions.initializeCurrentItem({ userId: this.userId, itemType: this.itemType }));
+    this.router.navigate(['./edit', 0], { relativeTo: this.route });
+  }
+
+  /**
    * Capture the current record and navigate to Item-Edit
    * @param item
    */

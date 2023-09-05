@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  OnDestroy,
   OnInit,
   ViewChildren,
 } from '@angular/core';
@@ -10,7 +9,7 @@ import { FormBuilder, FormControlName, FormGroup } from '@angular/forms';
 import { formatDate } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ConfirmationService } from 'primeng/api';
 
@@ -46,7 +45,7 @@ import { getUserOid } from 'src/app/core/services/login/state/login-util.reducer
   styleUrls: ['./item-edit.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ItemEditComponent implements OnInit, OnDestroy {
+export class ItemEditComponent implements OnInit {
   @ViewChildren(FormControlName, { read: ElementRef })
   private userId!: string;
 
@@ -64,7 +63,6 @@ export class ItemEditComponent implements OnInit, OnDestroy {
   periodSwitch: number | undefined;
   dateRangeToggle!: boolean;
 
-  //private sub$!: Subscription;
   private currentItem$!: Observable<IItem | null>;
   private currentItemType$!: Observable<IItemType | null>;
   utilArray$!: Observable<IUtilArray | null>;
@@ -83,7 +81,6 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     private router: Router,
     private messageUtilService: MessageUtilService,
     private itemDetailCommonService: ItemDetailCommonService,
-    private itemTypeService: ItemTypeService,
     private utilArrayService: UtilArrayService,
     private err: GlobalErrorHandlerService,
     private store: Store<State>
@@ -117,12 +114,14 @@ export class ItemEditComponent implements OnInit, OnDestroy {
 
     this.currentItemType$.subscribe({
       next: (itemType: IItemType | null): void => {
-        if (itemType) {   // Normal operations
+        if (itemType) {
+          // Normal operations
           this.itemType = itemType;
-        } else {          // When the user refreshes, then reinitialize ItemType
+        } else {
+          // When the user refreshes, then reinitialize ItemType
           this.store.dispatch(
             ItemTypeActions.setCurrentItemType({
-              itemType: this.itemType
+              itemType: this.itemType,
             })
           );
         }
@@ -143,22 +142,15 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     this.initializeRecord();
     this.itemForm = this.itemDetailCommonService.generateForm(this.fb);
 
-    // JSON.parse(sessionStorage.getItem("currentItem") ?? '') as IItem;
     this.currentItem$.subscribe({
       next: (item: IItem | null): void => {
         if (item) {
           this.onItemRetrieved(item);
-        } else {
-          this.initializeRecord;
-        }
-        //this.recordId = item?.id ?? 0;
+        } 
         this.setTitleText();
       },
       error: catchError((err: any) => this.err.handleError(err)),
     });
-
-
-    //this.getRouteParams();
   }
 
   /**
@@ -168,7 +160,9 @@ export class ItemEditComponent implements OnInit, OnDestroy {
   getPeriod(e: any): void {
     this.periodSwitch = +e.value;
     this.currentPeriod = this.findPeriodById(this.periodSwitch);
-    this.store.dispatch(PeriodActions.setCurrentPeriod({ period: this.currentPeriod }));
+    this.store.dispatch(
+      PeriodActions.setCurrentPeriod({ period: this.currentPeriod })
+    );
     this.itemDetailCommonService.setPeriodFields(
       this.itemForm,
       this.periodSwitch
@@ -199,18 +193,16 @@ export class ItemEditComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Add New Record
+   * Initialize new item
    */
-  addNewItem(): void {
-    this.initializeRecord();
-    this.onItemRetrieved(this.item);
-  }
-
-  /**
-   * Removes the "sub" observable for Prameter retrieval
-   */
-  ngOnDestroy(): void {
-    //this.sub$.unsubscribe();
+  openNew(): void {
+    this.store.dispatch(
+      ItemActions.initializeCurrentItem({
+        userId: this.userId,
+        itemType: this.itemType,
+      })
+    );
+    this.router.navigate(['./edit', 0], { relativeTo: this.route });
   }
   //#endregion Events
 
@@ -273,7 +265,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
       annualDom: undefined,
 
       itemType: this.itemType,
-      period: undefined
+      period: undefined,
     };
   }
 
@@ -286,11 +278,13 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     if (this.itemForm) {
       this.itemForm.reset();
     }
-    this.item = {...item} as IItem;
+    this.item = { ...item } as IItem;
     this.recordId = this.item.id;
     this.periodSwitch = this.item.fkPeriod;
     this.currentPeriod = this.findPeriodById(this.item.fkPeriod);
-    this.store.dispatch(PeriodActions.setCurrentPeriod({ period: this.currentPeriod }));
+    this.store.dispatch(
+      PeriodActions.setCurrentPeriod({ period: this.currentPeriod })
+    );
 
     this.dateRangeToggle = this.item.dateRangeReq;
     // Update the data on the form
@@ -346,7 +340,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
       SemiAnnual2Day: this.item.semiAnnual2Day,
       // Annual
       AnnualMoy: this.item.annualMoy,
-      AnnualDom: this.item.annualDom
+      AnnualDom: this.item.annualDom,
     });
     this.itemDetailCommonService.setPeriodFields(
       this.itemForm,
@@ -413,8 +407,7 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     newItem.annualMoy = itemForm.value.AnnualMoy;
     newItem.annualDom = itemForm.value.AnnualDom;
     // Definition Classes
-    newItem.period = this.currentPeriod,
-    newItem.itemType = this.itemType
+    (newItem.period = this.currentPeriod), (newItem.itemType = this.itemType);
     return newItem;
   }
   //#endregion Utilities

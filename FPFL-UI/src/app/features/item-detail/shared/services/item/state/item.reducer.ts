@@ -59,6 +59,46 @@ export const itemReducer = createReducer<ItemState>(
       progressSpinner: action.show,
     };
   }),
+  on(ItemActions.initializeCurrentItem, (state, action): ItemState => {
+    const newItem: IItem = {
+      id: 0,
+      userId: action.userId,
+      name: '',
+      amount: 0,
+      fkItemType: action.itemType.id,
+      fkPeriod: 0,
+      dateRangeReq: false,
+      beginDate: undefined,
+      endDate: undefined,
+      weeklyDow: undefined,
+      everOtherWeekDow: undefined,
+      biMonthlyDay1: undefined,
+      biMonthlyDay2: undefined,
+      monthlyDom: undefined,
+      quarterly1Month: undefined,
+      quarterly1Day: undefined,
+      quarterly2Month: undefined,
+      quarterly2Day: undefined,
+      quarterly3Month: undefined,
+      quarterly3Day: undefined,
+      quarterly4Month: undefined,
+      quarterly4Day: undefined,
+      semiAnnual1Month: undefined,
+      semiAnnual1Day: undefined,
+      semiAnnual2Month: undefined,
+      semiAnnual2Day: undefined,
+      annualMoy: undefined,
+      annualDom: undefined,
+
+      itemType: action.itemType,
+      period: undefined
+    };
+    sessionStorage.setItem("currentItem", JSON.stringify(newItem));
+    return {
+      ...state,
+      currentItem: newItem,
+    };
+  }),
   on(ItemActions.setCurrentItem, (state, action): ItemState => {
     sessionStorage.setItem("currentItem", JSON.stringify(action.item));
     return {
@@ -116,8 +156,7 @@ export const itemReducer = createReducer<ItemState>(
   on(ItemActions.updateItemFailure, (state, action): ItemState => {
     return {
       ...state,
-      error: `Item Update Error`,
-      //error: `Item Update Error: ${action.error}`
+      error: `Item Update Error`, //error: `Item Update Error: ${action.error}`
     };
   }),
   /** Item delete */
@@ -133,8 +172,7 @@ export const itemReducer = createReducer<ItemState>(
   on(ItemActions.deleteItemFailure, (state, action): ItemState => {
     return {
       ...state,
-      error: `Item delete Error`,
-      //error: `Item delete Error: ${action.error}`
+      error: `Item delete Error`, //error: `Item delete Error: ${action.error}`
     };
   })
 );

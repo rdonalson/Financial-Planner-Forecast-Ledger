@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { IItem } from '../../../models/item';
+import { IItemType } from '../../../models/item-type';
 
 export const setProgressSpinner = createAction(
   '[Item] Set Progress Spinner',
@@ -19,7 +20,11 @@ export const returnNewItemKey = createAction(
 );
 
 export const clearCurrentItem = createAction('[Item] Clear Current Item]');
-export const initializeCurrentItem = createAction('[Item] Init Current Item');
+
+export const initializeCurrentItem = createAction(
+  '[Item] Initialize New Current Item',
+  props<{ userId: string; itemType: IItemType }>()
+);
 
 /** Items */
 export const loadItems = createAction(
