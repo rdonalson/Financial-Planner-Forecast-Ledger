@@ -30,7 +30,7 @@ const getPeriodFeatureState = createFeatureSelector<PeriodState>('periods');
 
 export const getCurrentPeriod = createSelector(
   getPeriodFeatureState,
-  (state) => state.currentPeriod
+  (state) => state.currentPeriod ?? JSON.parse(sessionStorage.getItem("currentPeriod") ?? '') as IPeriod
 );
 
 export const getPeriods = createSelector(
@@ -46,6 +46,7 @@ export const getError = createSelector(
 export const periodReducer = createReducer<PeriodState>(
   initialState,
   on(PeriodActions.setCurrentPeriod, (state, action): PeriodState => {
+    sessionStorage.setItem("currentPeriod", JSON.stringify(action.period))
     return {
       ...state,
       currentPeriod: action.period,

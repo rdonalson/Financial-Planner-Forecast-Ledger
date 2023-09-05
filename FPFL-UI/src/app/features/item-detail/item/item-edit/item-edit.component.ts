@@ -29,7 +29,6 @@ import {
 } from '../../shared/services/item/state/item.reducer';
 import { IItemType } from '../../shared/models/item-type';
 import { getCurrentItemType } from '../../shared/services/item-type/state/item-type.reducer';
-import { ItemTypeService } from '../../shared/services/item-type/item-type.service';
 import { getUtilArrays } from '../../shared/services/common/state/util-array.reducer';
 import * as PeriodActions from '../../shared/services/period/state/period.actions';
 import * as ItemTypeActions from '../../shared/services/item-type/state/item-type.actions';
@@ -74,7 +73,6 @@ export class ItemEditComponent implements OnInit {
    * Constructor
    */
   constructor(
-    private claimsUtilService: LoginUtilService,
     private confirmationService: ConfirmationService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -139,14 +137,14 @@ export class ItemEditComponent implements OnInit {
     });
 
     this.getUtilArrayItems();
-    this.initializeRecord();
+    //this.initializeRecord();
     this.itemForm = this.itemDetailCommonService.generateForm(this.fb);
 
     this.currentItem$.subscribe({
       next: (item: IItem | null): void => {
         if (item) {
           this.onItemRetrieved(item);
-        } 
+        }
         this.setTitleText();
       },
       error: catchError((err: any) => this.err.handleError(err)),
@@ -225,48 +223,6 @@ export class ItemEditComponent implements OnInit {
     } else {
       this.pageTitle = `Edit ${this.itemType.name}`;
     }
-  }
-
-  /**
-   * Called on Form Init; gets users OID from Claims object in localstorage
-   * Also initializes a new IItem class
-   */
-  private initializeRecord(): void {
-    this.recordId = 0;
-    this.setTitleText();
-    this.item = {
-      id: this.recordId,
-      userId: this.userId,
-      name: '',
-      amount: 0,
-      fkItemType: this.itemType.id,
-      fkPeriod: 0,
-      dateRangeReq: false,
-      beginDate: undefined,
-      endDate: undefined,
-      weeklyDow: undefined,
-      everOtherWeekDow: undefined,
-      biMonthlyDay1: undefined,
-      biMonthlyDay2: undefined,
-      monthlyDom: undefined,
-      quarterly1Month: undefined,
-      quarterly1Day: undefined,
-      quarterly2Month: undefined,
-      quarterly2Day: undefined,
-      quarterly3Month: undefined,
-      quarterly3Day: undefined,
-      quarterly4Month: undefined,
-      quarterly4Day: undefined,
-      semiAnnual1Month: undefined,
-      semiAnnual1Day: undefined,
-      semiAnnual2Month: undefined,
-      semiAnnual2Day: undefined,
-      annualMoy: undefined,
-      annualDom: undefined,
-
-      itemType: this.itemType,
-      period: undefined,
-    };
   }
 
   /**
@@ -425,31 +381,10 @@ export class ItemEditComponent implements OnInit {
     return this.utilArrayService.getUtilArrayItems().subscribe({
       next: (data: IUtilArray): void => {
         this.utilArray = data;
-        // console.log(JSON.stringify(this.utilArray));
+        // console.log(`Service getUtilArrayItems: ${JSON.stringify(this.utilArray)}`)
       },
       error: catchError((err: any) => this.err.handleError(err)),
       complete: () => {},
-    });
-  }
-
-  /**
-   * Get a specific Item
-   * @param {number} id The id of the Item
-   * @returns {any} result
-   */
-  getItem(id: number): any {
-    if (id === 0) {
-      return undefined;
-    }
-    return this.currentItem$.subscribe({
-      next: (item: IItem | null): void => {
-        if (item) {
-          this.onItemRetrieved(item);
-        } else {
-          this.initializeRecord;
-        }
-      },
-      error: catchError((err: any) => this.err.handleError(err)),
     });
   }
   //#endregion Reads
