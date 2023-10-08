@@ -49,7 +49,7 @@ export const periodReducer = createReducer<PeriodState>(
     localStorage.setItem("currentPeriod", JSON.stringify(action.period))
     return {
       ...state,
-      currentPeriod: action.period,
+      currentPeriod: action.period as IPeriod,
     };
   }),
   on(PeriodActions.clearCurrentPeriod, (state): PeriodState => {
@@ -61,7 +61,7 @@ export const periodReducer = createReducer<PeriodState>(
   on(PeriodActions.loadPeriodsSuccess, (state, action): PeriodState => {
     return {
       ...state,
-      periods: action.periods,
+      periods: action.periods as IPeriod[],
       error: '',
     };
   }),

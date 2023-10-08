@@ -21,10 +21,10 @@ import {
 
 import * as ItemActions from '../../shared/services/item/state/item.actions';
 import * as ItemTypeActions from '../../shared/services/item-type/state/item-type.actions';
+import * as PeriodActions from '../../shared/services/period/state/period.actions';
 import { IItemType } from '../../shared/models/item-type';
-
 import { getCurrentItemType } from '../../shared/services/item-type/state/item-type.reducer';
-import { ItemTypeService } from '../../shared/services/item-type/item-type.service';
+import { getUserOid } from 'src/app/core/services/login/state/login-util.reducer';
 
 /**
  * Form that will display the list two types of items; Credit (1) or Debit (2)
@@ -41,11 +41,11 @@ export class ItemListComponent implements OnInit {
   itemList: IItem[] = [];
   userId: string = '';
 
-  //private paramsSub$!: Subscription;
   items$!: Observable<IItem[]>;
   progressSpinner$!: Observable<boolean>;
   errorMessage$!: Observable<string>;
   currentItemType$!: Observable<IItemType | null>;
+  userId$!: Observable<string>;
 
   /**
    * Constructor
@@ -53,7 +53,6 @@ export class ItemListComponent implements OnInit {
   constructor(
     private loginUtilService: LoginUtilService,
     private messageUtilService: MessageUtilService,
-    private itemTypeService: ItemTypeService,
     private err: GlobalErrorHandlerService,
     private route: ActivatedRoute,
     private router: Router,
@@ -63,7 +62,9 @@ export class ItemListComponent implements OnInit {
 
   //#region Events
   ngOnInit(): void {
-    this.userId = this.loginUtilService.getUserOid();
+    this.store.dispatch(ItemActions.clearCurrentItem());
+    this.store.dispatch(PeriodActions.clearCurrentPeriod());
+    this.userId$ = this.store.select(getUserOid);
 
     this.progressSpinner$ = this.store.select(getProgressSpinner);
     this.currentItemType$ = this.store.select(getCurrentItemType);
@@ -74,6 +75,15 @@ export class ItemListComponent implements OnInit {
       next: (err: string): void => {
         this.messageUtilService.onError(err);
       },
+    });
+
+    this.userId$.subscribe({
+      next: (userId: string | null): void => {
+        if (userId) {
+          this.userId = userId;
+        }
+      },
+      error: catchError((err: any) => this.err.handleError(err)),
     });
 
     this.currentItemType$.subscribe({

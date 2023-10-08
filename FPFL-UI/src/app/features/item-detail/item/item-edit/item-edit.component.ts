@@ -42,7 +42,7 @@ import { getUserOid } from 'src/app/core/services/login/state/login-util.reducer
 @Component({
   templateUrl: './item-edit.component.html',
   styleUrls: ['./item-edit.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class ItemEditComponent implements OnInit {
   @ViewChildren(FormControlName, { read: ElementRef })
@@ -101,15 +101,6 @@ export class ItemEditComponent implements OnInit {
     this.store.dispatch(UtilArrayActions.loadUtilArray());
     this.currentItem$ = this.store.select(getCurrentItem);
 
-    this.userId$.subscribe({
-      next: (userId: string | null): void => {
-        if (userId) {
-          this.userId = userId;
-        }
-      },
-      error: catchError((err: any) => this.err.handleError(err)),
-    });
-
     this.currentItemType$.subscribe({
       next: (itemType: IItemType | null): void => {
         if (itemType) {
@@ -137,7 +128,6 @@ export class ItemEditComponent implements OnInit {
     });
 
     this.getUtilArrayItems();
-    //this.initializeRecord();
     this.itemForm = this.itemDetailCommonService.generateForm(this.fb);
 
     this.currentItem$.subscribe({
@@ -184,7 +174,6 @@ export class ItemEditComponent implements OnInit {
    * Stop edit or create and move back parent item list
    */
   cancel(): void {
-    this.store.dispatch(ItemActions.clearCurrentItem());
     this.router.navigate([this.defaultPath.toString()], {
       relativeTo: this.route,
     });
@@ -194,13 +183,20 @@ export class ItemEditComponent implements OnInit {
    * Initialize new item
    */
   openNew(): void {
+    this.userId$.subscribe({
+      next: (userId: string | null): void => {
+        if (userId) {
+          this.userId = userId;
+        }
+      },
+      error: catchError((err: any) => this.err.handleError(err)),
+    });
     this.store.dispatch(
       ItemActions.initializeCurrentItem({
         userId: this.userId,
         itemType: this.itemType,
       })
     );
-    this.router.navigate(['./edit', 0], { relativeTo: this.route });
   }
   //#endregion Events
 

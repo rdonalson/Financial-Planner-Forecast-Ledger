@@ -8,6 +8,7 @@ import {
 import * as AppState from '../../../../../../state/app.state';
 import * as ItemActions from '../state/item.actions';
 import { IItem } from '../../../models/item';
+import { IItemType } from '../../../models/item-type';
 
 export interface State extends AppState.State {
   itemstate: ItemState;
@@ -38,12 +39,14 @@ export const getProgressSpinner = createSelector(
 
 export const getCurrentItem = createSelector(
   getItemFeatureState,
-  (state) => state.currentItem ?? JSON.parse(localStorage.getItem("currentItem") ?? '') as IItem
+  (state) =>
+    state.currentItem ??
+    (JSON.parse(localStorage.getItem('currentItem') ?? '') as IItem)
 );
 
 export const getItems = createSelector(
   getItemFeatureState,
-  (state) => state.items
+  (state) => state.items as IItem[]
 );
 
 export const getError = createSelector(
@@ -62,11 +65,11 @@ export const itemReducer = createReducer<ItemState>(
   on(ItemActions.initializeCurrentItem, (state, action): ItemState => {
     const newItem: IItem = {
       id: 0,
-      userId: action.userId,
+      userId: action.userId as string,
       name: '',
       amount: 0,
-      fkItemType: action.itemType.id,
-      fkPeriod: 0,
+      fkItemType: action.itemType.id as number,
+      fkPeriod: undefined,
       dateRangeReq: false,
       beginDate: undefined,
       endDate: undefined,
@@ -90,20 +93,20 @@ export const itemReducer = createReducer<ItemState>(
       annualMoy: undefined,
       annualDom: undefined,
 
-      itemType: action.itemType,
-      period: undefined
+      itemType: action.itemType as IItemType,
+      period: undefined,
     };
-    localStorage.setItem("currentItem", JSON.stringify(newItem));
+    localStorage.setItem('currentItem', JSON.stringify(newItem));
     return {
       ...state,
       currentItem: newItem,
     };
   }),
   on(ItemActions.setCurrentItem, (state, action): ItemState => {
-    localStorage.setItem("currentItem", JSON.stringify(action.item));
+    localStorage.setItem('currentItem', JSON.stringify(action.item));
     return {
       ...state,
-      currentItem: action.item,
+      currentItem: action.item as IItem,
     };
   }),
   on(ItemActions.clearCurrentItem, (state): ItemState => {
@@ -115,7 +118,7 @@ export const itemReducer = createReducer<ItemState>(
   on(ItemActions.loadItemsSuccess, (state, action): ItemState => {
     return {
       ...state,
-      items: action.items,
+      items: action.items as IItem[],
       error: '',
     };
   }),
@@ -123,15 +126,15 @@ export const itemReducer = createReducer<ItemState>(
     return {
       ...state,
       items: [],
-      error: `Item Load Error`,  //error: `Item Load Error: ${action.error}`
+      error: `Item Load Error`, //error: `Item Load Error: ${action.error}`
     };
   }),
   /** Item Create */
   on(ItemActions.createItemSuccess, (state, action): ItemState => {
     return {
       ...state,
-      items: [...state.items, action.item],
-      currentItemId: action.item?.id,
+      items: [...state.items, action.item] as IItem[],
+      currentItemId: action.item?.id as number,
       error: '',
     };
   }),
@@ -148,8 +151,8 @@ export const itemReducer = createReducer<ItemState>(
     );
     return {
       ...state,
-      items: updatedItems,
-      currentItemId: action.item?.id,
+      items: updatedItems as IItem[],
+      currentItemId: action.item?.id as number,
       error: '',
     };
   }),
@@ -176,46 +179,3 @@ export const itemReducer = createReducer<ItemState>(
     };
   })
 );
-
-
-
-/** Archive
-  on(ItemActions.initializeCurrentItem, (state): ItemState => {
-    return {
-      ...state,
-      currentItem: {
-        id: 0,
-        userId: '',
-        name: '',
-        amount: 0,
-        fkItemType: 0,
-        itemType: '',
-        fkPeriod: 0,
-        period: '',
-        dateRangeReq: false,
-        beginDate: undefined,
-        endDate: undefined,
-        weeklyDow: undefined,
-        everOtherWeekDow: undefined,
-        biMonthlyDay1: undefined,
-        biMonthlyDay2: undefined,
-        monthlyDom: undefined,
-        quarterly1Month: undefined,
-        quarterly1Day: undefined,
-        quarterly2Month: undefined,
-        quarterly2Day: undefined,
-        quarterly3Month: undefined,
-        quarterly3Day: undefined,
-        quarterly4Month: undefined,
-        quarterly4Day: undefined,
-        semiAnnual1Month: undefined,
-        semiAnnual1Day: undefined,
-        semiAnnual2Month: undefined,
-        semiAnnual2Day: undefined,
-        annualMoy: undefined,
-        annualDom: undefined,
-      },
-    };
-  }),
-
- */
