@@ -38,7 +38,7 @@ export const getProgressSpinner = createSelector(
 
 export const getCurrentItem = createSelector(
   getItemFeatureState,
-  (state) => state.currentItem ?? JSON.parse(sessionStorage.getItem("currentItem") ?? '') as IItem
+  (state) => state.currentItem ?? JSON.parse(localStorage.getItem("currentItem") ?? '') as IItem
 );
 
 export const getItems = createSelector(
@@ -93,14 +93,14 @@ export const itemReducer = createReducer<ItemState>(
       itemType: action.itemType,
       period: undefined
     };
-    sessionStorage.setItem("currentItem", JSON.stringify(newItem));
+    localStorage.setItem("currentItem", JSON.stringify(newItem));
     return {
       ...state,
       currentItem: newItem,
     };
   }),
   on(ItemActions.setCurrentItem, (state, action): ItemState => {
-    sessionStorage.setItem("currentItem", JSON.stringify(action.item));
+    localStorage.setItem("currentItem", JSON.stringify(action.item));
     return {
       ...state,
       currentItem: action.item,
