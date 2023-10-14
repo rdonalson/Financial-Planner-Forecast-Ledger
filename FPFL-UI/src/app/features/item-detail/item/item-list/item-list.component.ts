@@ -1,8 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, catchError } from 'rxjs';
@@ -23,7 +19,7 @@ import * as ItemTypeActions from '../../shared/services/item-type/state/item-typ
 import * as PeriodActions from '../../shared/services/period/state/period.actions';
 import { IItemType } from '../../shared/models/item-type';
 import { getCurrentItemType } from '../../shared/services/item-type/state/item-type.reducer';
-import { getUserOid } from 'src/app/core/services/login/state/login-util.reducer';
+import { getUserOid } from '../../../../core/services/login/state/login-util.reducer';
 
 /**
  * Form that will display the list two types of items; Credit (1) or Debit (2)
@@ -73,6 +69,7 @@ export class ItemListComponent implements OnInit {
       next: (err: string): void => {
         this.messageUtilService.onError(err);
       },
+      error: catchError((err: any) => this.err.handleError(err)),
     });
 
     this.userId$.subscribe({
@@ -86,16 +83,20 @@ export class ItemListComponent implements OnInit {
 
     this.currentItemType$.subscribe({
       next: (itemType: IItemType | null): void => {
-        if (itemType) {   // Normal operations
+        if (itemType) {
+          // Normal operations
           this.itemType = itemType;
-        } else {          // When the user refreshes, then reinitialize ItemType
+        } else {
+          // When the user refreshes, then reinitialize ItemType
           this.store.dispatch(
             ItemTypeActions.setCurrentItemType({
-              itemType: this.itemType
+              itemType: this.itemType,
             })
           );
         }
-        this.store.dispatch(ItemActions.loadItems(this.userId, this.itemType.id));
+        this.store.dispatch(
+          ItemActions.loadItems(this.userId, this.itemType.id)
+        );
         this.pageTitle = `Manage ${this.itemType.name}`;
       },
       error: catchError((err: any) => this.err.handleError(err)),
@@ -113,7 +114,12 @@ export class ItemListComponent implements OnInit {
    * Initialize new item
    */
   openNew(): void {
-    this.store.dispatch(ItemActions.initializeCurrentItem({ userId: this.userId, itemType: this.itemType }));
+    this.store.dispatch(
+      ItemActions.initializeCurrentItem({
+        userId: this.userId,
+        itemType: this.itemType,
+      })
+    );
     this.router.navigate(['./edit', 0], { relativeTo: this.route });
   }
 
