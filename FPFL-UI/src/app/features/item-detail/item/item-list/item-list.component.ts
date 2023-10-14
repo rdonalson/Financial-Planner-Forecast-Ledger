@@ -51,7 +51,6 @@ export class ItemListComponent implements OnInit {
    * Constructor
    */
   constructor(
-    private loginUtilService: LoginUtilService,
     private messageUtilService: MessageUtilService,
     private err: GlobalErrorHandlerService,
     private route: ActivatedRoute,

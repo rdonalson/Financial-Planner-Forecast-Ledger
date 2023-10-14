@@ -44,9 +44,7 @@ import { getUserOid } from 'src/app/core/services/login/state/login-util.reducer
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class ItemEditComponent implements OnInit {
-  @ViewChildren(FormControlName, { read: ElementRef })
-  private userId!: string;
-
+  private userId: string = '';
   itemType: IItemType = { id: 0, name: '' };
   periods: IPeriod[] = [];
   currentPeriod!: IPeriod | null;
@@ -63,10 +61,10 @@ export class ItemEditComponent implements OnInit {
 
   private currentItem$!: Observable<IItem | null>;
   private currentItemType$!: Observable<IItemType | null>;
+  private userId$!: Observable<string>;
   utilArray$!: Observable<IUtilArray | null>;
   periods$!: Observable<IPeriod[]>;
   progressSpinner$!: Observable<boolean>;
-  private userId$!: Observable<string>;
 
   /**
    * Constructor
@@ -99,6 +97,15 @@ export class ItemEditComponent implements OnInit {
     this.store.dispatch(PeriodActions.loadPeriods());
     this.store.dispatch(UtilArrayActions.loadUtilArray());
     this.currentItem$ = this.store.select(getCurrentItem);
+
+    this.userId$.subscribe({
+      next: (userId: string | null): void => {
+        if (userId) {
+          this.userId = userId;
+        }
+      },
+      error: catchError((err: any) => this.err.handleError(err)),
+    });
 
     this.currentItemType$.subscribe({
       next: (itemType: IItemType | null): void => {
@@ -182,14 +189,6 @@ export class ItemEditComponent implements OnInit {
    * Initialize new item
    */
   openNew(): void {
-    this.userId$.subscribe({
-      next: (userId: string | null): void => {
-        if (userId) {
-          this.userId = userId;
-        }
-      },
-      error: catchError((err: any) => this.err.handleError(err)),
-    });
     this.store.dispatch(
       ItemActions.initializeCurrentItem({
         userId: this.userId,
