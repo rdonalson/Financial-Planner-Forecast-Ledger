@@ -10,7 +10,6 @@ import { ConfirmationService } from 'primeng/api';
 
 import { IItem } from '../../shared/models/item';
 import { MessageUtilService } from '../../shared/services/common/message-util.service';
-import { LoginUtilService } from 'src/app/core/services/login/login-util.service';
 import { GlobalErrorHandlerService } from '../../../../core/services/error/global-error-handler.service';
 import { State } from '../../../../state/app.state';
 import {
@@ -36,10 +35,10 @@ import { getUserOid } from 'src/app/core/services/login/state/login-util.reducer
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ItemListComponent implements OnInit {
+  private userId: string = '';
   pageTitle!: string;
   itemType: IItemType = { id: 0, name: '' };
   itemList: IItem[] = [];
-  userId: string = '';
 
   items$!: Observable<IItem[]>;
   progressSpinner$!: Observable<boolean>;
