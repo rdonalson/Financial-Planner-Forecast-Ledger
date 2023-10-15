@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { catchError } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/internal/Observable';
 
 import { GlobalErrorHandlerService } from '../../../core/services/error/global-error-handler.service';
 import { InitialAmountService } from '../shared/services/initial-amount/initial-amount.service';
@@ -26,15 +27,9 @@ export class InitialAmountComponent implements OnInit {
   pageTitle: string = 'Initial Amount';
   progressSpinner: boolean = false;
   initialAmount!: IItem;
-  userId$: any;
 
-  /**
-   * Base Constructor
-   * @param {LoginUtilService} loginUtilService A common utilities service
-   * @param {MessageUtilService} messageUtilService A common utilities service
-   * @param {GlobalErrorHandlerService} err Error Handler
-   * @param {InitialAmountService} intialAmountService Initial Amount Service
-   */
+  private userId$!: Observable<string>;
+
   constructor(
     private messageUtilService: MessageUtilService,
     private err: GlobalErrorHandlerService,

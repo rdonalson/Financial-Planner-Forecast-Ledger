@@ -36,15 +36,12 @@ export class ItemListComponent implements OnInit {
   itemType: IItemType = { id: 0, name: '' };
   itemList: IItem[] = [];
 
+  private userId$!: Observable<string>;
+  private currentItemType$!: Observable<IItemType | null>;
   items$!: Observable<IItem[]>;
   progressSpinner$!: Observable<boolean>;
   errorMessage$!: Observable<string>;
-  currentItemType$!: Observable<IItemType | null>;
-  userId$!: Observable<string>;
 
-  /**
-   * Constructor
-   */
   constructor(
     private messageUtilService: MessageUtilService,
     private err: GlobalErrorHandlerService,

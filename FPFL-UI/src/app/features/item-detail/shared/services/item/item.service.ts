@@ -9,7 +9,6 @@ import { GlobalErrorHandlerService } from '../../../../../core/services/error/gl
 import { IItem } from '../../models/item';
 import { State } from '../../../../../state/app.state';
 import * as ItemActions from '../item/state/item.actions';
-
 import * as auth from '../../../../../../assets/data/auth-config.json';
 
 /**
@@ -48,7 +47,7 @@ export class ItemService {
       return of(this.items);
     }
     return this.http.get<IItem[]>(url).pipe(
-      //delay(5000),
+      //delay(5000),  //Diagnostic to test spinner
       tap((items: IItem[]) => {
         //console.log(`Service getItems: ${JSON.stringify(items)}`);
         this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
