@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
+import { GlobalErrorHandlerService } from '../../../../../core/services/error/global-error-handler.service';
 import { IUtilArray } from '../../models/util-array';
 import { catchError, tap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';

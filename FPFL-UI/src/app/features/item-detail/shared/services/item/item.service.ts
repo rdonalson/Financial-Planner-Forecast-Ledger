@@ -5,12 +5,12 @@ import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
-import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
+import { GlobalErrorHandlerService } from '../../../../../core/services/error/global-error-handler.service';
 import { IItem } from '../../models/item';
-
-import { State } from 'src/app/state/app.state';
-import * as auth from '../../../../../../assets/data/auth-config.json';
+import { State } from '../../../../../state/app.state';
 import * as ItemActions from '../item/state/item.actions';
+
+import * as auth from '../../../../../../assets/data/auth-config.json';
 
 /**
  * Item Service

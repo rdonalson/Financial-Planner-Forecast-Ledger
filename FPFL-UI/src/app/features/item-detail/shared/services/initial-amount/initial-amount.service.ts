@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
-import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
+import { GlobalErrorHandlerService } from '../../../../../core/services/error/global-error-handler.service';
 import { IItem } from '../../models/item';
 
 import * as auth from '../../../../../../assets/data/auth-config.json';

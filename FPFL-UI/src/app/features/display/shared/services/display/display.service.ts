@@ -3,8 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
 
+import { GlobalErrorHandlerService } from '../../../../../core/services/error/global-error-handler.service';
 import { ILedgerParams } from '../../models/ledger-params';
 import { ILedgerVM } from '../../view-models/ledger-vm';
 

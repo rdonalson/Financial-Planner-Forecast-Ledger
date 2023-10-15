@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ConfirmationService } from 'primeng/api';
 
-import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
+import { GlobalErrorHandlerService } from '../../../../core/services/error/global-error-handler.service';
 import { IItem } from '../../shared/models/item';
 import { IPeriod } from '../../shared/models/period';
 import { UtilArrayService } from '../../shared/services/common/util-array.service';
@@ -32,7 +32,7 @@ import * as PeriodActions from '../../shared/services/period/state/period.action
 import * as ItemTypeActions from '../../shared/services/item-type/state/item-type.actions';
 import * as UtilArrayActions from '../../shared/services/common/state/util-array.actions';
 import * as ItemActions from '../../shared/services/item/state/item.actions';
-import { getUserOid } from 'src/app/core/services/login/state/login-util.reducer';
+import { getUserOid } from '../../../../core/services/login/state/login-util.reducer';
 
 /**
  * Reactive CRUD Form for individual items; credit (itemTypeId: 1) or debit (itemTypeId: 2)

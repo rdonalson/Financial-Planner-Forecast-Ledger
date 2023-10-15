@@ -2,8 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { LoginUtilService } from 'src/app/core/services/login/login-util.service';
-import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
+
+import { LoginUtilService } from '../../core/services/login/login-util.service';
+import { GlobalErrorHandlerService } from '../../core/services/error/global-error-handler.service';
 import { ILedgerParams } from './shared/models/ledger-params';
 import { DisplayService } from './shared/services/display/display.service';
 import { ExportService } from './shared/services/export/export.service';

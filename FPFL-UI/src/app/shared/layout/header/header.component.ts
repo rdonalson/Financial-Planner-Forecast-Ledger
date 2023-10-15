@@ -16,13 +16,12 @@ import {
 } from '@azure/msal-browser';
 import { Subject, Subscription } from 'rxjs';
 import { catchError, filter, takeUntil } from 'rxjs/operators';
-
 import { MenuItem } from 'primeng/api';
 
-import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
-import { LoginUtilService } from 'src/app/core/services/login/login-util.service';
-import { IClaims } from 'src/app/core/model/claims';
-import { MenuService } from 'src/app/core/services/menu/menu.service';
+import { GlobalErrorHandlerService } from '../../../core/services/error/global-error-handler.service';
+import { LoginUtilService } from '../../../core/services/login/login-util.service';
+import { IClaims } from '../../../core/model/claims';
+import { MenuService } from '../../../core/services/menu/menu.service';
 
 /**
  * This component builds the Header and Navigation
