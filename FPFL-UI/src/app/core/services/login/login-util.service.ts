@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { IClaims } from '../../model/claims';
 import { Store } from '@ngrx/store';
+
+import { IClaims } from '../../model/claims';
 import { State, setClaims } from './state/login-util.reducer';
 
 /**
@@ -46,7 +47,6 @@ export class LoginUtilService {
   /**
    * Returns Claims and if not there will go get it from the Local Storage
    * in Local Storage
-   * @param {any} token The result from logging in
    * @returns {IClaims} The Claims Data
    */
   getClaims(): IClaims {
