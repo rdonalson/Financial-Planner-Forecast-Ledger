@@ -2,15 +2,14 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
-import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
+import { GlobalErrorHandlerService } from '../../../../../core/services/error/global-error-handler.service';
 import { IItem } from '../../models/item';
-
-import { State } from 'src/app/state/app.state';
-import * as auth from '../../../../../../assets/data/auth-config.json';
+import { State } from '../../../../../state/app.state';
 import * as ItemActions from '../item/state/item.actions';
+import * as auth from '../../../../../../assets/data/auth-config.json';
 
 /**
  * Item Service
@@ -19,6 +18,7 @@ import * as ItemActions from '../item/state/item.actions';
 export class ItemService {
   private url = auth.resources.api.resourceUri + '/items';
   private headers = new HttpHeaders({ 'content-type': 'application/json' });
+  private items!: IItem[];
 
   /**
    * Base Constructor
@@ -33,7 +33,7 @@ export class ItemService {
 
   //#region Reads
   /**
-   * Gets all of the Items for this user   *
+   * Gets all of the Items for this user and either Debit or Credit depending upon selection  *
    * @param {string} userId User's OID from Login
    * @param {number} itemType Type of Item; Credit 1 or Debit 2
    * @returns {Observable<IItem[]>} returns the records
@@ -42,8 +42,12 @@ export class ItemService {
     this.store.dispatch(ItemActions.setProgressSpinner({ show: true }));
     const url = `${this.url}/${userId}/list/${itemType}`;
 
+    if (this.items && this.items.length > 0) {
+      this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));
+      return of(this.items);
+    }
     return this.http.get<IItem[]>(url).pipe(
-      //delay(5000),
+      //delay(5000),  //Diagnostic to test spinner
       tap((items: IItem[]) => {
         //console.log(`Service getItems: ${JSON.stringify(items)}`);
         this.store.dispatch(ItemActions.setProgressSpinner({ show: false }));

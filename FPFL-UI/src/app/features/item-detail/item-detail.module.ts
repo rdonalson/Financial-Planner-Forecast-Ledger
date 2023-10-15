@@ -36,6 +36,8 @@ import { itemReducer } from './shared/services/item/state/item.reducer';
 import { ItemEffects } from './shared/services/item/state/item.effects';
 import { utilArrayReducer } from './shared/services/common/state/util-array.reducer';
 import { UtilArrayEffects } from './shared/services/common/state/util-array.effects';
+import { itemTypeReducer } from './shared/services/item-type/state/item-type.reducer';
+import { ItemTypeEffects } from './shared/services/item-type/state/item-type.effects';
 
 @NgModule({
   declarations: [
@@ -48,9 +50,10 @@ import { UtilArrayEffects } from './shared/services/common/state/util-array.effe
     CommonModule,
     FormsModule,
     StoreModule.forFeature('periods', periodReducer),
+    StoreModule.forFeature('itemTypes', itemTypeReducer),
     StoreModule.forFeature('items', itemReducer),
     StoreModule.forFeature('utilArray', utilArrayReducer),
-    EffectsModule.forFeature([PeriodEffects, ItemEffects, UtilArrayEffects]),
+    EffectsModule.forFeature([PeriodEffects, ItemTypeEffects, ItemEffects, UtilArrayEffects]),
     ReactiveFormsModule,
     ProgressSpinnerModule,
     ConfirmDialogModule,

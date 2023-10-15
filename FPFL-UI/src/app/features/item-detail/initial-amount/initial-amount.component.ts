@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { catchError } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/internal/Observable';
 
-import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
+import { GlobalErrorHandlerService } from '../../../core/services/error/global-error-handler.service';
 import { InitialAmountService } from '../shared/services/initial-amount/initial-amount.service';
 import { MessageUtilService } from '../shared/services/common/message-util.service';
-import { LoginUtilService } from 'src/app/core/services/login/login-util.service';
 import { IItem } from '../shared/models/item';
+import { State } from '../../../state/app.state';
+import { getUserOid } from '../../../core/services/login/state/login-util.reducer';
 
 /**
  * Class and Page that manage the initial starting amount that the User has in their
@@ -17,33 +20,39 @@ import { IItem } from '../shared/models/item';
  */
 @Component({
   templateUrl: './initial-amount.component.html',
-  styleUrls: ['./initial-amount.component.scss']
+  styleUrls: ['./initial-amount.component.scss'],
 })
 export class InitialAmountComponent implements OnInit {
+  private userId: string = '';
   pageTitle: string = 'Initial Amount';
   progressSpinner: boolean = false;
-  userId: string = '';
   initialAmount!: IItem;
 
-  /**
-   * Base Constructor
-   * @param {LoginUtilService} loginUtilService A common utilities service
-   * @param {MessageUtilService} messageUtilService A common utilities service
-   * @param {GlobalErrorHandlerService} err Error Handler
-   * @param {InitialAmountService} intialAmountService Initial Amount Service
-   */
+  private userId$!: Observable<string>;
+
   constructor(
-    private loginUtilService: LoginUtilService,
     private messageUtilService: MessageUtilService,
     private err: GlobalErrorHandlerService,
-    private intialAmountService: InitialAmountService
-  ) { }
+    private intialAmountService: InitialAmountService,
+    private store: Store<State>
+  ) {}
 
   //#region Events
   /**
    * Initialize the form
    */
   ngOnInit(): void {
+    this.userId$ = this.store.select(getUserOid);
+
+    this.userId$.subscribe({
+      next: (userId: string | null): void => {
+        if (userId) {
+          this.userId = userId;
+        }
+      },
+      error: catchError((err: any) => this.err.handleError(err)),
+    });
+
     this.initialize();
     this.getInitialAmount(this.userId);
   }
@@ -53,8 +62,8 @@ export class InitialAmountComponent implements OnInit {
   /**
    * Prepares the form and "initialAmount" for use
    */
-   private initialize(): void {
-    this.userId = this.loginUtilService.getUserOid();
+  private initialize(): void {
+    //this.userId = this.loginUtilService.getUserOid();
     this.initialAmount = {
       id: 0,
       userId: this.userId,
@@ -85,7 +94,7 @@ export class InitialAmountComponent implements OnInit {
       semiAnnual2Month: undefined,
       semiAnnual2Day: undefined,
       annualMoy: undefined,
-      annualDom: undefined
+      annualDom: undefined,
     };
   }
   //#endregion Utils
@@ -101,21 +110,20 @@ export class InitialAmountComponent implements OnInit {
    */
   getInitialAmount(userId: string): any {
     this.progressSpinner = true;
-    return this.intialAmountService.getInitialAmount(userId)
-      .subscribe({
-        next: (data: IItem): void => {
-          if (!data) {
-            this.saveInitialAmount();
-          } else {
-            this.initialAmount = data;
-            // console.log(`Record Retrieved: ${JSON.stringify(this.initialAmount)}`);
-          }
-        },
-        error: catchError((err: any) => this.err.handleError(err)),
-        complete: () => {
-          this.progressSpinner = false;
+    return this.intialAmountService.getInitialAmount(userId).subscribe({
+      next: (data: IItem): void => {
+        if (!data) {
+          this.saveInitialAmount();
+        } else {
+          this.initialAmount = data;
+          // console.log(`Record Retrieved: ${JSON.stringify(this.initialAmount)}`);
         }
-      });
+      },
+      error: catchError((err: any) => this.err.handleError(err)),
+      complete: () => {
+        this.progressSpinner = false;
+      },
+    });
   }
   //#endregion Reads
   //#region Writes
@@ -127,7 +135,8 @@ export class InitialAmountComponent implements OnInit {
     this.progressSpinner = true;
     if (this.initialAmount.id === 0) {
       // Create a new record
-      this.intialAmountService.createInitialAmount(this.initialAmount)
+      this.intialAmountService
+        .createInitialAmount(this.initialAmount)
         .subscribe({
           next: (data: IItem): void => {
             this.initialAmount = data;
@@ -139,12 +148,15 @@ export class InitialAmountComponent implements OnInit {
           }),
           complete: () => {
             this.progressSpinner = false;
-            this.messageUtilService.onComplete('Default Initial Amount Created');
-          }
+            this.messageUtilService.onComplete(
+              'Default Initial Amount Created'
+            );
+          },
         });
     } else {
       // Update the existing record
-      this.intialAmountService.updateInitialAmount(this.initialAmount)
+      this.intialAmountService
+        .updateInitialAmount(this.initialAmount)
         .subscribe({
           next: (data: IItem) => {
             this.initialAmount = data;
@@ -157,7 +169,7 @@ export class InitialAmountComponent implements OnInit {
           complete: () => {
             this.progressSpinner = false;
             this.messageUtilService.onComplete('Initial Amount Updated');
-          }
+          },
         });
     }
   }

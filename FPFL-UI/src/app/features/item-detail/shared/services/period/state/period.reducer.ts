@@ -23,14 +23,14 @@ export interface PeriodState {
 const initialState: PeriodState = {
   currentPeriod: null,
   periods: [],
-  error: '',
+  error: ''
 };
 
 const getPeriodFeatureState = createFeatureSelector<PeriodState>('periods');
 
 export const getCurrentPeriod = createSelector(
   getPeriodFeatureState,
-  (state) => state.currentPeriod
+  (state) => state.currentPeriod ?? JSON.parse(localStorage.getItem("currentPeriod") ?? '') as IPeriod
 );
 
 export const getPeriods = createSelector(
@@ -46,9 +46,10 @@ export const getError = createSelector(
 export const periodReducer = createReducer<PeriodState>(
   initialState,
   on(PeriodActions.setCurrentPeriod, (state, action): PeriodState => {
+    localStorage.setItem("currentPeriod", JSON.stringify(action.period))
     return {
       ...state,
-      currentPeriod: action.period,
+      currentPeriod: action.period as IPeriod,
     };
   }),
   on(PeriodActions.clearCurrentPeriod, (state): PeriodState => {
@@ -60,7 +61,7 @@ export const periodReducer = createReducer<PeriodState>(
   on(PeriodActions.loadPeriodsSuccess, (state, action): PeriodState => {
     return {
       ...state,
-      periods: action.periods,
+      periods: action.periods as IPeriod[],
       error: '',
     };
   }),

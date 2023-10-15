@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
-import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
+import { GlobalErrorHandlerService } from '../../../../../core/services/error/global-error-handler.service';
 import { IItem } from '../../models/item';
 
 import * as auth from '../../../../../../assets/data/auth-config.json';
@@ -14,6 +14,7 @@ import * as auth from '../../../../../../assets/data/auth-config.json';
 @Injectable()
 export class InitialAmountService {
   private url = auth.resources.api.resourceUri + '/initialamount';
+  private headers = new HttpHeaders({ 'content-type': 'application/json' });
 
   /**
    * Base Constructor
@@ -51,8 +52,7 @@ export class InitialAmountService {
    * @returns {Observable<IItem>} return the record
    */
   createInitialAmount(initialAmount: IItem): Observable<IItem> {
-    const headers = new HttpHeaders({ 'content-type': 'application/json' });
-    return this.http.post<IItem>(this.url, initialAmount, { headers })
+    return this.http.post<IItem>(this.url, initialAmount, { headers: this.headers })
       .pipe(
         // tap(data => console.log('createInitialAmount: ' + JSON.stringify(data))),
         catchError((err: any) => this.err.handleError(err))
@@ -66,9 +66,8 @@ export class InitialAmountService {
    * @returns {Observable<IInitialAmount>} return the record
    */
   updateInitialAmount(initialAmount: IItem): Observable<IItem> {
-    const headers = new HttpHeaders({ 'content-type': 'application/json' });
     const url = `${this.url}/${initialAmount.userId}`;
-    return this.http.put<IItem>(url, initialAmount, { headers })
+    return this.http.put<IItem>(url, initialAmount, { headers: this.headers })
       .pipe(
         // tap(() => console.log('updateInitialAmount: ' + initialAmount.id)),
         // Return the product on an update

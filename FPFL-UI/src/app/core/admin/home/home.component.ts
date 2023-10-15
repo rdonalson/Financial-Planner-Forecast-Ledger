@@ -3,13 +3,13 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MsalService } from '@azure/msal-angular';
 import { MenuItem } from 'primeng/api';
 import { catchError } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
-import { IImage } from 'src/app/core/model/image';
-import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
-import { ImageService } from 'src/app/core/services/photo/image.service';
+import { IImage } from '../../model/image';
+import { GlobalErrorHandlerService } from '../../services/error/global-error-handler.service';
+import { ImageService } from '../../services/photo/image.service';
 import { LoginUtilService } from '../../services/login/login-util.service';
 import { MenuService } from '../../services/menu/menu.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   templateUrl: './home.component.html',

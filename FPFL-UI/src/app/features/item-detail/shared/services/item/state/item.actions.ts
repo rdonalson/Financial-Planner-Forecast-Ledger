@@ -7,12 +7,6 @@ export const setProgressSpinner = createAction(
   props<{ show: boolean }>()
 );
 
-/** Item Type */
-export const setCurrentItemType = createAction(
-  '[Item] Set Current Item Type',
-  props<{ itemType: IItemType }>()
-);
-
 /** Item */
 export const setCurrentItem = createAction(
   '[Item] Set Current Item',
@@ -26,7 +20,11 @@ export const returnNewItemKey = createAction(
 );
 
 export const clearCurrentItem = createAction('[Item] Clear Current Item]');
-export const initializeCurrentItem = createAction('[Item] Init Current Item');
+
+export const initializeCurrentItem = createAction(
+  '[Item] Initialize New Current Item',
+  props<{ userId: string; itemType: IItemType }>()
+);
 
 /** Items */
 export const loadItems = createAction(

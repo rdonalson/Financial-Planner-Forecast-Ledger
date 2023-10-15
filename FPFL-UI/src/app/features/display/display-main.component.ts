@@ -1,20 +1,23 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { LoginUtilService } from 'src/app/core/services/login/login-util.service';
-import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
+
+import { LoginUtilService } from '../../core/services/login/login-util.service';
+import { GlobalErrorHandlerService } from '../../core/services/error/global-error-handler.service';
 import { ILedgerParams } from './shared/models/ledger-params';
 import { DisplayService } from './shared/services/display/display.service';
 import { ExportService } from './shared/services/export/export.service';
 import { ILedgerVM } from './shared/view-models/ledger-vm';
+import { State } from '../../state/app.state';
+import { getUserOid } from '../../core/services/login/state/login-util.reducer';
 
 @Component({
   templateUrl: './display-main.component.html',
   styleUrls: ['./display-main.component.scss']
 })
 export class DisplayMainComponent implements OnInit, OnDestroy {
-  private sub!: Subscription;
   private userId: string = '';
   private groupingStrategy: string = 'Daily';
 
@@ -26,6 +29,9 @@ export class DisplayMainComponent implements OnInit, OnDestroy {
   ledgerList: ILedgerVM[] = [];
   invalidDate!: Date;
 
+  private sub$!: Subscription;
+  private userId$!: Observable<string>;
+
   /** Chart data items */
   labels: string[] = [];
   rTotals: string[] = [];
@@ -34,20 +40,12 @@ export class DisplayMainComponent implements OnInit, OnDestroy {
   data: any;
   messages: { [key: string]: { [key: string]: string; }; };
 
-  /**
-   * Constructor
-   * @param {LoginUtilService} loginUtilService
-   * @param {GlobalErrorHandlerService} err
-   * @param {DisplayService} displayService
-   * @param {ActivatedRoute} route
-   * @param {ExportService} exportService
-   */
   constructor(
-    private loginUtilService: LoginUtilService,
     private err: GlobalErrorHandlerService,
     private displayService: DisplayService,
     private route: ActivatedRoute,
-    private exportService: ExportService
+    private exportService: ExportService,
+    private store: Store<State>
   ) {
     // Criterial field messages.
     this.messages = {
@@ -69,7 +67,17 @@ export class DisplayMainComponent implements OnInit, OnDestroy {
    * Initialize the page
    */
   ngOnInit(): void {
-    this.userId = this.loginUtilService.getUserOid();
+    this.userId$ = this.store.select(getUserOid);
+
+    this.userId$.subscribe({
+      next: (userId: string | null): void => {
+        if (userId) {
+          this.userId = userId;
+        }
+      },
+      error: catchError((err: any) => this.err.handleError(err)),
+    });
+
     this.getRouteParams();
     this.initializeLedgerParams();
     this.createLedger();
@@ -87,7 +95,7 @@ export class DisplayMainComponent implements OnInit, OnDestroy {
    * Removes the "sub" observable for Prameter retrieval
    */
   ngOnDestroy(): void {
-    this.sub.unsubscribe();
+    this.sub$.unsubscribe();
   }
   //#endregion Events
 
@@ -137,7 +145,7 @@ export class DisplayMainComponent implements OnInit, OnDestroy {
    * Get desired tab index Route Paramters
    */
   private getRouteParams(): void {
-    this.sub = this.route.params
+    this.sub$ = this.route.params
       .subscribe((params: any) => {
         this.activeIndex = +params.id;
       });

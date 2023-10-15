@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { GlobalErrorHandlerService } from 'src/app/core/services/error/global-error-handler.service';
 
+import { GlobalErrorHandlerService } from '../../../../../core/services/error/global-error-handler.service';
 import { ILedgerParams } from '../../models/ledger-params';
 import { ILedgerVM } from '../../view-models/ledger-vm';
 
@@ -15,8 +14,8 @@ import * as auth from '../../../../../../assets/data/auth-config.json';
  */
 @Injectable()
 export class DisplayService {
-
   private url = auth.resources.api.resourceUri + '/display';
+  private headers = new HttpHeaders({ 'content-type': 'application/json' });
 
   /**
    * Constructor
@@ -37,9 +36,7 @@ export class DisplayService {
    * @returns {Observable<ILedgerVM[]>} return the record
    */
   createLedger(ledgerParams: ILedgerParams): Observable<ILedgerVM[]> {
-
-    const headers = new HttpHeaders({ 'content-type': 'application/json' });
-    return this.http.post<ILedgerVM[]>(this.url, ledgerParams, { headers })
+    return this.http.post<ILedgerVM[]>(this.url, ledgerParams, { headers: this.headers })
       .pipe(
         // tap((data: ILedgerVM[]) => console.log('Service createLedger: ' + JSON.stringify(data))),
         catchError((err: any) => this.err.handleError(err))
