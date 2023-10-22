@@ -1,8 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
-// @import "primeng/resources/themes/lara-light-teal/theme.css";
-// @import "primeng/resources/primeng.css";
-// @import "primeicons/primeicons.css";
-// @import "bootstrap/scss/bootstrap";
+@import "primeng/resources/themes/bootstrap4-light-purple/theme.css";
+@import "primeng/resources/primeng.min.css";
+@import "primeicons/primeicons.css";
+@import "primeflex/primeflex.css";
+@import "bootstrap/scss/bootstrap";
 
 html,
 body {
@@ -34,7 +35,6 @@ body {
   .row {
     padding: 0 !important;
     margin: 0 !important;
-
   }
 
   .flex .flex-column {
