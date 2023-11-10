@@ -62,3 +62,13 @@ Demo on Azure: https://fpng-ui.azurewebsites.net/home
     - No longer required to get item from db after Posting or Putting.
   * PostItem: 
     - Now API is returning the new Item after successful completion of Add
+### 11/10/2023 Bug Fix
+  * Fixed the issue of Item Types not being available for initial navigation:
+    - Cause:  Recently with an update the Item Types were configured to be retrieved from an API call to the FPFL SQL Server
+      database on Azure.  This caused the user to have a confusing experience when initially navigating to any of the
+      Item Detail features; Initial Amount, Credits or Debits.  Clicking on the linkes results in nothing happening.
+      The FPFL Database on Azure has the lowest level of availability, so when not in use it goes to sleep.  If propmted by an
+      API call then it normally takes 1-2 minutes for it to awaken and return the data requested.
+    - Fix:  The API call for the Item Types on login was deprecated and the Item Types are now intialized in the Item Type Service
+      in the front end UI.  So now when the user initiates navigation to the Item Detail features there will be a Spinner to
+      indicate that data will be avialable shortly.
