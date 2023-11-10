@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, tap } from 'rxjs';
+import { Observable, from, of, tap } from 'rxjs';
 
 import { GlobalErrorHandlerService } from '../../../../../core/services/error/global-error-handler.service';
 import * as auth from '../../../../../../assets/data/auth-config.json';
@@ -28,17 +28,30 @@ export class ItemTypeService {
    * @returns {Observable<IItemType[]>} returns the records
    */
   getItemTypes(): Observable<IItemType[]> {
-    return this.http.get<IItemType[]>(this.url).pipe(
-      tap((itemTypes: IItemType[]) => {
-        this.itemTypes = itemTypes;
-        // console.log(`ItemTypes Service - getItemTypes: ${JSON.stringify(this.itemTypes)}`)
-      }),
-      catchError((err: any) => this.err.handleError(err))
-    );
+    if (this.itemTypes && this.itemTypes.length > 0) {
+      return of(this.itemTypes);
+    } else {
+      this.itemTypes = [...this.generateItemTypes()];
+      return of(this.itemTypes);
+    }
   }
   //#endregion Reads
 
   //#region Utilities
+  /**
+   * Initializes the ItemTypes
+   * @returns {IItemType[]} list
+   */
+  private generateItemTypes(): IItemType[] {
+    // Your logic to generate the list goes here
+    const list: IItemType[] = [
+      { id: 1, name: 'Credit' },
+      { id: 2, name: 'Debit' },
+      { id: 3, name: 'InitialAmount' },
+    ];
+    return list;
+  }
+
   /**
    * Get the ItemType from the ItemTypes List
    * Store value in Session and initialize the "currentItemType"
