@@ -28,12 +28,10 @@ export class ItemTypeService {
    * @returns {Observable<IItemType[]>} returns the records
    */
   getItemTypes(): Observable<IItemType[]> {
-    if (this.itemTypes && this.itemTypes.length > 0) {
-      return of(this.itemTypes);
-    } else {
+    if (!this.itemTypes || this.itemTypes.length === 0) {
       this.itemTypes = [...this.generateItemTypes()];
-      return of(this.itemTypes);
     }
+    return of(this.itemTypes);
   }
   //#endregion Reads
 
