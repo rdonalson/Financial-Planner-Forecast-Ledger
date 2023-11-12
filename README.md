@@ -5,7 +5,7 @@ This version of the Financial Planner is an Angular 15 SPA using PrimeNg, Materi
 The UI and API are being hosted on the Azure Cloud. 
 The DAL is Entity Framework Core 3.1, designed in a Code First approach.
 
-ABSTRACT This Application enables You to keep your checking or saving account solvent out to any future point in time.  You enter expenses and gratuities with a starting amount, then by entering a time frame, you can easily see a total by end of that time frame.  These calculated items can be displayed in either a graphic or ledger format. 
+ABSTRACT: This Application enables You to keep your checking or saving account solvent out to any future point in time.  You enter expenses and gratuities with a starting amount, then by entering a time frame, you can easily see a total by end of that time frame.  These calculated items can be displayed in either a graphic or ledger format. 
 
 Demo on Azure: https://fpng-ui.azurewebsites.net/home
   * Login: bbusby@rdonalson.onmicrosoft.com
