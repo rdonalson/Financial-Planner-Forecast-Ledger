@@ -1,7 +1,7 @@
 # Financial-Planner-Forecast-Ledger (Angular 15 Hosted on Azure)
 ## Source Code
 
-*    The Financial Planner is an Angular 15 SPA with a .NET Core API are Web Apps hosted on Azure Cloud. The UI is a mix of PrimeNg, Material, Bootstrap 5 and NgRx-Redux.  The API is .NET Core using Entity Framework Core with a Code First approach.  The UI Login and the API security are handled by Microsoft Intra ID (Active Directory). 
+*    The Financial Planner is an Angular 15 SPA with a .NET Core API are Web Apps hosted on Azure Cloud. The UI is a mix of PrimeNg, Material, Bootstrap 5 and NgRx-Redux.  The API is .NET Core using Entity Framework Core with a Code First approach.  The UI Login and the API security are handled by Microsoft Intra ID (Active Directory). The Database is SQL Server also hosted on Azure.
 
 *	Financial Planner Abstract: This Application enables You to keep your checking or saving account solvent out to any future point in time. You enter expenses and incomes with a starting amount, then by entering a time frame, you can easily see a total by end of that time frame. These calculated items can be displayed in either a graphic or ledger format.
     - Once logged in go to the Item Detail section and add your credits (Income sources: paychecks, tax refunds, etc.) and the Period of Occurrence. Be sure to enter the amounts you get after taxes are taken out (take-home pay).
