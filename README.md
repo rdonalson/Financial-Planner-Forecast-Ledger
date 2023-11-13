@@ -1,11 +1,14 @@
 # Financial-Planner-Forecast-Ledger (Angular 15 Hosted on Azure)
 ## Source Code
 
-This version of the Financial Planner is an Angular 15 SPA using PrimeNg, Material, Bootstrap 5, a .Net Core 3.1 API and using Azure Active Directory securing both. 
-The UI and API are being hosted on the Azure Cloud. 
-The DAL is Entity Framework Core 3.1, designed in a Code First approach.
+* The Financial Planner is an Angular 15 SPA with a .NET Core API are Web Apps hosted on Azure Cloud. The UI is a mix of PrimeNg, Material and Bootstrap 5.  The API is .NET Core using Entity Framework Core with a Code First approach.  The UI Login and the API security are handled by Microsoft Intra ID (Active Directory). 
 
-ABSTRACT: This Application enables You to keep your checking or saving account solvent out to any future point in time.  You enter expenses and gratuities with a starting amount, then by entering a time frame, you can easily see a total by end of that time frame.  These calculated items can be displayed in either a graphic or ledger format. 
+*	Financial Planner Abstract: This Application enables You to keep your checking or saving account solvent out to any future point in time. You enter expenses and incomes with a starting amount, then by entering a time frame, you can easily see a total by end of that time frame. These calculated items can be displayed in either a graphic or ledger format.
+    - Once logged in go to the Item Detail section and add your credits (Income sources: paychecks, tax refunds, etc.) and the Period of Occurrence. Be sure to enter the amounts you get after taxes are taken out (take-home pay).
+    - Then do the same with your debits (Bills, mortgage, car payment, etc.). Enter debit amounts in positive values, the program will take of the subtracting.
+    -	Then enter your starting Balance.
+    -	Then go to the Display Section. With either the Timeline or the Ledger Display & Export enter a time frame and click enter. With Ledger Display & Export you can export your data to Excel.
+       
 
 Demo on Azure: https://fpng-ui.azurewebsites.net/home
   * Login: bbusby@rdonalson.onmicrosoft.com
