@@ -11,10 +11,7 @@
        
 
 Demo on Azure: https://fpng-ui.azurewebsites.net/home
-  * Login: bbusby@rdonalson.onmicrosoft.com
-  * Pswd: SciFiSlackerAI-2022   
-    -	**Note: When prompted click “Ask Later”, don’t click “Next”
-    -	This is a workaround for the Azure MS Intra ID 2 Factor Authentication 15-day Grace Period. 
+  * Demo on Request
 
 ## 06/15/2020 Improvements and Consolidations 
   * Better Responsive Behaviour
