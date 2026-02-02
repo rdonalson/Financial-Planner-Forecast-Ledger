@@ -99,7 +99,7 @@ This application enables users to forecast their checking or savings account bal
 - [Stored Procedure: spCreateLedgerReadout.sql](https://github.com/rdonalson/Financial-Planner-Forecast-Ledger/blob/main/FPFL-API/FPFL%20Database/Procedures/spCreateLedgerReadout.sql)
 
 ### Entities
-- [Domain models for items, periods, and ledger generation](https://github.com/rdonalson/FinancialPlanner/tree/master/FinancialPlanner.Data/Entity)
+- [Domain models for items, periods, and ledger generation](https://github.com/rdonalson/Financial-Planner-Forecast-Ledger/tree/main/FPFL-API/FPFL.API.Data/Domain)
 ---
 ## 06/15/2020 Improvements and Consolidations 
   * Better Responsive Behaviour
