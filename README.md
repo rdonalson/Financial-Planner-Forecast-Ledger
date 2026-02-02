@@ -1,18 +1,106 @@
-# Financial-Planner-Forecast-Ledger (Angular 15 Hosted on Azure)
-## Source Code
+# Financial Planner Forecast Ledger  
+**Angular 15 SPA + .NET Core API (Azure Hosted)**
 
-*    The Financial Planner is an Angular 15 SPA with a .NET Core API are Web Apps hosted on Azure Cloud. The UI is a mix of PrimeNg, Material, Bootstrap 5 and NgRx-Redux.  The API is .NET Core using Entity Framework Core with a Code First approach.  The UI Login and the API security are handled by Microsoft Intra ID (Active Directory). The Database is SQL Server also hosted on Azure.
+The **Financial Planner Forecast Ledger** is a full‑stack application designed to help users project their financial solvency across any future time frame. It combines an Angular 15 single‑page application with a .NET Core API, both deployed on Azure. Authentication is handled through **Microsoft Intra ID (Active Directory)**, and all data is stored in **Azure SQL Server** using Entity Framework Core (Code‑First).
 
-*	Financial Planner Abstract: This Application enables You to keep your checking or saving account solvent out to any future point in time. You enter expenses and incomes with a starting amount, then by entering a time frame, you can easily see a total by end of that time frame. These calculated items can be displayed in either a graphic or ledger format.
-    - Once logged in go to the Item Detail section and add your credits (Income sources: paychecks, tax refunds, etc.) and the Period of Occurrence. Be sure to enter the amounts you get after taxes are taken out (take-home pay).
-    - Then do the same with your debits (Bills, mortgage, car payment, etc.). Enter debit amounts in positive values, the program will take of the subtracting.
-    -	Then enter your starting Balance.
-    -	Then go to the Display Section. With either the Timeline or the Ledger Display & Export enter a time frame and click enter. With Ledger Display & Export you can export your data to Excel.
-       
+---
 
-Demo on Azure: https://fpng-ui.azurewebsites.net/home
-  * Demo on Request
+## Overview
 
+This application enables users to forecast their checking or savings account balance into the future. By entering income sources, recurring expenses, and a starting balance, users can generate a projected ledger or timeline view. Data can also be exported to Excel for offline analysis.
+
+### Core Features
+- Track recurring **credits** (income)
+- Track recurring **debits** (expenses)
+- Enter a **starting balance**
+- Generate forecasts for any date range
+- View results in:
+  - **Timeline View**
+  - **Ledger Display & Export** (Excel export supported)
+- Secure login via **Microsoft Intra ID**
+- Fully hosted on **Azure Cloud**
+
+---
+
+## How It Works
+
+1. **Log in** using your Microsoft account (Intra ID).  
+2. Navigate to **Item Detail**.  
+3. Add your **credits** (paychecks, refunds, etc.).  
+4. Add your **debits** (bills, mortgage, car payments, etc.).  
+   - Enter debit amounts as positive numbers; the system handles subtraction.  
+5. Enter your **starting balance**.  
+6. Go to the **Display** section and choose:
+   - **Timeline**
+   - **Ledger Display & Export**  
+7. Enter a date range and generate your forecast.  
+8. Export to Excel if needed.
+
+---
+
+## Demo & Links
+
+- **Demo:** Financial Planner Forecast Ledger (available upon request)  
+- **GitHub (Source Code):** `https://github.com/rdonalson/Financial-Planner-Forecast-Ledger` [(github.com in Bing)](https://www.bing.com/search?q="https%3A%2F%2Fgithub.com%2Frdonalson%2FFinancial-Planner-Forecast-Ledger")  
+- **LinkedIn:** `https://www.linkedin.com/in/rick-donalson-52281328/` [(linkedin.com in Bing)](https://www.bing.com/search?q="https%3A%2F%2Fwww.linkedin.com%2Fin%2Frick-donalson-52281328%2F")  
+- **GitHub Profile:** [https://github.com/rdonalson](https://github.com/rdonalson)  
+- **Azure Live App:** [https://fpng-ui.azurewebsites.net/home](https://fpng-ui.azurewebsites.net/home)  
+- **Documentation:**  
+  - Financial Planner Guide  
+  - Excel Export Helper  
+
+---
+
+# Front End — Angular 15
+
+### Components, Services & Models
+- [ItemListComponent](https://github.com/rdonalson/Financial-Planner-Forecast-Ledger/blob/main/FPFL-UI/src/app/features/item-detail/item/item-list/item-list.component.ts)
+- [ItemEditComponent](https://github.com/rdonalson/Financial-Planner-Forecast-Ledger/blob/main/FPFL-UI/src/app/features/item-detail/item/item-edit/item-edit.component.ts)  
+- [ItemService](https://github.com/rdonalson/Financial-Planner-Forecast-Ledger/blob/main/FPFL-UI/src/app/features/item-detail/shared/services/item/item.service.ts)  
+- [IItem](https://github.com/rdonalson/Financial-Planner-Forecast-Ledger/blob/main/FPFL-UI/src/app/features/item-detail/shared/models/item.ts)  
+- [GenericValidator](https://github.com/rdonalson/Financial-Planner-Forecast-Ledger/blob/main/FPFL-UI/src/app/features/item-detail/shared/validators/generic-validator.ts)  
+- [MessageUtilService](https://github.com/rdonalson/Financial-Planner-Forecast-Ledger/blob/main/FPFL-UI/src/app/features/item-detail/shared/services/common/message-util.service.ts)  
+
+### NgRx / Redux State
+- [Item State](https://github.com/rdonalson/Financial-Planner-Forecast-Ledger/tree/main/FPFL-UI/src/app/features/item-detail/shared/services/item/state)  
+- [ItemType State](https://github.com/rdonalson/Financial-Planner-Forecast-Ledger/tree/main/FPFL-UI/src/app/features/item-detail/shared/services/item-type/state)  
+- [Period State](https://github.com/rdonalson/Financial-Planner-Forecast-Ledger/tree/main/FPFL-UI/src/app/features/item-detail/shared/services/period/state)
+
+### Markup
+- [item-list.component.html](https://github.com/rdonalson/Financial-Planner-Forecast-Ledger/blob/main/FPFL-UI/src/app/features/item-detail/item/item-list/item-list.component.html)  
+- [item-edit.component.html](https://github.com/rdonalson/Financial-Planner-Forecast-Ledger/blob/main/FPFL-UI/src/app/features/item-detail/item/item-edit/item-edit.component.html)  
+
+### Routing & Lazy Loading
+- [AppRoutingModule](https://github.com/rdonalson/Financial-Planner-Forecast-Ledger/blob/main/FPFL-UI/src/app/app-routing.module.ts)  
+- [ItemDetailRoutingModule](https://github.com/rdonalson/Financial-Planner-Forecast-Ledger/blob/main/FPFL-UI/src/app/features/item-detail/item-detail-routing.module.ts)  
+
+### Styles
+- [app.component.scss](https://github.com/rdonalson/Financial-Planner-Forecast-Ledger/blob/main/FPFL-UI/src/app/app.component.scss)  
+- [display-main.component.scss](https://github.com/rdonalson/Financial-Planner-Forecast-Ledger/blob/main/FPFL-UI/src/app/features/display/display-main.component.scss)  
+
+### Miscellaneous
+- [form-utility-items.json](https://github.com/rdonalson/Financial-Planner-Forecast-Ledger/blob/main/FPFL-UI/src/assets/data/form-utility-items.json)
+
+---
+
+# Back End — .NET Core API
+
+### API & Repository Layer
+- [ItemsController](https://github.com/rdonalson/Financial-Planner-Forecast-Ledger/blob/main/FPFL-API/FPFL.API.Web/Controllers/ItemDetail/ItemsController.cs)  
+- [RepoItems](https://github.com/rdonalson/Financial-Planner-Forecast-Ledger/blob/main/FPFL-API/FPFL.API.Infrastructure/ItemDetail/Repository/RepoItems.cs)  
+- [RepoPeriods](https://github.com/rdonalson/Financial-Planner-Forecast-Ledger/blob/main/FPFL-API/FPFL.API.Infrastructure/ItemDetail/Repository/RepoPeriods.cs)  
+
+### EF Core (Code First)
+- [FPFLContext](https://github.com/rdonalson/Financial-Planner-Forecast-Ledger/blob/main/FPFL-API/FPFL.API.Data/Context/FPFLContext.cs)  
+- [Item](https://github.com/rdonalson/Financial-Planner-Forecast-Ledger/blob/main/FPFL-API/FPFL.API.Data/Domain/Item.cs)  
+- [Migrations](https://github.com/rdonalson/Financial-Planner-Forecast-Ledger/tree/main/FPFL-API/FPFL.API.Data/Migrations)  
+
+### SQL
+- [Stored Procedure: spCreateLedgerReadout.sql](https://github.com/rdonalson/Financial-Planner-Forecast-Ledger/blob/main/FPFL-API/FPFL%20Database/Procedures/spCreateLedgerReadout.sql)
+
+### Entities
+- [Domain models for items, periods, and ledger generation](https://github.com/rdonalson/FinancialPlanner/tree/master/FinancialPlanner.Data/Entity)
+---
 ## 06/15/2020 Improvements and Consolidations 
   * Better Responsive Behaviour
   * Consolidation of Debits, Credits & Initial Amount in these areas:
