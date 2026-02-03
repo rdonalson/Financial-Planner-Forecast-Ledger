@@ -50,7 +50,8 @@ This application enables users to forecast their checking or savings account bal
   - Excel Export Helper  
 
 ---
-
+---
+# Portfolio Samples
 # Front End — Angular 15
 
 ### Components, Services & Models
@@ -82,7 +83,6 @@ This application enables users to forecast their checking or savings account bal
 - [form-utility-items.json](https://github.com/rdonalson/Financial-Planner-Forecast-Ledger/blob/main/FPFL-UI/src/assets/data/form-utility-items.json)
 
 ---
-
 # Back End — .NET Core API
 
 ### API & Repository Layer
@@ -100,7 +100,11 @@ This application enables users to forecast their checking or savings account bal
 
 ### Entities
 - [Domain models for items, periods, and ledger generation](https://github.com/rdonalson/Financial-Planner-Forecast-Ledger/tree/main/FPFL-API/FPFL.API.Data/Domain)
+
+
 ---
+---
+# Updates
 ## 06/15/2020 Improvements and Consolidations 
   * Better Responsive Behaviour
   * Consolidation of Debits, Credits & Initial Amount in these areas:
